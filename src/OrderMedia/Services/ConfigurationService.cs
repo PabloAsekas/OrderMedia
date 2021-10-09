@@ -36,5 +36,26 @@ namespace OrderMedia.Services
             var section = this.configuration.GetSection("videoExtensions");
             return section.Get<string[]>();
         }
+
+        /// <inheritdoc/>
+        public string[] GetMediaExtensions()
+        {
+            var section = this.configuration.GetSection("mediaExtensions");
+            return section.Get<string[]>();
+        }
+
+        /// <inheritdoc/>
+        public string GetImageFolderName()
+        {
+            var section = this.configuration.GetSection("imgFolder");
+            return section.Get<string>();
+        }
+
+        /// <inheritdoc/>
+        public string GetVideoFolderName()
+        {
+            var section = this.configuration.GetSection("vidFolder");
+            return section.Get<string>();
+        }
     }
 }
