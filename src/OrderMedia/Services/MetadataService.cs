@@ -23,7 +23,7 @@ namespace OrderMedia.Services
         /// </summary>
         /// <param name="filePath">File path.</param>
         /// <returns>String with the date in format yyyy-mm-dd.</returns>
-        public string GetMediaDate(string filePath)
+        /*public string GetMediaDate(string filePath)
         {
             var metadataDateTime = this.GetImageDateFromMetadata(filePath);
 
@@ -56,6 +56,6 @@ namespace OrderMedia.Services
             DateTime result = imageDateParsed ? imageDate : videoDate;
 
             return result;
-        }
+        }*/
     }
 }

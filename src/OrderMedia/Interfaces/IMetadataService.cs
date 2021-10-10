@@ -14,6 +14,6 @@ namespace OrderMedia.Interfaces
         /// </summary>
         /// <param name="filePath">File path.</param>
         /// <returns>String with the date in format yyyy-mm-dd.</returns>
-        string GetMediaDate(string filePath);
+        //string GetMediaDate(string filePath);
     }
 }
