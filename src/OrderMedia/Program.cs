@@ -53,10 +53,13 @@ namespace OrderMedia
                     });
 
                     // Add MetadataService
-                    services.AddScoped<IMetadataService, MetadataService>();
+                    //services.AddScoped<IMetadataService, MetadataService>();
 
                     // Add ConfigurationService
                     services.AddScoped<IConfigurationService, ConfigurationService>();
+
+                    // Add MediaFactoryService
+                    services.AddScoped<IMediaFactoryService, MediaFactoryService>();
 
                     // Add MediaClassificationService.
                     services.AddHostedService<MediaClassificationService>();
