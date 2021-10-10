@@ -19,6 +19,7 @@ namespace OrderMedia.Services
         private readonly IIOService ioService;
         private readonly IMetadataService metadataService;
         private readonly IConfigurationService configurationService;
+        private readonly IMediaFactoryService mediaFactoryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaClassificationService"/> class.
@@ -27,12 +28,14 @@ namespace OrderMedia.Services
         /// <param name="ioService">IO Service.</param>
         /// <param name="metadataService">Metadata service.</param>
         /// <param name="configurationService">Configuration service.</param>
-        public MediaClassificationService(ILogger<MediaClassificationService> logger, IIOService ioService, IMetadataService metadataService, IConfigurationService configurationService)
+        /// <param name="mediaFactoryService">Media factory service.</param>
+        public MediaClassificationService(ILogger<MediaClassificationService> logger, IIOService ioService, IMetadataService metadataService, IConfigurationService configurationService, IMediaFactoryService mediaFactoryService)
         {
             this.logger = logger;
             this.ioService = ioService;
             this.metadataService = metadataService;
             this.configurationService = configurationService;
+            this.mediaFactoryService = mediaFactoryService;
         }
 
         /// <inheritdoc/>
@@ -55,22 +58,25 @@ namespace OrderMedia.Services
             return Task.CompletedTask;
         }
 
-        private void ManageMedia(string type, params string[] extensions) //TODO: refactorizar el type
+        private void ManageMedia(params string[] extensions)
         {
             var allMedia = this.ioService.GetFilesByExtensions(extensions);
 
             foreach (var media in allMedia)
             {
-                string mediaDate = this.metadataService.GetMediaDate(media.FullName);
+                var mediaObject = this.mediaFactoryService.CreateMedia(media.FullName);
 
-                this.ioService.MoveMedia(media, mediaDate, type);
+                string mediaDate = mediaObject.GetCreationDate();
+
+                this.ioService.MoveMedia(mediaObject, mediaDate);
             }
         }
 
         private void Manage()
         {
-            this.ManageMedia("i", this.configurationService.GetImageExtensions()); //TODO: refactorizar el type
-            this.ManageMedia("v", this.configurationService.GetVideoExtensions());
+            // Images first because of livePhotos classification.
+            this.ManageMedia(this.configurationService.GetImageExtensions());
+            this.ManageMedia(this.configurationService.GetVideoExtensions());
         }
     }
 }
