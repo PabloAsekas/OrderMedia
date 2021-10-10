@@ -6,6 +6,7 @@ namespace OrderMedia.Interfaces
 {
     using System.Collections.Generic;
     using System.IO;
+    using OrderMedia.MediaFiles;
 
     /// <summary>
     /// IIOService interface.
@@ -29,6 +30,6 @@ namespace OrderMedia.Interfaces
         /// </summary>
         /// <param name="file">File to be moved.</param>
         /// <param name="subFolderName">Name of the sub folder.</param>
-        void MoveMedia(FileInfo file, string subFolderName, string type); //TODO: refactorizar el type
+        void MoveMedia(BaseMedia file, string subFolderName);
     }
 }
