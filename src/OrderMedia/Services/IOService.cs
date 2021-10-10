@@ -8,6 +8,7 @@ namespace OrderMedia.Services
     using System.IO;
     using OrderMedia.Extensions;
     using OrderMedia.Interfaces;
+    using OrderMedia.MediaFiles;
 
     /// <summary>
     /// IO service class.
@@ -47,16 +48,15 @@ namespace OrderMedia.Services
         }
 
         /// <inheritdoc/>
-        public void MoveMedia(FileInfo file, string subFolderName, string type) //TODO: refactorizar el type
+        public void MoveMedia(BaseMedia media, string subFolderName)
         {
-            var folder = type == "i" ? this.imgFolder : this.vidFolder;
-            string subFolderFullPath = Path.Combine(this.path, folder, subFolderName); // TODO: Averiguar cuando es una img o un vid.
+            string subFolderFullPath = Path.Combine(this.path, media.ClassificationFolderName, subFolderName);
             this.CreateFolder(subFolderFullPath);
 
-            string newMediaLocation = Path.Combine(subFolderFullPath, file.Name);
-            this.MoveMedia(file.FullName, newMediaLocation);
+            string newMediaLocation = Path.Combine(subFolderFullPath, media.Name);
+            this.MoveMedia(media.Path, newMediaLocation);
 
-            this.MoveLivePhoto(file, subFolderFullPath);
+            this.MoveLivePhoto(media.NameWithoutExtension, subFolderFullPath);
         }
 
         private void CreateFolder(string path)
@@ -64,10 +64,9 @@ namespace OrderMedia.Services
             Directory.CreateDirectory(path);
         }
 
-        private void MoveLivePhoto(FileInfo file, string folder)
+        private void MoveLivePhoto(string fileNameWithoutExtension, string folder)
         {
-            string imageNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-            string videoName = $"{imageNameWithoutExtension}.mov";
+            string videoName = $"{fileNameWithoutExtension}.mov";
             string videoLocation = Path.Combine(this.path, videoName);
 
             if (File.Exists(videoLocation))
