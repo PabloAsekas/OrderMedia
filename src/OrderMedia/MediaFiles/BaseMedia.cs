@@ -1,5 +1,5 @@
-﻿// <copyright file="BaseMedia.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="BaseMedia.cs" company="Pablo Bermejo">
+// Copyright (c) Pablo Bermejo. All rights reserved.
 // </copyright>
 
 namespace OrderMedia.MediaFiles
