@@ -17,7 +17,6 @@ namespace OrderMedia.Services
     {
         private readonly ILogger<MediaClassificationService> logger;
         private readonly IIOService ioService;
-        private readonly IMetadataService metadataService;
         private readonly IConfigurationService configurationService;
         private readonly IMediaFactoryService mediaFactoryService;
 
@@ -26,14 +25,12 @@ namespace OrderMedia.Services
         /// </summary>
         /// <param name="logger">Logger.</param>
         /// <param name="ioService">IO Service.</param>
-        /// <param name="metadataService">Metadata service.</param>
         /// <param name="configurationService">Configuration service.</param>
         /// <param name="mediaFactoryService">Media factory service.</param>
-        public MediaClassificationService(ILogger<MediaClassificationService> logger, IIOService ioService, IMetadataService metadataService, IConfigurationService configurationService, IMediaFactoryService mediaFactoryService)
+        public MediaClassificationService(ILogger<MediaClassificationService> logger, IIOService ioService, IConfigurationService configurationService, IMediaFactoryService mediaFactoryService)
         {
             this.logger = logger;
             this.ioService = ioService;
-            this.metadataService = metadataService;
             this.configurationService = configurationService;
             this.mediaFactoryService = mediaFactoryService;
         }
