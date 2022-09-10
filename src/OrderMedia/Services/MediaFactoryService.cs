@@ -49,6 +49,7 @@ namespace OrderMedia.Services
                 ".mp4" => new Mp4Media(path, this.configurationService.GetVideoFolderName()),
                 ".whatsappimage" => new WhatsAppMedia(path, this.configurationService.GetImageFolderName()),
                 ".whatsappvideo" => new WhatsAppMedia(path, this.configurationService.GetVideoFolderName()),
+                ".arw" => new ArwMedia(path, this.configurationService.GetImageFolderName()),
                 _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
             };
         }
