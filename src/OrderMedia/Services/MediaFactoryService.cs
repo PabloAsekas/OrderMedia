@@ -50,6 +50,7 @@ namespace OrderMedia.Services
                 ".whatsappimage" => new WhatsAppMedia(path, this.configurationService.GetImageFolderName()),
                 ".whatsappvideo" => new WhatsAppMedia(path, this.configurationService.GetVideoFolderName()),
                 ".arw" => new ArwMedia(path, this.configurationService.GetImageFolderName()),
+                ".dng" => new ArwMedia(path, this.configurationService.GetImageFolderName()),
                 _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
             };
         }

@@ -74,6 +74,15 @@ namespace OrderMedia.Services
                 string newVideoLocation = Path.Combine(folder, videoName);
                 this.MoveMedia(videoLocation, newVideoLocation);
             }
+
+            string aaeName = $"{fileNameWithoutExtension}.aae";
+            string aaeLocation = Path.Combine(this.path, aaeName);
+
+            if (File.Exists(aaeLocation))
+            {
+                string newAaeLocation = Path.Combine(folder, aaeName);
+                this.MoveMedia(aaeLocation, newAaeLocation);
+            }
         }
 
         private void MoveMedia(string oldPath, string newPath)
