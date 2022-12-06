@@ -1,17 +1,13 @@
-﻿// <copyright file="Program.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia
 {
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using OrderMedia.Interfaces;
-    using OrderMedia.Services;
-
     /// <summary>
     /// Main program class.
     /// </summary>
@@ -42,15 +38,8 @@ namespace OrderMedia
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    var serviceProvider = services.BuildServiceProvider();
-
-                    var configuration = serviceProvider.GetService<IConfiguration>();
-
                     // Add IOService.
-                    services.AddScoped<IIOService, IOService>(serviceProvider =>
-                    {
-                        return new IOService(configuration.GetSection("originalPath").Value, configuration.GetSection("imgFolder").Value, configuration.GetSection("vidFolder").Value);
-                    });
+                    services.AddScoped<IIOService, IOService>();
 
                     // Add ConfigurationService
                     services.AddScoped<IConfigurationService, ConfigurationService>();
