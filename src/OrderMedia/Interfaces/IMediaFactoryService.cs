@@ -1,11 +1,7 @@
-﻿// <copyright file="IMediaFactoryService.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using OrderMedia.MediaFiles;
 
 namespace OrderMedia.Interfaces
 {
-    using OrderMedia.MediaFiles;
-
     /// <summary>
     /// Media factory service interface.
     /// </summary>

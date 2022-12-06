@@ -1,14 +1,10 @@
-﻿// <copyright file="DirectoryInfoExtensionsMethods.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace OrderMedia.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
     /// <summary>
     /// <see cref="DirectoryInfo" /> extensions methods class.
     /// </summary>
