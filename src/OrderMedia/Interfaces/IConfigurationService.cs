@@ -1,14 +1,16 @@
-﻿// <copyright file="IConfigurationService.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
-
-namespace OrderMedia.Interfaces
+﻿namespace OrderMedia.Interfaces
 {
     /// <summary>
     /// Configuration service interface.
     /// </summary>
     public interface IConfigurationService
     {
+        /// <summary>
+        /// Gets the original path.
+        /// </summary>
+        /// <returns>String with the original path.</returns>
+        string GetOriginalPath();
+
         /// <summary>
         /// Gets image extensions.
         /// </summary>

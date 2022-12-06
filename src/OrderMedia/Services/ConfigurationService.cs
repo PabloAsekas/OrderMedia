@@ -1,18 +1,14 @@
-﻿// <copyright file="ConfigurationService.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using Microsoft.Extensions.Configuration;
+using OrderMedia.Interfaces;
 
 namespace OrderMedia.Services
 {
-    using Microsoft.Extensions.Configuration;
-    using OrderMedia.Interfaces;
-
     /// <summary>
     /// Configuration service class.
     /// </summary>
     public class ConfigurationService : IConfigurationService
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
@@ -20,41 +16,42 @@ namespace OrderMedia.Services
         /// <param name="configuration">Configuration.</param>
         public ConfigurationService(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
-        /// <inheritdoc/>
-        public string[] GetImageExtensions()
+        public string GetOriginalPath()
         {
-            var section = this.configuration.GetSection("imageExtensions");
-            return section.Get<string[]>();
-        }
-
-        /// <inheritdoc/>
-        public string[] GetVideoExtensions()
-        {
-            var section = this.configuration.GetSection("videoExtensions");
-            return section.Get<string[]>();
-        }
-
-        /// <inheritdoc/>
-        public string[] GetMediaExtensions()
-        {
-            var section = this.configuration.GetSection("mediaExtensions");
-            return section.Get<string[]>();
-        }
-
-        /// <inheritdoc/>
-        public string GetImageFolderName()
-        {
-            var section = this.configuration.GetSection("imgFolder");
+            var section = _configuration.GetSection("originalPath");
             return section.Get<string>();
         }
 
-        /// <inheritdoc/>
+        public string[] GetImageExtensions()
+        {
+            var section = _configuration.GetSection("imageExtensions");
+            return section.Get<string[]>();
+        }
+
+        public string[] GetVideoExtensions()
+        {
+            var section = _configuration.GetSection("videoExtensions");
+            return section.Get<string[]>();
+        }
+
+        public string[] GetMediaExtensions()
+        {
+            var section = _configuration.GetSection("mediaExtensions");
+            return section.Get<string[]>();
+        }
+
+        public string GetImageFolderName()
+        {
+            var section = _configuration.GetSection("imgFolder");
+            return section.Get<string>();
+        }
+
         public string GetVideoFolderName()
         {
-            var section = this.configuration.GetSection("vidFolder");
+            var section = _configuration.GetSection("vidFolder");
             return section.Get<string>();
         }
     }
