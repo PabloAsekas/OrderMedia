@@ -1,6 +1,5 @@
-﻿// <copyright file="MovMedia.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
@@ -9,13 +8,8 @@ namespace OrderMedia.MediaFiles
     /// </summary>
     public class MovMedia : VideoMedia
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MovMedia"/> class.
-        /// </summary>
-        /// <param name="path">Media path.</param>
-        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
-        public MovMedia(string path, string classificationFolderName)
-            : base(path, classificationFolderName)
+        public MovMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+            : base(mediaPath, classificationFolderName, ioService)
         {
         }
     }

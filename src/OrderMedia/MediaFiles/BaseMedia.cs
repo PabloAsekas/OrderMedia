@@ -1,6 +1,7 @@
-﻿// <copyright file="BaseMedia.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using System;
+using System.IO;
+using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
@@ -10,22 +11,14 @@ namespace OrderMedia.MediaFiles
     public abstract class BaseMedia
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseMedia"/> class.
+        /// Gets current media path.
         /// </summary>
-        /// <param name="path">Media path.</param>
-        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
-        public BaseMedia(string path, string classificationFolderName)
-        {
-            this.Path = path;
-            this.ClassificationFolderName = classificationFolderName;
-            this.Name = System.IO.Path.GetFileName(path);
-            this.NameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(path);
-        }
+        public string MediaPath { get; private set; }
 
         /// <summary>
-        /// Gets media path.
+        /// Gets current media folder.
         /// </summary>
-        public string Path { get; private set; }
+        public string MediaFolder { get; private set; }
 
         /// <summary>
         /// Gets classification folder name.
@@ -33,19 +26,78 @@ namespace OrderMedia.MediaFiles
         public string ClassificationFolderName { get; private set; }
 
         /// <summary>
-        /// Gets name.
+        /// Gets media name with extension included.
         /// </summary>
         public string Name { get; private set; }
 
         /// <summary>
-        /// Gets name without extension.
+        /// Gets media name without extension.
         /// </summary>
         public string NameWithoutExtension { get; private set; }
+
+        /// <summary>
+        /// Gets new media folder.
+        /// </summary>
+        public string NewMediaFolder { get; private set; }
+
+        /// <summary>
+        /// Gets new media location.
+        /// </summary>
+        public string NewMediaPath { get; private set; }
+
+        public DateTime CreatedDateTime { get; protected set; }
+
+        /// <summary>
+        /// IIOService.
+        /// </summary>
+        protected readonly IIOService _ioService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseMedia"/> class.
+        /// </summary>
+        /// <param name="mediaPath">Media path.</param>
+        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
+        /// <param name="ioService">IIOService injection.</param>
+        public BaseMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+        {
+            MediaPath = mediaPath;
+            MediaFolder = Path.GetDirectoryName(mediaPath);
+            ClassificationFolderName = classificationFolderName;
+            Name = Path.GetFileName(mediaPath);
+            NameWithoutExtension = Path.GetFileNameWithoutExtension(mediaPath);
+            _ioService = ioService;
+        }
 
         /// <summary>
         /// Gets creation date.
         /// </summary>
         /// <returns>Creation date string in format yyyy-MM-dd.</returns>
         public abstract string GetCreationDate();
+
+        /// <summary>
+        /// Process logic to clasify the media.
+        /// </summary>
+        public void Process()
+        {
+            MoveMedia();
+
+            PostProcess();
+        }
+
+        /// <summary>
+        /// Process logic after regular clasification is made.
+        /// </summary>
+        public abstract void PostProcess();
+
+        private void MoveMedia()
+        {
+            string mediaDate = GetCreationDate();
+
+            NewMediaFolder = Path.Combine(MediaFolder, ClassificationFolderName, mediaDate);
+            NewMediaPath = Path.Combine(NewMediaFolder, Name);
+
+            _ioService.CreateFolder(NewMediaFolder);
+            _ioService.MoveMedia(MediaPath, NewMediaPath);
+        }
     }
 }

@@ -1,21 +1,15 @@
-﻿// <copyright file="JpgMedia.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
     /// <summary>
     /// Media class for .jpg files.
     /// </summary>
-    public class JpgMedia : HeicMedia
+    public class JpgMedia : ImageMedia
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JpgMedia"/> class.
-        /// </summary>
-        /// <param name="path">Media path.</param>
-        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
-        public JpgMedia(string path, string classificationFolderName)
-            : base(path, classificationFolderName)
+        public JpgMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+            : base(mediaPath, classificationFolderName, ioService)
         {
         }
     }

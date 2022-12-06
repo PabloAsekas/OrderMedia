@@ -1,6 +1,6 @@
-﻿// <copyright file="HeicMedia.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using System.IO;
+using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
@@ -9,14 +9,39 @@ namespace OrderMedia.MediaFiles
     /// </summary>
     public class HeicMedia : ImageMedia
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeicMedia"/> class.
-        /// </summary>
-        /// <param name="path">Media path.</param>
-        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
-        public HeicMedia(string path, string classificationFolderName)
-            : base(path, classificationFolderName)
+        public HeicMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+            : base(mediaPath, classificationFolderName, ioService)
         {
+        }
+
+        public override void PostProcess()
+        {
+            MoveLivePhoto();
+            MoveAae();
+        }
+
+        private void MoveLivePhoto()
+        {
+            string videoName = $"{NameWithoutExtension}.mov";
+            string videoLocation = Path.Combine(MediaFolder, videoName);
+
+            if (File.Exists(videoLocation))
+            {
+                string newVideoLocation = Path.Combine(NewMediaFolder, videoName);
+                _ioService.MoveMedia(videoLocation, newVideoLocation);
+            }
+        }
+
+        private void MoveAae()
+        {
+            string aaeName = NameWithoutExtension.Insert(4, "O") + ".aae";
+            string aaeLocation = Path.Combine(MediaFolder, aaeName);
+
+            if (File.Exists(aaeLocation))
+            {
+                string newAaeLocation = Path.Combine(NewMediaFolder, aaeName);
+                _ioService.MoveMedia(aaeLocation, newAaeLocation);
+            }
         }
     }
 }

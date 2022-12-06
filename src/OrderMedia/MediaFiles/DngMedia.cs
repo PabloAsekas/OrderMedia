@@ -4,11 +4,11 @@ using OrderMedia.Services;
 namespace OrderMedia.MediaFiles
 {
     /// <summary>
-    /// Media class for .ARW files.
+    /// Media class for .DNG files.
     /// </summary>
-    public class ArwMedia : RawMedia
+    public class DngMedia : RawMedia
     {
-        public ArwMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+        public DngMedia(string mediaPath, string classificationFolderName, IIOService ioService)
             : base(mediaPath, classificationFolderName, ioService)
         {
         }

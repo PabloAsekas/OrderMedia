@@ -1,44 +1,40 @@
-﻿// <copyright file="VideoMedia.cs" company="Pablo Bermejo">
-// Copyright (c) Pablo Bermejo. All rights reserved.
-// </copyright>
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using MetadataExtractor;
+using MetadataExtractor.Formats.QuickTime;
+using OrderMedia.Interfaces;
+using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using MetadataExtractor;
-    using MetadataExtractor.Formats.QuickTime;
-
     /// <summary>
     /// Media class for generic video files.
     /// </summary>
     public abstract class VideoMedia : BaseMedia
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VideoMedia"/> class.
-        /// </summary>
-        /// <param name="path">Media path.</param>
-        /// <param name="classificationFolderName">Classification folder name where all the types will be located.</param>
-        public VideoMedia(string path, string classificationFolderName)
-            : base(path, classificationFolderName)
+        public VideoMedia(string mediaPath, string classificationFolderName, IIOService ioService)
+            : base(mediaPath, classificationFolderName, ioService)
         {
         }
 
-        /// <inheritdoc/>
         public override string GetCreationDate()
         {
-            var metadataDateTime = this.GetVideoDateFromMetadata(this.Path);
+            var metadataDateTime = GetVideoDateFromMetadata();
 
-            var finalDateTime = this.GetDateTimeFromMetadataString(metadataDateTime);
+            SetCreatedDateTimeFromMetadataString(metadataDateTime);
 
-            return finalDateTime.ToString("yyyy-MM-dd");
+            return CreatedDateTime.ToString("yyyy-MM-dd");
         }
 
-        private string GetVideoDateFromMetadata(string filePath)
+        public override void PostProcess()
         {
-            IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(filePath);
+        }
+
+        private string GetVideoDateFromMetadata()
+        {
+            IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(MediaPath);
 
             var quickTimeDirectory = directories.OfType<QuickTimeMetadataHeaderDirectory>().FirstOrDefault();
             var videoCreationDate = quickTimeDirectory?.GetDescription(QuickTimeMetadataHeaderDirectory.TagCreationDate);
@@ -46,11 +42,11 @@ namespace OrderMedia.MediaFiles
             return videoCreationDate;
         }
 
-        private DateTime GetDateTimeFromMetadataString(string metadataString)
+        private void SetCreatedDateTimeFromMetadataString(string metadataString)
         {
             DateTime.TryParseExact(metadataString, "ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("en-UK", false), System.Globalization.DateTimeStyles.None, out DateTime videoDate);
 
-            return videoDate;
+            CreatedDateTime = videoDate;
         }
     }
 }
