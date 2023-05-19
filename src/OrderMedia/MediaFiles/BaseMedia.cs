@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
 
@@ -33,7 +34,12 @@ namespace OrderMedia.MediaFiles
         /// <summary>
         /// Gets media name without extension.
         /// </summary>
-        public string NameWithoutExtension { get; private set; }
+        public string NameWithoutExtension {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(Name);
+            }
+        }
 
         /// <summary>
         /// Gets new media folder.
@@ -45,7 +51,27 @@ namespace OrderMedia.MediaFiles
         /// </summary>
         public string NewMediaPath { get; private set; }
 
+        /// <summary>
+        /// Gets the Created Date Time.
+        /// </summary>
         public DateTime CreatedDateTime { get; protected set; }
+
+        /// <summary>
+        /// Gets the new renamed name with extension included.
+        /// Format yyyy-MM-dd_HH-MM-ss_Name
+        /// If Name exceeds 9 characteres, a sorter name is generated randomly.
+        /// </summary>
+        public string NewName { get; private set; }
+
+        /// <summary>
+        /// Gets new media name without extension.
+        /// </summary>
+        public string NewNameWithoutExtension {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(NewName);
+            }
+        }
 
         /// <summary>
         /// IIOService.
@@ -64,15 +90,8 @@ namespace OrderMedia.MediaFiles
             MediaFolder = Path.GetDirectoryName(mediaPath);
             ClassificationFolderName = classificationFolderName;
             Name = Path.GetFileName(mediaPath);
-            NameWithoutExtension = Path.GetFileNameWithoutExtension(mediaPath);
             _ioService = ioService;
         }
-
-        /// <summary>
-        /// Gets creation date.
-        /// </summary>
-        /// <returns>Creation date string in format yyyy-MM-dd.</returns>
-        public abstract string GetCreationDate();
 
         /// <summary>
         /// Process logic to clasify the media.
@@ -89,15 +108,61 @@ namespace OrderMedia.MediaFiles
         /// </summary>
         public abstract void PostProcess();
 
+        /// <summary>
+        /// Sets creation date.
+        /// </summary>
+        protected abstract void SetCreationDate();
+
         private void MoveMedia()
         {
-            string mediaDate = GetCreationDate();
+            SetCreationDate();
 
-            NewMediaFolder = Path.Combine(MediaFolder, ClassificationFolderName, mediaDate);
-            NewMediaPath = Path.Combine(NewMediaFolder, Name);
+            string FolderMediaDateName = GetCreationDateAsString("yyyy-MM-dd");
+
+            SetNewName();
+
+            NewMediaFolder = Path.Combine(MediaFolder, ClassificationFolderName, FolderMediaDateName);
+            NewMediaPath = Path.Combine(NewMediaFolder, NewName);
 
             _ioService.CreateFolder(NewMediaFolder);
             _ioService.MoveMedia(MediaPath, NewMediaPath);
+        }
+
+        private string GetCreationDateAsString(string format)
+        {
+            return CreatedDateTime.ToString(format);
+        }
+
+        private void SetNewName()
+        {
+            string dateTime = GetCreationDateAsString("yyyy-MM-dd_HH-mm-ss");
+
+            string finalName = dateTime;
+
+            string cleanedName = GetCleanedName(NameWithoutExtension);
+
+            if (cleanedName.Length < 9)
+            {
+                finalName += $"_{cleanedName}";
+            }
+            else
+            {
+                var randomNumber = new Random().Next(0, 9999).ToString("D4");
+                finalName += $"_pbg_{randomNumber}";
+            }
+
+            NewName = Name.Replace(NameWithoutExtension, finalName);
+        }
+
+        private static string GetCleanedName(string name)
+        {
+            // Remove possible (1), (2), etc. from the name.
+            string cleanedName = Regex.Replace(name, @"\([\d]\)", string.Empty);
+
+            // Remove possible start and end spaces.
+            cleanedName.Trim();
+
+            return cleanedName;
         }
     }
 }

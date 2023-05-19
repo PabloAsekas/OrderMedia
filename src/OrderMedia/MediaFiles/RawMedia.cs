@@ -15,16 +15,14 @@ namespace OrderMedia.MediaFiles
         {
         }
 
-        public override string GetCreationDate()
+        protected override void SetCreationDate()
         {
-            var metadataDateTime = GetVideoDateFromMetadata();
+            var metadataDateTime = GetDateFromMetadata();
 
             SetCreatedDateTimeFromMetadataString(metadataDateTime);
-
-            return CreatedDateTime.ToString("yyyy-MM-dd");
         }
 
-        private string GetVideoDateFromMetadata()
+        private string GetDateFromMetadata()
         {
             IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(MediaPath);
 

@@ -21,7 +21,11 @@ namespace OrderMedia.MediaFiles
         {
         }
 
-        public override string GetCreationDate()
+        public override void PostProcess()
+        {
+        }
+
+        protected override void SetCreationDate()
         {
             //string pattern = @"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])";
             //string pattern = @"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[10-23]{2})-([0-59]{2})-([0-59]{2})";
@@ -32,18 +36,6 @@ namespace OrderMedia.MediaFiles
             // We assume that the regex will succeed.
 
             SetCreatedDateTimeFromMetadataString(m.Value);
-
-            return CreatedDateTime.ToString("yyyy-MM-dd");
-        }
-
-        public override void PostProcess()
-        {
-            // no funciona
-            /*if (File.Exists(NewMediaPath))
-            {
-                File.SetCreationTime(NewMediaPath, new DateTime(2022, 11, 02, 12, 26, 08));
-                File.SetLastWriteTime(NewMediaPath, new DateTime(2022, 11, 02, 12, 26, 08));
-            }*/
         }
 
         private void SetCreatedDateTimeFromMetadataString(string metadataString)

@@ -25,23 +25,39 @@ namespace OrderMedia.MediaFiles
             string videoName = $"{NameWithoutExtension}.mov";
             string videoLocation = Path.Combine(MediaFolder, videoName);
 
+            string newVideoName = $"{NewNameWithoutExtension}.mov";
+            string newVideoLocation = Path.Combine(NewMediaFolder, newVideoName);
+
             if (File.Exists(videoLocation))
             {
-                string newVideoLocation = Path.Combine(NewMediaFolder, videoName);
                 _ioService.MoveMedia(videoLocation, newVideoLocation);
             }
         }
 
         private void MoveAae()
         {
-            string aaeName = NameWithoutExtension.Insert(4, "O") + ".aae";
+            string aaeName = GetAeeName();
             string aaeLocation = Path.Combine(MediaFolder, aaeName);
+
+            string newAaeName = $"{NewNameWithoutExtension}.aae";
+            string newAaeLocation = Path.Combine(NewMediaFolder, newAaeName);
 
             if (File.Exists(aaeLocation))
             {
-                string newAaeLocation = Path.Combine(NewMediaFolder, aaeName);
                 _ioService.MoveMedia(aaeLocation, newAaeLocation);
             }
+        }
+
+        private string GetAeeName()
+        {
+            // Images with the (1) have the aae as IMG_xxxx (1)O.aae 
+            if (NameWithoutExtension.Contains('('))
+            {
+                return $"{NameWithoutExtension}O.aae";
+            }
+
+            // Images with regular names have the aae as IMG_Oxxx.aae
+            return $"{NameWithoutExtension.Insert(4, "O")}.aae";
         }
     }
 }

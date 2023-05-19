@@ -28,8 +28,8 @@ namespace OrderMedia.Services
             string extension = Path.GetExtension(path);
             string name = Path.GetFileNameWithoutExtension(path);
 
-            extension = this.AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
-            extension = this.AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);
+            extension = AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
+            extension = AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);
 
             return extension.ToLower() switch
             {
@@ -48,7 +48,7 @@ namespace OrderMedia.Services
             };
         }
 
-        private string AnalyzeMediaName(string name, string startsWith, string newExtension, string oldExtension)
+        private static string AnalyzeMediaName(string name, string startsWith, string newExtension, string oldExtension)
         {
             return name.StartsWith(startsWith) ? newExtension : oldExtension;
         }

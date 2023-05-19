@@ -65,10 +65,6 @@ namespace OrderMedia.Services
                 var mediaObject = _mediaFactoryService.CreateMedia(media.FullName);
 
                 mediaObject.Process();
-
-                //string mediaDate = mediaObject.GetCreationDate();
-
-                //this.ioService.MoveMedia(mediaObject, mediaDate);
             }
         }
 

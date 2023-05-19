@@ -19,20 +19,18 @@ namespace OrderMedia.MediaFiles
         {
         }
 
-        public override string GetCreationDate()
-        {
-            var metadataDateTime = GetImageDateFromMetadata();
-
-            SetCreatedDateTimeFromMetadataString(metadataDateTime);
-
-            return CreatedDateTime.ToString("yyyy-MM-dd");
-        }
-
         public override void PostProcess()
         {
         }
 
-        private string GetImageDateFromMetadata()
+        protected override void SetCreationDate()
+        {
+            var metadataDateTime = GetDateFromMetadata();
+
+            SetCreatedDateTimeFromMetadataString(metadataDateTime);
+        }
+
+        private string GetDateFromMetadata()
         {
             IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(MediaPath);
 
