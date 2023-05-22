@@ -37,12 +37,6 @@ namespace OrderMedia.Services
             return section.Get<string[]>();
         }
 
-        public string[] GetMediaExtensions()
-        {
-            var section = _configuration.GetSection("mediaExtensions");
-            return section.Get<string[]>();
-        }
-
         public string GetImageFolderName()
         {
             var section = _configuration.GetSection("imgFolder");
