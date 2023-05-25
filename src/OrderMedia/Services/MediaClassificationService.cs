@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -52,8 +51,8 @@ namespace OrderMedia.Services
 
         private void CreateMediaFolders()
         {
-            _ioService.CreateFolder(Path.Combine(_configurationService.GetOriginalPath(), _configurationService.GetImageFolderName()));
-            _ioService.CreateFolder(Path.Combine(_configurationService.GetOriginalPath(), _configurationService.GetVideoFolderName()));
+            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetOriginalPath(), _configurationService.GetImageFolderName() }));
+            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetOriginalPath(), _configurationService.GetVideoFolderName() }));
         }
 
         private void ManageMedia(params string[] extensions)

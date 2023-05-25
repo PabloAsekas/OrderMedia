@@ -5,7 +5,6 @@ using System.Linq;
 using MetadataExtractor;
 using MetadataExtractor.Formats.QuickTime;
 using OrderMedia.Interfaces;
-using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {

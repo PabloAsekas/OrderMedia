@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using MetadataExtractor;
-using MetadataExtractor.Formats.Exif;
 using OrderMedia.Interfaces;
-using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {

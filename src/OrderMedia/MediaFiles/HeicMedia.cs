@@ -1,6 +1,4 @@
-﻿using System.IO;
-using OrderMedia.Interfaces;
-using OrderMedia.Services;
+﻿using OrderMedia.Interfaces;
 
 namespace OrderMedia.MediaFiles
 {
@@ -23,12 +21,12 @@ namespace OrderMedia.MediaFiles
         private void MoveLivePhoto()
         {
             string videoName = $"{NameWithoutExtension}.mov";
-            string videoLocation = Path.Combine(MediaFolder, videoName);
+            string videoLocation = _ioService.Combine(new string[] { MediaFolder, videoName });
 
             string newVideoName = $"{NewNameWithoutExtension}.mov";
-            string newVideoLocation = Path.Combine(NewMediaFolder, newVideoName);
+            string newVideoLocation = _ioService.Combine(new string[] { NewMediaFolder, newVideoName });
 
-            if (File.Exists(videoLocation))
+            if (_ioService.Exists(videoLocation))
             {
                 _ioService.MoveMedia(videoLocation, newVideoLocation);
             }
@@ -37,12 +35,12 @@ namespace OrderMedia.MediaFiles
         private void MoveAae()
         {
             string aaeName = GetAeeName();
-            string aaeLocation = Path.Combine(MediaFolder, aaeName);
+            string aaeLocation = _ioService.Combine(new string[] { MediaFolder, aaeName });
 
             string newAaeName = $"{NewNameWithoutExtension}.aae";
-            string newAaeLocation = Path.Combine(NewMediaFolder, newAaeName);
+            string newAaeLocation = _ioService.Combine(new string[] { NewMediaFolder, newAaeName });
 
-            if (File.Exists(aaeLocation))
+            if (_ioService.Exists(aaeLocation))
             {
                 _ioService.MoveMedia(aaeLocation, newAaeLocation);
             }

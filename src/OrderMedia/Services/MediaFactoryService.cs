@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using OrderMedia.Interfaces;
 using OrderMedia.MediaFiles;
 
@@ -25,8 +24,8 @@ namespace OrderMedia.Services
 
         public BaseMedia CreateMedia(string path)
         {
-            string extension = Path.GetExtension(path);
-            string name = Path.GetFileNameWithoutExtension(path);
+            string extension = _ioService.GetExtension(path);
+            string name = _ioService.GetFileNameWithoutExtension(path);
 
             extension = AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
             extension = AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);

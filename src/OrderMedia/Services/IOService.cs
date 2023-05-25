@@ -2,7 +2,6 @@
 using System.IO;
 using OrderMedia.Extensions;
 using OrderMedia.Interfaces;
-using OrderMedia.MediaFiles;
 
 namespace OrderMedia.Services
 {
@@ -25,6 +24,36 @@ namespace OrderMedia.Services
         public void CreateFolder(string path)
         {
             Directory.CreateDirectory(path);
+        }
+
+        public string Combine(string[] paths)
+        {
+            return Path.Combine(paths);
+        }
+
+        public string GetExtension(string path)
+        {
+            return Path.GetExtension(path);
+        }
+
+        public string GetFileNameWithoutExtension(string path)
+        {
+            return Path.GetFileNameWithoutExtension(path);
+        }
+
+        public string GetDirectoryName(string path)
+        {
+            return Path.GetDirectoryName(path);
+        }
+
+        public string GetFileName(string path)
+        {
+            return Path.GetFileName(path);
+        }
+
+        public bool Exists(string path)
+        {
+            return File.Exists(path);
         }
     }
 }

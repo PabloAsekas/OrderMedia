@@ -1,5 +1,4 @@
 ﻿using OrderMedia.Interfaces;
-using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
