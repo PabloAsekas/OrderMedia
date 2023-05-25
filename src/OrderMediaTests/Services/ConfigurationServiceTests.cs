@@ -25,24 +25,6 @@ namespace OrderMediaTests.Services
 		{
 			_autoMocker = new AutoMocker();
 
-			
-
-            /*var appSettings = new Dictionary<string, string>
-			{
-				{ "originalPath", "originalPath" },
-				{ "imgFolder", "imgFolder"},
-				{ "vidFolder", "vidFolder"},
-				{ "imageExtensions:0", ".heic"},
-				{ "imageExtensions:1", ".jpg"},
-				{ "imageExtensions:2", ".jpeg"},
-				{ "imageExtensions:3", ".gif"},
-				{ "imageExtensions:4", ".png"},
-				{ "imageExtensions:5", ".arw"},
-				{ "imageExtensions:6", ".dng"},
-                { "videoExtensions:0", ".mov"},
-                { "videoExtensions:1", ".mp4"},
-			};*/
-
             var appSettings = new Dictionary<string, string>
             {
                 { originalPath, originalPath },

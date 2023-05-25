@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Text.RegularExpressions;
 using OrderMedia.Interfaces;
-using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {
@@ -37,7 +35,7 @@ namespace OrderMedia.MediaFiles
         public string NameWithoutExtension {
             get
             {
-                return Path.GetFileNameWithoutExtension(Name);
+                return _ioService.GetFileNameWithoutExtension(Name);
             }
         }
 
@@ -69,7 +67,7 @@ namespace OrderMedia.MediaFiles
         public string NewNameWithoutExtension {
             get
             {
-                return Path.GetFileNameWithoutExtension(NewName);
+                return _ioService.GetFileNameWithoutExtension(NewName);
             }
         }
 
@@ -87,11 +85,13 @@ namespace OrderMedia.MediaFiles
         public BaseMedia(string mediaPath, string classificationFolderName, IIOService ioService)
         {
             MediaPath = mediaPath;
-            MediaFolder = Path.GetDirectoryName(mediaPath);
+            MediaFolder = _ioService.GetDirectoryName(mediaPath);
             ClassificationFolderName = classificationFolderName;
-            Name = Path.GetFileName(mediaPath);
+            Name = _ioService.GetFileName(mediaPath);
             _ioService = ioService;
         }
+
+        public BaseMedia() { }
 
         /// <summary>
         /// Process logic to clasify the media.
@@ -121,8 +121,8 @@ namespace OrderMedia.MediaFiles
 
             SetNewName();
 
-            NewMediaFolder = Path.Combine(MediaFolder, ClassificationFolderName, FolderMediaDateName);
-            NewMediaPath = Path.Combine(NewMediaFolder, NewName);
+            NewMediaFolder = _ioService.Combine(new string[] { MediaFolder, ClassificationFolderName, FolderMediaDateName });
+            NewMediaPath = _ioService.Combine(new string[] { NewMediaFolder, NewName });
 
             _ioService.CreateFolder(NewMediaFolder);
             _ioService.MoveMedia(MediaPath, NewMediaPath);

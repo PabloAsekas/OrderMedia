@@ -5,7 +5,6 @@ using System.Linq;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 using OrderMedia.Interfaces;
-using OrderMedia.Services;
 
 namespace OrderMedia.MediaFiles
 {

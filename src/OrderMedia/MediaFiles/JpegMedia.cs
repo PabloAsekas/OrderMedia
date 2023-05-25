@@ -1,6 +1,4 @@
-﻿using System.IO;
-using OrderMedia.Interfaces;
-using OrderMedia.Services;
+﻿using OrderMedia.Interfaces;
 
 namespace OrderMedia.MediaFiles
 {
