@@ -12,69 +12,145 @@ namespace OrderMedia.MediaFiles
         /// <summary>
         /// Gets current media path.
         /// </summary>
-        public string MediaPath { get; private set; }
-
-        /// <summary>
-        /// Gets current media folder.
-        /// </summary>
-        public string MediaFolder { get; private set; }
+        protected string MediaPath { get; private set; }
 
         /// <summary>
         /// Gets classification folder name.
         /// </summary>
-        public string ClassificationFolderName { get; private set; }
+        protected string ClassificationFolderName { get; private set; }
+
+        /// <summary>
+        /// IIOService.
+        /// </summary>
+        protected readonly IIOService _ioService;
+
+        /// <summary>
+        /// Gets current media folder.
+        /// </summary>
+        protected string MediaFolder {
+            get
+            {
+                return _ioService.GetDirectoryName(MediaPath);
+            }
+        }
 
         /// <summary>
         /// Gets media name with extension included.
         /// </summary>
-        public string Name { get; private set; }
+        protected string Name {
+            get
+            {
+                return _ioService.GetFileName(MediaPath);
+            }
+        }
 
         /// <summary>
         /// Gets media name without extension.
         /// </summary>
-        public string NameWithoutExtension {
+        protected string NameWithoutExtension {
             get
             {
                 return _ioService.GetFileNameWithoutExtension(Name);
             }
         }
 
-        /// <summary>
-        /// Gets new media folder.
-        /// </summary>
-        public string NewMediaFolder { get; private set; }
+        private DateTime createdDateTime { get; set; }
 
         /// <summary>
-        /// Gets new media location.
+        /// Gets or sets the Created Date Time.
         /// </summary>
-        public string NewMediaPath { get; private set; }
+        protected DateTime CreatedDateTime {
+            get
+            {            
+                if (createdDateTime == DateTime.MinValue)
+                {
+                    SetCreationDate();
+                }
+
+                return createdDateTime;
+            }
+            set
+            {
+                createdDateTime = value;
+            }
+        }
+
+        private string newMediaPath { get; set; }
 
         /// <summary>
-        /// Gets the Created Date Time.
+        /// Gets or sets new media location.
         /// </summary>
-        public DateTime CreatedDateTime { get; protected set; }
+        protected string NewMediaPath {
+            get
+            {
+                if (string.IsNullOrEmpty(newMediaPath))
+                {
+                    SetNewMediaPath();
+                }
+
+                return newMediaPath;
+            }
+            set
+            {
+                newMediaPath = value;
+            }
+        }
+
+        private string newMediaFolder { get; set; }
+
+        /// <summary>
+        /// Gets or sets new media folder.
+        /// </summary>
+        protected string NewMediaFolder
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(newMediaFolder))
+                {
+                    SetNewMediaFolder();
+                }
+
+                return newMediaFolder;
+            }
+            set
+            {
+                newMediaFolder = value;
+            }
+        }
+
+        private string newName { get; set; }
 
         /// <summary>
         /// Gets the new renamed name with extension included.
         /// Format yyyy-MM-dd_HH-MM-ss_Name
         /// If Name exceeds 9 characteres, a sorter name is generated randomly.
         /// </summary>
-        public string NewName { get; private set; }
+        protected string NewName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(newName))
+                {
+                    SetNewName();
+                }
+
+                return newName;
+            }
+            set
+            {
+                newName = value;
+            }
+        }
 
         /// <summary>
         /// Gets new media name without extension.
         /// </summary>
-        public string NewNameWithoutExtension {
+        protected string NewNameWithoutExtension {
             get
             {
                 return _ioService.GetFileNameWithoutExtension(NewName);
             }
         }
-
-        /// <summary>
-        /// IIOService.
-        /// </summary>
-        protected readonly IIOService _ioService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseMedia"/> class.
@@ -84,11 +160,9 @@ namespace OrderMedia.MediaFiles
         /// <param name="ioService">IIOService injection.</param>
         public BaseMedia(string mediaPath, string classificationFolderName, IIOService ioService)
         {
-            MediaPath = mediaPath;
-            MediaFolder = _ioService.GetDirectoryName(mediaPath);
-            ClassificationFolderName = classificationFolderName;
-            Name = _ioService.GetFileName(mediaPath);
             _ioService = ioService;
+            MediaPath = mediaPath;
+            ClassificationFolderName = classificationFolderName;
         }
 
         public BaseMedia() { }
@@ -106,7 +180,7 @@ namespace OrderMedia.MediaFiles
         /// <summary>
         /// Process logic after regular clasification is made.
         /// </summary>
-        public abstract void PostProcess();
+        protected abstract void PostProcess();
 
         /// <summary>
         /// Sets creation date.
@@ -115,17 +189,27 @@ namespace OrderMedia.MediaFiles
 
         private void MoveMedia()
         {
-            SetCreationDate();
-
-            string FolderMediaDateName = GetCreationDateAsString("yyyy-MM-dd");
-
-            SetNewName();
-
-            NewMediaFolder = _ioService.Combine(new string[] { MediaFolder, ClassificationFolderName, FolderMediaDateName });
-            NewMediaPath = _ioService.Combine(new string[] { NewMediaFolder, NewName });
-
             _ioService.CreateFolder(NewMediaFolder);
             _ioService.MoveMedia(MediaPath, NewMediaPath);
+        }
+
+        private void SetNewMediaPath()
+        {
+            NewMediaPath = _ioService.Combine(new string[] { NewMediaFolder, NewName });
+        }
+
+        private void SetNewMediaFolder()
+        {
+            string mediaFolderDateName = GetCreationDateAsString("yyyy-MM-dd");
+
+            NewMediaFolder = _ioService.Combine(new string[] { MediaFolder, ClassificationFolderName, mediaFolderDateName });
+        }
+
+        private void SetNewName()
+        {
+            string finalName = GetFinalName();
+
+            NewName = Name.Replace(NameWithoutExtension, finalName);
         }
 
         private string GetCreationDateAsString(string format)
@@ -133,11 +217,9 @@ namespace OrderMedia.MediaFiles
             return CreatedDateTime.ToString(format);
         }
 
-        private void SetNewName()
+        private string GetFinalName()
         {
-            string dateTime = GetCreationDateAsString("yyyy-MM-dd_HH-mm-ss");
-
-            string finalName = dateTime;
+            string finalName = GetCreationDateAsString("yyyy-MM-dd_HH-mm-ss");
 
             string cleanedName = GetCleanedName(NameWithoutExtension);
 
@@ -151,7 +233,7 @@ namespace OrderMedia.MediaFiles
                 finalName += $"_pbg_{randomNumber}";
             }
 
-            NewName = Name.Replace(NameWithoutExtension, finalName);
+            return finalName;
         }
 
         private static string GetCleanedName(string name)

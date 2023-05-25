@@ -18,7 +18,7 @@ namespace OrderMedia.MediaFiles
         {
         }
 
-        public override void PostProcess()
+        protected override void PostProcess()
         {
         }
 
