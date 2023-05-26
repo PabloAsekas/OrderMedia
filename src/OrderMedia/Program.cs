@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
@@ -18,43 +16,30 @@ namespace OrderMedia
         /// </summary>
         /// <param name="args">Arguments.</param>
         /// <returns>Nothing.</returns>
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            using IHost host = CreateHostBuilder(args).Build();
+            var sp = CreateServiceProvider();
 
-            await host.RunAsync();
+            var mcs = sp.GetRequiredService<MediaClassificationService>();
+
+            mcs.Run();
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args)
+        private static ServiceProvider CreateServiceProvider()
         {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, configuration) =>
-                {
-                    configuration.Sources.Clear();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
-                    configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var serviceCollection = new ServiceCollection()
+                .AddLogging(configure => configure.AddConsole())
+                .AddScoped<IIOService, IOService>() // Add IOService.
+                .AddScoped<IConfigurationService, ConfigurationService>() // Add ConfigurationService
+                .AddScoped<IMediaFactoryService, MediaFactoryService>() // Add MediaFactoryService
+                .AddScoped<MediaClassificationService>()
+                .AddSingleton<IConfiguration>(configuration);
 
-                    configuration.AddCommandLine(args);
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
-                    // Add IOService.
-                    services.AddScoped<IIOService, IOService>();
-
-                    // Add ConfigurationService
-                    services.AddScoped<IConfigurationService, ConfigurationService>();
-
-                    // Add MediaFactoryService
-                    services.AddScoped<IMediaFactoryService, MediaFactoryService>();
-
-                    // Add MediaClassificationService.
-                    services.AddHostedService<MediaClassificationService>();
-                })
-                .ConfigureLogging((hostContext, configLogging) =>
-                {
-                    configLogging.AddConsole();
-                })
-                .UseConsoleLifetime();
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }

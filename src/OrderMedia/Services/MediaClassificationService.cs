@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using OrderMedia.Interfaces;
 
 namespace OrderMedia.Services
@@ -9,7 +6,7 @@ namespace OrderMedia.Services
     /// <summary>
     /// Media classification service class.
     /// </summary>
-    public class MediaClassificationService : IHostedService
+    public class MediaClassificationService
     {
         private readonly ILogger<MediaClassificationService> _logger;
         private readonly IIOService _ioService;
@@ -31,7 +28,7 @@ namespace OrderMedia.Services
             _mediaFactoryService = mediaFactoryService;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public void Run()
         {
             _logger.LogInformation("Classification started.");
 
@@ -39,14 +36,7 @@ namespace OrderMedia.Services
 
             Manage();
 
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
             _logger.LogInformation("Classification ended.");
-
-            return Task.CompletedTask;
         }
 
         private void CreateMediaFolders()
