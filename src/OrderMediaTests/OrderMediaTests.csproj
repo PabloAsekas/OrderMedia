@@ -25,8 +25,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Services\" />
+    <None Remove="Factories\" />
+    <None Remove="Services\CreatedDateExtractors\" />
+    <None Remove="Services\Processors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
+    <Folder Include="Factories\" />
+    <Folder Include="Services\CreatedDateExtractors\" />
+    <Folder Include="Services\Processors\" />
   </ItemGroup>
 </Project>
