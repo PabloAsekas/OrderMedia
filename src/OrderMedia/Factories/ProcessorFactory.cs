@@ -56,7 +56,7 @@ namespace OrderMedia.Factories
 
         private IProcessor CreateDefaultProcessor()
         {
-            return (IProcessor) _serviceProvider.GetService(typeof(IProcessor));
+            return (IProcessor) _serviceProvider.GetService(typeof(MainProcessor));
         }
     }
 }

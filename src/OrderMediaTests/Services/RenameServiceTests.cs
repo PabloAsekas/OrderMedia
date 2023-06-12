@@ -40,10 +40,12 @@ namespace OrderMediaTests.Services
 			_randomizerService.Setup(x => x.GetRandomNumberAsD4())
 				.Returns("1234");
 
+			var fullName = name + extension;
+
             var sut = _autoMocker.CreateInstance<RenameService>();
 
             // Act
-            var result = sut.Rename(name, createdDateTime);
+            var result = sut.Rename(fullName, createdDateTime);
 
             // Assert
             result.Should().Be(renamed);

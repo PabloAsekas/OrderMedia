@@ -57,7 +57,7 @@ namespace OrderMedia.Services
             string cleanedName = _ioService.GetFileNameWithoutExtension(name);
 
             // Remove possible (1), (2), etc. from the name.
-            cleanedName = Regex.Replace(name, @"\([\d]\)", string.Empty);
+            cleanedName = Regex.Replace(cleanedName, @"\([\d]\)", string.Empty);
 
             // Remove possible start and end spaces.
             cleanedName = cleanedName.Trim();

@@ -29,7 +29,7 @@ namespace OrderMediaTests.Factories
 			var aaeProcessor = new AaeProcessor(ioServiceMock.Object, renameServiceMock.Object);
 
             _serviceProviderMock = _autoMocker.GetMock<IServiceProvider>();
-			_serviceProviderMock.Setup(x => x.GetService(typeof(IProcessor)))
+			_serviceProviderMock.Setup(x => x.GetService(typeof(MainProcessor)))
 				.Returns(mainProcessor);
             _serviceProviderMock.Setup(x => x.GetService(typeof(LivePhotoProcessor)))
                 .Returns(livePhotoProcessor);
