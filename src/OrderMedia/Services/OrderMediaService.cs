@@ -4,28 +4,23 @@ using OrderMedia.Interfaces;
 namespace OrderMedia.Services
 {
     /// <summary>
-    /// Media classification service class.
+    /// Order Media service class.
     /// </summary>
-    public class MediaClassificationService
+    public class OrderMediaService
     {
-        private readonly ILogger<MediaClassificationService> _logger;
+        private readonly ILogger<OrderMediaService> _logger;
         private readonly IIOService _ioService;
         private readonly IConfigurationService _configurationService;
-        private readonly IMediaFactoryService _mediaFactoryService;
+        private readonly IMediaFactory _mediaFactory;
+        private readonly IClassificationService _classificationService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MediaClassificationService"/> class.
-        /// </summary>
-        /// <param name="logger">Logger.</param>
-        /// <param name="ioService">IO Service.</param>
-        /// <param name="configurationService">Configuration service.</param>
-        /// <param name="mediaFactoryService">Media factory service.</param>
-        public MediaClassificationService(ILogger<MediaClassificationService> logger, IIOService ioService, IConfigurationService configurationService, IMediaFactoryService mediaFactoryService)
+        public OrderMediaService(ILogger<OrderMediaService> logger, IIOService ioService, IConfigurationService configurationService, IMediaFactory mediaFactoryService, IClassificationService classificationService)
         {
             _logger = logger;
             _ioService = ioService;
             _configurationService = configurationService;
-            _mediaFactoryService = mediaFactoryService;
+            _mediaFactory = mediaFactoryService;
+            _classificationService = classificationService;
         }
 
         public void Run()
@@ -51,9 +46,9 @@ namespace OrderMedia.Services
 
             foreach (var media in allMedia)
             {
-                var mediaObject = _mediaFactoryService.CreateMedia(media.FullName);
+                var mediaObject = _mediaFactory.CreateMedia(media.FullName);
 
-                mediaObject.Process();
+                _classificationService.Process(mediaObject);
             }
         }
 

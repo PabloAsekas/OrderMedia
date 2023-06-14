@@ -10,10 +10,6 @@ namespace OrderMedia.Services
     {
         private readonly IConfiguration _configuration;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationService"/> class.
-        /// </summary>
-        /// <param name="configuration">Configuration.</param>
         public ConfigurationService(IConfiguration configuration)
         {
             _configuration = configuration;
