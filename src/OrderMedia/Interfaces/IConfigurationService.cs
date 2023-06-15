@@ -6,10 +6,10 @@
     public interface IConfigurationService
     {
         /// <summary>
-        /// Gets the original path.
+        /// Gets the media source path.
         /// </summary>
-        /// <returns>String with the original path.</returns>
-        string GetOriginalPath();
+        /// <returns>String with the media source path.</returns>
+        string GetMediaSourcePath();
 
         /// <summary>
         /// Gets image extensions.
