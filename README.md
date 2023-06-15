@@ -1,5 +1,7 @@
 # Order Media
 
+<p align="center">![Order Media](https://github.com/PabloAsekas/OrderMedia/assets/2021846/f46b7ba6-0302-46a6-b67f-bcc77240d61e)</p>
+
 Order Media is a .NET 6 console application made to classify media files based on the captured date.
 
 To have an ordered media catalog, this application will move each file to the corresponding folder based on the captured date.
