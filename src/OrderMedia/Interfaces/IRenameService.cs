@@ -1,12 +1,11 @@
 ﻿using System;
-using OrderMedia.Models;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Rename service interface.
-	/// </summary>
-	public interface IRenameService
+    /// <summary>
+    /// Rename service interface.
+    /// </summary>
+    public interface IRenameService
 	{
 		/// <summary>
 		/// Renames given name based on the current name and the created DateTime.

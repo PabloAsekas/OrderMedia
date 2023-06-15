@@ -11,11 +11,13 @@ namespace OrderMedia.Services
     {
         private readonly IIOService _ioService;
         private readonly IRandomizerService _randomizerService;
+        private readonly IConfigurationService _configurationService;
 
-        public RenameService(IIOService ioService, IRandomizerService randomizerService)
+        public RenameService(IIOService ioService, IRandomizerService randomizerService, IConfigurationService configurationService)
         {
             _ioService = ioService;
             _randomizerService = randomizerService;
+            _configurationService = configurationService;
         }
 
         public string Rename(string name, DateTime createdDateTime)
@@ -26,14 +28,14 @@ namespace OrderMedia.Services
 
             string cleanedName = GetCleanedName(name);
 
-            if (cleanedName.Length < 9)
+            if (ReplaceName(cleanedName.Length))
             {
-                finalName += $"_{cleanedName}";
+                var randomNumber = _randomizerService.GetRandomNumberAsD4();
+                finalName += $"_{_configurationService.GetNewMediaName()}_{randomNumber}";
             }
             else
             {
-                var randomNumber = _randomizerService.GetRandomNumberAsD4();
-                finalName += $"_pbg_{randomNumber}";
+                finalName += $"_{cleanedName}";
             }
 
             return $"{finalName}{extension}";
@@ -63,6 +65,10 @@ namespace OrderMedia.Services
             cleanedName = cleanedName.Trim();
 
             return cleanedName;
+        }
+
+        private bool ReplaceName(int cleanedNameLength) {
+            return cleanedNameLength > _configurationService.GetMaxMediaNameLength() && _configurationService.GetReplaceLongNames();
         }
     }
 }

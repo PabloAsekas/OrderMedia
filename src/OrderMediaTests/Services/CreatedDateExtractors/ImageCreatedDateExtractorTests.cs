@@ -1,14 +1,10 @@
-﻿using System;
-using FluentAssertions;
-using MetadataExtractor.Formats.Exif;
-using Moq;
-using Moq.AutoMock;
+﻿using MetadataExtractor.Formats.Exif;
 using OrderMedia.Interfaces;
 using OrderMedia.Services.CreatedDateExtractors;
 
 namespace OrderMediaTests.Services.CreatedDateExtractors
 {
-	public class ImageCreatedDateExtractorTests
+    public class ImageCreatedDateExtractorTests
 	{
 		private AutoMocker _autoMocker;
 		private Mock<IMetadataExtractorService> _metadataExtractor;

@@ -1,15 +1,11 @@
-﻿using System;
-using FluentAssertions;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Services.Processors;
 
 namespace OrderMediaTests.Factories
 {
-	public class ProcessorFactoryTests
+    public class ProcessorFactoryTests
 	{
         private AutoMocker _autoMocker;
 		private Mock<IServiceProvider> _serviceProviderMock;

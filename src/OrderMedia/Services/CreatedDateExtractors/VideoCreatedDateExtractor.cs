@@ -1,7 +1,5 @@
 ﻿using System;
-using MetadataExtractor;
 using MetadataExtractor.Formats.QuickTime;
-using System.Collections.Generic;
 using System.Globalization;
 using OrderMedia.Interfaces;
 using System.Linq;

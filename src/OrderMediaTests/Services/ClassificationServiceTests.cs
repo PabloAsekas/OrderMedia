@@ -1,14 +1,11 @@
-﻿using System;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
 using OrderMedia.Services;
 
 namespace OrderMediaTests.Services
 {
-	public class ClassificationServiceTests
+    public class ClassificationServiceTests
 	{
 		private AutoMocker _autoMocker;
 		private Mock<IProcessor> _processorMock;

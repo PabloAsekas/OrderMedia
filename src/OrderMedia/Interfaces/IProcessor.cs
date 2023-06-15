@@ -1,12 +1,11 @@
-﻿using System;
-using OrderMedia.Models;
+﻿using OrderMedia.Models;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Processor interface.
-	/// </summary>
-	public interface IProcessor
+    /// <summary>
+    /// Processor interface.
+    /// </summary>
+    public interface IProcessor
 	{
 		/// <summary>
 		/// Executes the processor method for the desired media.

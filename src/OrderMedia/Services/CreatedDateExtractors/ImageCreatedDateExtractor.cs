@@ -1,11 +1,8 @@
 ﻿using System;
-using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
-using System.Collections.Generic;
 using System.Globalization;
 using OrderMedia.Interfaces;
 using System.Linq;
-using OrderMedia.Models;
 
 namespace OrderMedia.Services.CreatedDateExtractors
 {

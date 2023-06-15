@@ -1,12 +1,7 @@
-﻿using System;
-using FluentAssertions;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Services.CreatedDateExtractors;
 
 namespace OrderMediaTests.Factories
 {
@@ -20,20 +15,16 @@ namespace OrderMediaTests.Factories
         private Mock<IMediaTypeService> _mediaTypeServiceMock;
         private Mock<ICreatedDateExtractorsFactory> _createdDateTimeServiceFactoryMock;
 
-        private const string mediaFolder = "path";
-        private const string mediaPath = $"test/{mediaFolder}/";
-        private const string nameWithoutExtension = "media";
-        private const string image = $"{nameWithoutExtension}.jpg";
-        private const string raw = $"{nameWithoutExtension}.dng";
-        private const string video = $"{nameWithoutExtension}.mp4";
-        private const string whatsApp = $"{nameWithoutExtension}.whatsapp";
-        private const string classificationFolderName = "img";
-        private const string createdDate = "2014-07-31";
+        private const string mediaPath = $"{mediaFolder}/{name}";
+        private const string mediaFolder = "test/path";
+        private const string name = "test.jpg";
+        private const string nameWithoutExtension = "test";
         private static DateTime createdDateTime = new DateTime(2014, 7, 31, 22, 15, 15);
-        private const string newMediaFolder = $"{mediaFolder}/{classificationFolderName}/{createdDate}";
-        private const string newNameWithoutExtension = "renamedName";
-        private const string newName = $"{newNameWithoutExtension}.jpg";
-        private const string newMediaPath = $"{newMediaFolder}/{newName}";
+        private const string createdDateTimeFolder = "2014-07-31";
+        private const string classificationFolderName = "img";
+        private const string newMediaFolder = $"{mediaFolder}/{classificationFolderName}/{createdDateTimeFolder}/";
+        private const string newName = "renamed.jpg";
+        private const string newNameWithoutExtension = "renamed";
 
         [SetUp]
         public void SetUp()
@@ -49,42 +40,22 @@ namespace OrderMediaTests.Factories
             _ioServiceMock = _autoMocker.GetMock<IIOService>();
             _ioServiceMock.Setup(x => x.GetDirectoryName(It.IsAny<string>()))
                 .Returns(mediaFolder);
-            _ioServiceMock.Setup(x => x.GetFileName(mediaPath + image))
-                .Returns(image);
-            _ioServiceMock.Setup(x => x.GetFileName(mediaPath + raw))
-                .Returns(raw);
-            _ioServiceMock.Setup(x => x.GetFileName(mediaPath + video))
-                .Returns(video);
-            _ioServiceMock.Setup(x => x.GetFileName(mediaPath + whatsApp))
-                .Returns(whatsApp);
-            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath + image))
+            _ioServiceMock.Setup(x => x.GetFileName(mediaPath))
+                .Returns(name);
+            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
                 .Returns(nameWithoutExtension);
-            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath + raw))
-                .Returns(nameWithoutExtension);
-            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath + video))
-                .Returns(nameWithoutExtension);
-            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath + whatsApp))
-                .Returns(nameWithoutExtension);
-            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(newName))
-                .Returns(newNameWithoutExtension);
             _ioServiceMock.Setup(x => x.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTime.ToString("yyyy-MM-dd") }))
                 .Returns(newMediaFolder);
-            _ioServiceMock.Setup(x => x.Combine(new string[] { newMediaFolder, newName }))
-                .Returns(newMediaPath);
+            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(newName))
+                .Returns(newNameWithoutExtension);
+            _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(name))
+                .Returns(nameWithoutExtension);
 
             _renameServiceMock = _autoMocker.GetMock<IRenameService>();
             _renameServiceMock.Setup(x => x.Rename(It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(newName);
 
             _mediaTypeServiceMock = _autoMocker.GetMock<IMediaTypeService>();
-            _mediaTypeServiceMock.Setup(x => x.GetMediaType(mediaPath + image))
-                .Returns(MediaType.Image);
-            _mediaTypeServiceMock.Setup(x => x.GetMediaType(mediaPath + raw))
-                .Returns(MediaType.Raw);
-            _mediaTypeServiceMock.Setup(x => x.GetMediaType(mediaPath + video))
-                .Returns(MediaType.Video);
-            _mediaTypeServiceMock.Setup(x => x.GetMediaType(mediaPath + whatsApp))
-                .Returns(MediaType.WhatsApp);
 
             var createdDateExtractor = _autoMocker.GetMock<ICreatedDateExtractor>();
             createdDateExtractor.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
@@ -96,47 +67,62 @@ namespace OrderMediaTests.Factories
         }
 
         [Test]
-        [TestCase(image, MediaType.Image)]
-        [TestCase(raw, MediaType.Raw)]
-        [TestCase(video, MediaType.Video)]
-        [TestCase(whatsApp, MediaType.WhatsApp)]
-        public void CreateMedia_Returns_Succesfully(string name, MediaType mediaType)
+        [TestCase(MediaType.Image, true)]
+        [TestCase(MediaType.Image, false)]
+        [TestCase(MediaType.Raw, true)]
+        [TestCase(MediaType.Raw, false)]
+        [TestCase(MediaType.Video, true)]
+        [TestCase(MediaType.Video, false)]
+        [TestCase(MediaType.WhatsApp, true)]
+        [TestCase(MediaType.WhatsApp, false)]
+        public void CreateMedia_Returns_Succesfully(MediaType mediaType, bool renamed)
         {
             // Arrange
-            string fullPath = mediaPath + name;
+            var finalNewName = renamed ? newName : name;
+
+            var finalNewNameWithoutExtension = renamed ? newNameWithoutExtension : nameWithoutExtension;
+
+            var finalMediaPath = $"{newMediaFolder}/{finalNewName}";
+
+            _ioServiceMock.Setup(x => x.Combine(new string[] { newMediaFolder, finalNewName }))
+                .Returns(finalMediaPath);
+
+            _mediaTypeServiceMock.Setup(x => x.GetMediaType(It.IsAny<string>()))
+                .Returns(mediaType);
+
+            _configurationServiceMock.Setup(x => x.GetRenameMediaFiles())
+                .Returns(renamed);
 
             var sut = _autoMocker.CreateInstance<MediaFactory>();
 
             // Act
-            var result = sut.CreateMedia(fullPath);
+            var result = sut.CreateMedia(mediaPath);
 
             // Assert
             result.Should().BeOfType<Media>();
             result.MediaType.Should().Be(mediaType);
-            result.MediaPath.Should().Be(fullPath);
+            result.MediaPath.Should().Be(mediaPath);
             result.MediaFolder.Should().Be(mediaFolder);
             result.Name.Should().Be(name);
             result.NameWithoutExtension.Should().Be(nameWithoutExtension);
             result.CreatedDateTime.Should().Be(createdDateTime);
-            result.NewMediaPath.Should().Be(newMediaPath);
+            result.NewMediaPath.Should().Be(finalMediaPath);
             result.NewMediaFolder.Should().Be(newMediaFolder);
-            result.NewName.Should().Be(newName);
-            result.NewNameWithoutExtension.Should().Be(newNameWithoutExtension);
+            result.NewName.Should().Be(finalNewName);
+            result.NewNameWithoutExtension.Should().Be(finalNewNameWithoutExtension);
         }
 
         [Test]
         public void CreateMedia_Throws_Exception()
         {
             // Arrange
-            string fullPath = mediaPath + "none.none";
-
-            _mediaTypeServiceMock.Setup(x => x.GetMediaType(fullPath))
+            _mediaTypeServiceMock.Setup(x => x.GetMediaType(mediaPath))
                 .Returns(MediaType.None);
 
             var sut = _autoMocker.CreateInstance<MediaFactory>();
 
             // Act
-            Action act = () => sut.CreateMedia(fullPath);
+            Action act = () => sut.CreateMedia(mediaPath);
 
             // Assert
             act.Should().Throw<FormatException>();

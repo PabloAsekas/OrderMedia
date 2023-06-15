@@ -1,12 +1,11 @@
-﻿using System;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Media Type Service interface.
-	/// </summary>
-	public interface IMediaTypeService
+    /// <summary>
+    /// Media Type Service interface.
+    /// </summary>
+    public interface IMediaTypeService
 	{
 		/// <summary>
 		/// Gets media type based on the media path.

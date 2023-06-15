@@ -1,12 +1,11 @@
-﻿using System;
-using OrderMedia.Models;
+﻿using OrderMedia.Models;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Classification Service interface.
-	/// </summary>
-	public interface IClassificationService
+    /// <summary>
+    /// Classification Service interface.
+    /// </summary>
+    public interface IClassificationService
 	{
 		/// <summary>
 		/// Process the passed media.

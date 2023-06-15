@@ -1,13 +1,10 @@
-﻿using System;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 using OrderMedia.Services.Processors;
 
 namespace OrderMediaTests.Services.Processors
 {
-	public class LivePhotoProcessorTests
+    public class LivePhotoProcessorTests
 	{
         private AutoMocker _autoMocker;
         private Mock<IIOService> _ioServiceMock;

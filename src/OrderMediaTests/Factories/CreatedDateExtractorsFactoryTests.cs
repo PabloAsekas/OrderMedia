@@ -1,16 +1,11 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using FluentAssertions;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Services.CreatedDateExtractors;
 
 namespace OrderMediaTests.Factories
 {
-	public class CreatedDateExtractorsFactoryTests
+    public class CreatedDateExtractorsFactoryTests
 	{
 		private AutoMocker _autoMocker;
 		private Mock<IServiceProvider> _serviceProviderMock;

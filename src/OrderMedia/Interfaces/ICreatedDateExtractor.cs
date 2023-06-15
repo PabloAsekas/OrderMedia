@@ -1,12 +1,11 @@
 ﻿using System;
-using OrderMedia.Models;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Created DateTime extractors interface.
-	/// </summary>
-	public interface ICreatedDateExtractor
+    /// <summary>
+    /// Created DateTime extractors interface.
+    /// </summary>
+    public interface ICreatedDateExtractor
 	{
 		/// <summary>
 		/// Gets the Created DateTime of the passed file.

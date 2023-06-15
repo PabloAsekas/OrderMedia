@@ -44,5 +44,29 @@ namespace OrderMedia.Services
             var section = _configuration.GetSection("VideoFolderName");
             return section.Get<string>();
         }
+
+        public bool GetRenameMediaFiles()
+        {
+            var section = _configuration.GetSection("RenameMediaFiles");
+            return section.Get<bool>();
+        }
+
+        public bool GetReplaceLongNames()
+        {
+            var section = _configuration.GetSection("ReplaceLongNames");
+            return section.Get<bool>();
+        }
+
+        public int GetMaxMediaNameLength()
+        {
+            var section = _configuration.GetSection("MaxMediaNameLength");
+            return section.Get<int>();
+        }
+
+        public string GetNewMediaName()
+        {
+            var section = _configuration.GetSection("NewMediaName");
+            return section.Get<string>();
+        }
     }
 }

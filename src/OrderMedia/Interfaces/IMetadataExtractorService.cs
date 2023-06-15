@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Metadata Extractor Service.
-	/// </summary>
-	public interface IMetadataExtractorService
+    /// <summary>
+    /// Metadata Extractor Service.
+    /// </summary>
+    public interface IMetadataExtractorService
 	{
 		/// <summary>
 		/// Gets Image Directory based on media path.
