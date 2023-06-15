@@ -1,12 +1,11 @@
-﻿using System;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 
 namespace OrderMedia.Interfaces
 {
-	/// <summary>
-	/// Created DateTime Service Factory interface.
-	/// </summary>
-	public interface ICreatedDateExtractorsFactory
+    /// <summary>
+    /// Created DateTime Service Factory interface.
+    /// </summary>
+    public interface ICreatedDateExtractorsFactory
 	{
         /// <summary>
         /// Gets the CreatedDateExtractors based on the MediaType.

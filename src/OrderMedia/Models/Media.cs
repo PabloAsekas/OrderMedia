@@ -1,14 +1,13 @@
 ﻿using System;
 using OrderMedia.Enums;
-using OrderMedia.Interfaces;
 
 namespace OrderMedia.Models
 {
-	public class Media
+    public class Media
 	{
         /// <summary>
         /// Gets or sets the media type.
-        /// Ex. Image, Raw, Video.
+        /// Ex. Image, Raw, Video or WhatsApp.
         /// </summary>
         public MediaType MediaType { get; set; }
 
@@ -21,7 +20,7 @@ namespace OrderMedia.Models
         /// <summary>
         /// Gets or sets current media folder name.
         /// Ex. Having a MediaPath "/pablo/photos/img_0001.heic"
-        ///     MediaFolder = "photos"
+        ///     MediaFolder = "/pablo/photos/"
         /// </summary>
         public string MediaFolder { get; set; }
 

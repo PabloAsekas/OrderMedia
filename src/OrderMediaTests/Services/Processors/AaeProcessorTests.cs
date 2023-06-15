@@ -1,14 +1,10 @@
-﻿using System;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 using OrderMedia.Services.Processors;
 
 namespace OrderMediaTests.Services.Processors
 {
-	public class AaeProcessorTests
+    public class AaeProcessorTests
 	{
 		private AutoMocker _autoMocker;
         private Mock<IIOService> _ioServiceMock;

@@ -1,5 +1,4 @@
-﻿using System;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services

@@ -1,14 +1,8 @@
-﻿using System;
-using FluentAssertions;
-using MetadataExtractor.Formats.Exif;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Interfaces;
-using OrderMedia.Services.CreatedDateExtractors;
+﻿using OrderMedia.Services.CreatedDateExtractors;
 
 namespace OrderMediaTests.Services.CreatedDateExtractors
 {
-	public class WhatsAppCreatedDateExtractorTests
+    public class WhatsAppCreatedDateExtractorTests
 	{
         private AutoMocker _autoMocker;
 

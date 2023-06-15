@@ -1,14 +1,9 @@
-﻿using System;
-using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
 using OrderMedia.Services;
 
 namespace OrderMediaTests.Services
 {
-	public class ConfigurationServiceTests
+    public class ConfigurationServiceTests
 	{
 		private AutoMocker _autoMocker;
 
@@ -19,6 +14,13 @@ namespace OrderMediaTests.Services
         private string[] imageExtensions = new string[] { ".heic", ".jpg", ".jpeg", ".gif", ".png", ".arw", ".dng" };
         private string videoExtensionsName = "VideoExtensions";
         private string[] videoExtensions = new string[] { ".mov", ".mp4" };
+        private string RenameMediaFilesName = "RenameMediaFiles";
+        private bool RenameMediaFiles = true;
+        private string ReplaceLongNamesName = "ReplaceLongNames";
+        private bool ReplaceLongNames = true;
+        private string MaxMediaNameLengthName = "MaxMediaNameLength";
+        private int MaxMediaNameLength = 9;
+        private string NewMediaName = "NewMediaName";
 
         [SetUp]
 		public void SetUp()
@@ -39,6 +41,10 @@ namespace OrderMediaTests.Services
                 { $"{imageExtensionsName}:6", imageExtensions[6]},
                 { $"{videoExtensionsName}:0", videoExtensions[0]},
                 { $"{videoExtensionsName}:1", videoExtensions[1]},
+                { RenameMediaFilesName, RenameMediaFiles.ToString() },
+                { ReplaceLongNamesName, ReplaceLongNames.ToString() },
+                { MaxMediaNameLengthName, MaxMediaNameLength.ToString() },
+                { NewMediaName, NewMediaName },
             };
 
             var configuration = new ConfigurationBuilder()
@@ -58,7 +64,7 @@ namespace OrderMediaTests.Services
 			var result = sut.GetMediaSourcePath();
 
 			// Assert
-			result.Should().BeEquivalentTo(MediaSourcePath);
+			result.Should().Be(MediaSourcePath);
 		}
 
         [Test]
@@ -97,7 +103,7 @@ namespace OrderMediaTests.Services
             var result = sut.GetImageFolderName();
 
             // Assert
-            result.Should().BeEquivalentTo(ImageFolderName);
+            result.Should().Be(ImageFolderName);
         }
 
         [Test]
@@ -110,7 +116,59 @@ namespace OrderMediaTests.Services
             var result = sut.GetVideoFolderName();
 
             // Assert
-            result.Should().BeEquivalentTo(VideoFolderName);
+            result.Should().Be(VideoFolderName);
+        }
+
+        [Test]
+        public void GetRenameMediaFiles_Success()
+        {
+            // Arrange
+            var sut = _autoMocker.CreateInstance<ConfigurationService>();
+
+            // Act
+            var result = sut.GetRenameMediaFiles();
+
+            // Assert
+            result.Should().Be(RenameMediaFiles);
+        }
+
+        [Test]
+        public void GetReplaceLongNames_Success()
+        {
+            // Arrange
+            var sut = _autoMocker.CreateInstance<ConfigurationService>();
+
+            // Act
+            var result = sut.GetReplaceLongNames();
+
+            // Assert
+            result.Should().Be(ReplaceLongNames);
+        }
+
+        [Test]
+        public void GetMaxMediaNameLength_Success()
+        {
+            // Arrange
+            var sut = _autoMocker.CreateInstance<ConfigurationService>();
+
+            // Act
+            var result = sut.GetMaxMediaNameLength();
+
+            // Assert
+            result.Should().Be(MaxMediaNameLength);
+        }
+
+        [Test]
+        public void GetNewMediaName_Success()
+        {
+            // Arrange
+            var sut = _autoMocker.CreateInstance<ConfigurationService>();
+
+            // Act
+            var result = sut.GetNewMediaName();
+
+            // Assert
+            result.Should().Be(NewMediaName);
         }
     }
 }

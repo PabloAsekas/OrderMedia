@@ -1,7 +1,6 @@
-﻿using System;
-namespace OrderMedia.Interfaces
+﻿namespace OrderMedia.Interfaces
 {
-	public interface IRandomizerService
+    public interface IRandomizerService
 	{
 		/// <summary>
 		/// Gets a random number betwen 0 and 9999 as D4 format: 0001, 1343, 3231.

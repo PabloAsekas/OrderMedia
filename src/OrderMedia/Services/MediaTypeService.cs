@@ -1,7 +1,6 @@
 ﻿using System;
 using OrderMedia.Enums;
 using OrderMedia.Interfaces;
-using OrderMedia.Models;
 
 namespace OrderMedia.Services
 {

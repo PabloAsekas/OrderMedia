@@ -1,5 +1,4 @@
-﻿using System;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services.Processors
@@ -19,6 +18,8 @@ namespace OrderMedia.Services.Processors
 
         public void Execute(Media media)
         {
+            Processor?.Execute(media);
+
             _ioService.CreateFolder(media.NewMediaFolder);
             _ioService.MoveMedia(media.MediaPath, media.NewMediaPath);
         }

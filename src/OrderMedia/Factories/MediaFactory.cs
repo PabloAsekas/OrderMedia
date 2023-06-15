@@ -49,7 +49,7 @@ namespace OrderMedia.Factories
 
             var newMediaFolder = _ioService.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeAsString });
 
-            var newName = _renameService.Rename(fullName, createdDateTime);
+            var newName = GetNewName(fullName, createdDateTime);
 
             var newNameWithoutExtension = _ioService.GetFileNameWithoutExtension(newName);
 
@@ -70,11 +70,6 @@ namespace OrderMedia.Factories
             };
         }
 
-        private static string AnalyzeMediaName(string name, string startsWith, string newExtension, string oldExtension)
-        {
-            return name.StartsWith(startsWith) ? newExtension : oldExtension;
-        }
-
         private string GetClassificationFolderName(MediaType mediaType)
         {
             return mediaType switch
@@ -85,6 +80,16 @@ namespace OrderMedia.Factories
                 MediaType.WhatsApp => _configurationService.GetImageFolderName(),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
+        }
+
+        private string GetNewName(string originalName, DateTime createdDateTime)
+        {
+            if (_configurationService.GetRenameMediaFiles())
+            {
+                return _renameService.Rename(originalName, createdDateTime);
+            }
+
+            return originalName;
         }
     }
 }

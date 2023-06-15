@@ -34,5 +34,29 @@
         /// </summary>
         /// <returns>String with the video folder name.</returns>
         string GetVideoFolderName();
+
+        /// <summary>
+        /// Gets the setting to rename media files or not.
+        /// </summary>
+        /// <returns>Bool with the rename meda file setting.</returns>
+        bool GetRenameMediaFiles();
+
+        /// <summary>
+        /// Gets the setting to replace long names with new ones.
+        /// </summary>
+        /// <returns>Bool with the replace long names setting.</returns>
+        bool GetReplaceLongNames();
+
+        /// <summary>
+        /// Gets the maximum length setting for media names to be replaced with new name.
+        /// </summary>
+        /// <returns>Integer with the maximum media name length.</returns>
+        int GetMaxMediaNameLength();
+
+        /// <summary>
+        /// Gets the new media name if the original media name will be replaced.
+        /// </summary>
+        /// <returns>String with the new media name.</returns>
+        string GetNewMediaName();
     }
 }

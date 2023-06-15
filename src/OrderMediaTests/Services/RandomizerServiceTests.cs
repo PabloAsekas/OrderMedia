@@ -1,11 +1,8 @@
-﻿using System;
-using FluentAssertions;
-using Moq.AutoMock;
-using OrderMedia.Services;
+﻿using OrderMedia.Services;
 
 namespace OrderMediaTests.Services
 {
-	public class RandomizerServiceTests
+    public class RandomizerServiceTests
 	{
 		private AutoMocker _autoMocker;
 

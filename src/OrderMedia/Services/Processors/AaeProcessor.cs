@@ -1,5 +1,4 @@
-﻿using System;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services.Processors
@@ -26,10 +25,7 @@ namespace OrderMedia.Services.Processors
 
         public void Execute(Media media)
         {
-            if (Processor is not null)
-            {
-                Processor.Execute(media);
-            }
+            Processor?.Execute(media);
 
             string aaeName = _renameService.GetAaeName(media.NameWithoutExtension);
             string aaeLocation = _ioService.Combine(new string[] { media.MediaFolder, aaeName });

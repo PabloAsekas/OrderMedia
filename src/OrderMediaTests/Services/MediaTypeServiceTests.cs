@@ -1,14 +1,10 @@
-﻿using System;
-using FluentAssertions;
-using Moq;
-using Moq.AutoMock;
-using OrderMedia.Enums;
+﻿using OrderMedia.Enums;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
 
 namespace OrderMediaTests.Services
 {
-	public class MediaTypeServiceTests
+    public class MediaTypeServiceTests
 	{
 		private AutoMocker _autoMocker;
 		private Mock<IIOService> _ioServiceMock;
