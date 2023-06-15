@@ -12,12 +12,12 @@ namespace OrderMediaTests.Services
 	{
 		private AutoMocker _autoMocker;
 
-        private string originalPath = "originalPath";
-        private string imgFolder = "imgFolder";
-        private string vidFolder = "vidFolder";
-        private string imageExtensionsName = "imageExtensions";
+        private string MediaSourcePath = "MediaSourcePath";
+        private string ImageFolderName = "ImageFolderName";
+        private string VideoFolderName = "VideoFolderName";
+        private string imageExtensionsName = "ImageExtensions";
         private string[] imageExtensions = new string[] { ".heic", ".jpg", ".jpeg", ".gif", ".png", ".arw", ".dng" };
-        private string videoExtensionsName = "videoExtensions";
+        private string videoExtensionsName = "VideoExtensions";
         private string[] videoExtensions = new string[] { ".mov", ".mp4" };
 
         [SetUp]
@@ -27,9 +27,9 @@ namespace OrderMediaTests.Services
 
             var appSettings = new Dictionary<string, string>
             {
-                { originalPath, originalPath },
-                { imgFolder, imgFolder },
-                { vidFolder, vidFolder },
+                { MediaSourcePath, MediaSourcePath },
+                { ImageFolderName, ImageFolderName },
+                { VideoFolderName, VideoFolderName },
                 { $"{imageExtensionsName}:0", imageExtensions[0]},
                 { $"{imageExtensionsName}:1", imageExtensions[1]},
                 { $"{imageExtensionsName}:2", imageExtensions[2]},
@@ -49,16 +49,16 @@ namespace OrderMediaTests.Services
 		}
 
 		[Test]
-		public void GetOriginalPath_Success()
+		public void GetMediaSourcePath_Success()
 		{
 			// Arrange
 			var sut = _autoMocker.CreateInstance<ConfigurationService>();
 
 			// Act
-			var result = sut.GetOriginalPath();
+			var result = sut.GetMediaSourcePath();
 
 			// Assert
-			result.Should().BeEquivalentTo(originalPath);
+			result.Should().BeEquivalentTo(MediaSourcePath);
 		}
 
         [Test]
@@ -97,7 +97,7 @@ namespace OrderMediaTests.Services
             var result = sut.GetImageFolderName();
 
             // Assert
-            result.Should().BeEquivalentTo(imgFolder);
+            result.Should().BeEquivalentTo(ImageFolderName);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace OrderMediaTests.Services
             var result = sut.GetVideoFolderName();
 
             // Assert
-            result.Should().BeEquivalentTo(vidFolder);
+            result.Should().BeEquivalentTo(VideoFolderName);
         }
     }
 }

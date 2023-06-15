@@ -36,13 +36,13 @@ namespace OrderMedia.Services
 
         private void CreateMediaFolders()
         {
-            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetOriginalPath(), _configurationService.GetImageFolderName() }));
-            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetOriginalPath(), _configurationService.GetVideoFolderName() }));
+            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetMediaSourcePath(), _configurationService.GetImageFolderName() }));
+            _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetMediaSourcePath(), _configurationService.GetVideoFolderName() }));
         }
 
         private void ManageMedia(params string[] extensions)
         {
-            var allMedia = _ioService.GetFilesByExtensions(_configurationService.GetOriginalPath(), extensions);
+            var allMedia = _ioService.GetFilesByExtensions(_configurationService.GetMediaSourcePath(), extensions);
 
             foreach (var media in allMedia)
             {

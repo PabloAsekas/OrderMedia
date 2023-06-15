@@ -15,33 +15,33 @@ namespace OrderMedia.Services
             _configuration = configuration;
         }
 
-        public string GetOriginalPath()
+        public string GetMediaSourcePath()
         {
-            var section = _configuration.GetSection("originalPath");
+            var section = _configuration.GetSection("MediaSourcePath");
             return section.Get<string>();
         }
 
         public string[] GetImageExtensions()
         {
-            var section = _configuration.GetSection("imageExtensions");
+            var section = _configuration.GetSection("ImageExtensions");
             return section.Get<string[]>();
         }
 
         public string[] GetVideoExtensions()
         {
-            var section = _configuration.GetSection("videoExtensions");
+            var section = _configuration.GetSection("VideoExtensions");
             return section.Get<string[]>();
         }
 
         public string GetImageFolderName()
         {
-            var section = _configuration.GetSection("imgFolder");
+            var section = _configuration.GetSection("ImageFolderName");
             return section.Get<string>();
         }
 
         public string GetVideoFolderName()
         {
-            var section = _configuration.GetSection("vidFolder");
+            var section = _configuration.GetSection("VideoFolderName");
             return section.Get<string>();
         }
     }
