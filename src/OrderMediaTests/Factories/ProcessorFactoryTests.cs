@@ -24,6 +24,8 @@ namespace OrderMediaTests.Factories
 
 			var aaeProcessor = new AaeProcessor(ioServiceMock.Object, renameServiceMock.Object);
 
+            var xmpProcessor = new XmpProcessor(ioServiceMock.Object, renameServiceMock.Object);
+
             _serviceProviderMock = _autoMocker.GetMock<IServiceProvider>();
 			_serviceProviderMock.Setup(x => x.GetService(typeof(MainProcessor)))
 				.Returns(mainProcessor);
@@ -31,11 +33,13 @@ namespace OrderMediaTests.Factories
                 .Returns(livePhotoProcessor);
             _serviceProviderMock.Setup(x => x.GetService(typeof(AaeProcessor)))
                 .Returns(aaeProcessor);
+            _serviceProviderMock.Setup(x => x.GetService(typeof(XmpProcessor)))
+                .Returns(xmpProcessor);
         }
 
 		[Test]
 		[TestCase(MediaType.Image, typeof(AaeProcessor))]
-        [TestCase(MediaType.Raw, typeof(MainProcessor))]
+        [TestCase(MediaType.Raw, typeof(XmpProcessor))]
         [TestCase(MediaType.Video, typeof(MainProcessor))]
         [TestCase(MediaType.WhatsApp, typeof(MainProcessor))]
         public void CreateProcessor_Returns_Succesfully(MediaType mediaType, Type processor)
