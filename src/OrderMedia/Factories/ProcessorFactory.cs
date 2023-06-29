@@ -41,7 +41,12 @@ namespace OrderMedia.Factories
 
         private IProcessor CreateRawProcessor()
         {
-            return CreateDefaultProcessor();
+            var mainProcessor = CreateDefaultProcessor();
+
+            var xmpProcessor = (IProcessor)_serviceProvider.GetService(typeof(XmpProcessor));
+            xmpProcessor.SetProcessor(mainProcessor);
+
+            return xmpProcessor;
         }
 
         private IProcessor CreateVideoProcessor()

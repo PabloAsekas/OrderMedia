@@ -36,6 +36,7 @@ It also supports:
 
 - LivePhoto: if a `.heic` or `.jpg` file is a LivePhoto, the application will move and rename the video.
 - Aae files: sometimes, Apple photos (like Portrait photos) export a `.aae` file with metadata related to the Portrait effect. The application will move and rename the file.
+- Xmp files: for raw media files, sometimes there is a sidecar file with `.xmp` extension. This file contains metadata about the photo. The application will move and rename the file.
 - WhatsApp media:  if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss` or `VIDEO-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification.
 
 ## Configuration

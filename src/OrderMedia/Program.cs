@@ -57,6 +57,8 @@ namespace OrderMedia
                 .AddScoped<IProcessor, AaeProcessor>(s => s.GetService<AaeProcessor>())
                 .AddScoped<LivePhotoProcessor>()
                 .AddScoped<IProcessor, LivePhotoProcessor>(s => s.GetService<LivePhotoProcessor>())
+                .AddScoped<XmpProcessor>()
+                .AddScoped<IProcessor, XmpProcessor>(s => s.GetService<XmpProcessor>())
                 .AddScoped<IProcessorFactory, ProcessorFactory>()
                 .AddScoped<OrderMediaService>()
                 .AddScoped<IRandomizerService, RandomizerService>()
