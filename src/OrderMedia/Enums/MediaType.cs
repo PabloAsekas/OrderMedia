@@ -7,7 +7,8 @@ namespace OrderMedia.Enums
 		Image,
 		Raw,
 		Video,
-		WhatsApp
+		WhatsAppImage,
+		WhatsAppVideo
 	}
 }
 

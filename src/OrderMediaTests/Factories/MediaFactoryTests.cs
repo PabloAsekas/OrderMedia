@@ -73,8 +73,10 @@ namespace OrderMediaTests.Factories
         [TestCase(MediaType.Raw, false)]
         [TestCase(MediaType.Video, true)]
         [TestCase(MediaType.Video, false)]
-        [TestCase(MediaType.WhatsApp, true)]
-        [TestCase(MediaType.WhatsApp, false)]
+        [TestCase(MediaType.WhatsAppImage, true)]
+        [TestCase(MediaType.WhatsAppImage, false)]
+        [TestCase(MediaType.WhatsAppVideo, true)]
+        [TestCase(MediaType.WhatsAppVideo, false)]
         public void CreateMedia_Returns_Succesfully(MediaType mediaType, bool renamed)
         {
             // Arrange

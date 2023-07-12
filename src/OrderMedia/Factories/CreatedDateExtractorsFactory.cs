@@ -21,7 +21,8 @@ namespace OrderMedia.Factories
                 MediaType.Image => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(ImageCreatedDateExtractor)),
                 MediaType.Raw => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(RawCreatedDateExtractor)),
                 MediaType.Video => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(VideoCreatedDateExtractor)),
-                MediaType.WhatsApp => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(WhatsAppCreatedDateExtractor)),
+                MediaType.WhatsAppImage => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(WhatsAppCreatedDateExtractor)),
+                MediaType.WhatsAppVideo => (ICreatedDateExtractor) _serviceProvider.GetService(typeof(WhatsAppCreatedDateExtractor)),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
         }

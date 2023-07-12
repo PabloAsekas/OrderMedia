@@ -32,8 +32,9 @@ namespace OrderMediaTests.Factories
 		[TestCase(MediaType.Image, typeof(ImageCreatedDateExtractor))]
 		[TestCase(MediaType.Raw, typeof(RawCreatedDateExtractor))]
 		[TestCase(MediaType.Video, typeof(VideoCreatedDateExtractor))]
-		[TestCase(MediaType.WhatsApp, typeof(WhatsAppCreatedDateExtractor))]
-		public void GetExtractor_Returns_Succesfully(MediaType mediaType, Type createdDataExtractors)
+		[TestCase(MediaType.WhatsAppImage, typeof(WhatsAppCreatedDateExtractor))]
+		[TestCase(MediaType.WhatsAppVideo, typeof(WhatsAppCreatedDateExtractor))]
+        public void GetExtractor_Returns_Succesfully(MediaType mediaType, Type createdDataExtractors)
 		{
 			// Arrange
 			var sut = _autoMocker.CreateInstance<CreatedDateExtractorsFactory>();

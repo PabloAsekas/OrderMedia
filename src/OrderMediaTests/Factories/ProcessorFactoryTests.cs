@@ -41,7 +41,8 @@ namespace OrderMediaTests.Factories
 		[TestCase(MediaType.Image, typeof(AaeProcessor))]
         [TestCase(MediaType.Raw, typeof(XmpProcessor))]
         [TestCase(MediaType.Video, typeof(MainProcessor))]
-        [TestCase(MediaType.WhatsApp, typeof(MainProcessor))]
+        [TestCase(MediaType.WhatsAppImage, typeof(MainProcessor))]
+        [TestCase(MediaType.WhatsAppVideo, typeof(MainProcessor))]
         public void CreateProcessor_Returns_Succesfully(MediaType mediaType, Type processor)
 		{
 			// Arrange
