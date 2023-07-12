@@ -77,7 +77,8 @@ namespace OrderMedia.Factories
                 MediaType.Image => _configurationService.GetImageFolderName(),
                 MediaType.Raw => _configurationService.GetImageFolderName(),
                 MediaType.Video => _configurationService.GetVideoFolderName(),
-                MediaType.WhatsApp => _configurationService.GetImageFolderName(),
+                MediaType.WhatsAppImage => _configurationService.GetImageFolderName(),
+                MediaType.WhatsAppVideo => _configurationService.GetVideoFolderName(),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
         }

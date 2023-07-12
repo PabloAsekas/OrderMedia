@@ -21,7 +21,8 @@ namespace OrderMedia.Factories
                 MediaType.Image => CreateImageProcessor(),
                 MediaType.Raw => CreateRawProcessor(),
                 MediaType.Video => CreateVideoProcessor(),
-                MediaType.WhatsApp => CreateWhatsAppProcessor(),
+                MediaType.WhatsAppImage => CreateWhatsAppProcessor(),
+                MediaType.WhatsAppVideo => CreateWhatsAppProcessor(),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
         }
