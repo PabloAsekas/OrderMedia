@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using OrderMedia.Interfaces;
 
-namespace OrderMedia.Services
+namespace OrderMedia.ConsoleApp.Services
 {
     /// <summary>
     /// Order Media service class.

@@ -1,5 +1,4 @@
-﻿using System;
-namespace OrderMedia.Enums
+﻿namespace OrderMedia.Enums
 {
 	public enum MediaType
 	{

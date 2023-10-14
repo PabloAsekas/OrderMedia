@@ -1,41 +1,24 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
 using OrderMedia.Services.CreatedDateExtractors;
 using OrderMedia.Services.Processors;
 
-namespace OrderMedia
+namespace OrderMedia.Extensions
 {
-    /// <summary>
-    /// Main program class.
-    /// </summary>
-    public class Program
-    {
+	public static class ServiceCollectionExtension
+	{
         /// <summary>
-        /// Main method.
+        /// Adds OrderMedia services and configurations.
         /// </summary>
-        /// <param name="args">Arguments.</param>
-        /// <returns>Nothing.</returns>
-        public static void Main(string[] args)
+        /// <param name="services">Service Collection.</param>
+        /// <returns><see cref="IServiceCollection"/> with all the services needed by the project.</returns>
+        public static IServiceCollection AddOrderMediaServiceClient(this IServiceCollection services)
         {
-            var sp = CreateServiceProvider();
-
-            var mcs = sp.GetRequiredService<OrderMediaService>();
-
-            mcs.Run();
-        }
-
-        private static ServiceProvider CreateServiceProvider()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(configure => configure.AddConsole())
+            services
                 .AddScoped<IClassificationService, ClassificationService>()
                 .AddScoped<IConfigurationService, ConfigurationService>()
                 .AddScoped<ImageCreatedDateExtractor>()
@@ -60,12 +43,11 @@ namespace OrderMedia
                 .AddScoped<XmpProcessor>()
                 .AddScoped<IProcessor, XmpProcessor>(s => s.GetService<XmpProcessor>())
                 .AddScoped<IProcessorFactory, ProcessorFactory>()
-                .AddScoped<OrderMediaService>()
                 .AddScoped<IRandomizerService, RandomizerService>()
-                .AddScoped<IRenameService, RenameService>()
-                .AddSingleton<IConfiguration>(configuration);
+                .AddScoped<IRenameService, RenameService>();
 
-            return serviceCollection.BuildServiceProvider();
+            return services;
         }
     }
 }
+
