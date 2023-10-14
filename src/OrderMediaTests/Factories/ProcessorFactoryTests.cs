@@ -38,8 +38,8 @@ namespace OrderMediaTests.Factories
         }
 
 		[Test]
-		[TestCase(MediaType.Image, typeof(AaeProcessor))]
-        [TestCase(MediaType.Raw, typeof(XmpProcessor))]
+		[TestCase(MediaType.Image, typeof(MainProcessor))]
+        [TestCase(MediaType.Raw, typeof(MainProcessor))]
         [TestCase(MediaType.Video, typeof(MainProcessor))]
         [TestCase(MediaType.WhatsAppImage, typeof(MainProcessor))]
         [TestCase(MediaType.WhatsAppVideo, typeof(MainProcessor))]

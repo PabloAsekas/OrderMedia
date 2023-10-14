@@ -6,27 +6,19 @@ namespace OrderMedia.Services.Processors
     /// <summary>
     /// Processor for Aae files.
     /// </summary>
-	public class AaeProcessor : IProcessor
+	public class AaeProcessor : BaseProcessor
 	{
         private readonly IIOService _ioService;
         private readonly IRenameService _renameService;
-        private IProcessor Processor;
 
-        public AaeProcessor(IIOService ioService, IRenameService renameService)
+        public AaeProcessor(IIOService ioService, IRenameService renameService) : base()
         {
             _ioService = ioService;
             _renameService = renameService;
         }
 
-        public void SetProcessor(IProcessor processor)
+        public override void Execute(Media media)
         {
-            Processor = processor;
-        }
-
-        public void Execute(Media media)
-        {
-            Processor?.Execute(media);
-
             string aaeName = _renameService.GetAaeName(media.NameWithoutExtension);
             string aaeLocation = _ioService.Combine(new string[] { media.MediaFolder, aaeName });
 
@@ -37,6 +29,8 @@ namespace OrderMedia.Services.Processors
 
                 _ioService.MoveMedia(aaeLocation, newAaeLocation);
             }
+
+            ExecuteProcessors(media);
         }
     }
 }

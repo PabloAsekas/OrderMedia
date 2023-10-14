@@ -6,25 +6,17 @@ namespace OrderMedia.Services.Processors
     /// <summary>
     /// Processor for LivePhoto files.
     /// </summary>
-	public class LivePhotoProcessor : IProcessor
+	public class LivePhotoProcessor : BaseProcessor
 	{
         private readonly IIOService _ioService;
-        private IProcessor Processor;
 
-        public LivePhotoProcessor(IIOService ioService)
+        public LivePhotoProcessor(IIOService ioService) : base()
         {
             _ioService = ioService;
         }
 
-        public void SetProcessor(IProcessor processor)
+        public override void Execute(Media media)
         {
-            Processor = processor;
-        }
-
-        public void Execute(Media media)
-        {
-            Processor?.Execute(media);
-
             string videoName = $"{media.NameWithoutExtension}.mov";
             string videoLocation = _ioService.Combine(new string[] { media.MediaFolder, videoName });
 
@@ -35,6 +27,8 @@ namespace OrderMedia.Services.Processors
 
                 _ioService.MoveMedia(videoLocation, newVideoLocation);
             }
+
+            ExecuteProcessors(media);
         }
     }
 }

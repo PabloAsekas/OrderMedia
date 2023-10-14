@@ -1,5 +1,4 @@
-﻿using System;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services.Processors
@@ -7,27 +6,19 @@ namespace OrderMedia.Services.Processors
     /// <summary>
     /// Processor for Xmp files.
     /// </summary>
-    public class XmpProcessor : IProcessor
+    public class XmpProcessor : BaseProcessor
     {
         private readonly IIOService _ioService;
         private readonly IRenameService _renameService;
-        private IProcessor Processor;
 
-        public XmpProcessor(IIOService ioService, IRenameService renameService)
+        public XmpProcessor(IIOService ioService, IRenameService renameService) : base()
         {
             _ioService = ioService;
             _renameService = renameService;
         }
 
-        public void SetProcessor(IProcessor processor)
+        public override void Execute(Media media)
         {
-            Processor = processor;
-        }
-
-        public void Execute(Media media)
-        {
-            Processor?.Execute(media);
-
             string xmpName = $"{media.NameWithoutExtension}.xmp";
             string xmpLocation = _ioService.Combine(new string[] { media.MediaFolder, xmpName });
 
@@ -38,6 +29,8 @@ namespace OrderMedia.Services.Processors
 
                 _ioService.MoveMedia(xmpLocation, newXmpLocation);
             }
+
+            ExecuteProcessors(media);
         }
     }
 }
