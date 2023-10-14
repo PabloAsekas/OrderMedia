@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia", "OrderMedia\Or
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMediaTests", "OrderMediaTests\OrderMediaTests.csproj", "{746C0CA2-C72F-46D2-BB0B-36ACA1B1ECCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.ConsoleApp", "OrderMedia.ConsoleApp\OrderMedia.ConsoleApp.csproj", "{051D69AF-45A7-466D-A8FE-0C29B10D91B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{746C0CA2-C72F-46D2-BB0B-36ACA1B1ECCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746C0CA2-C72F-46D2-BB0B-36ACA1B1ECCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746C0CA2-C72F-46D2-BB0B-36ACA1B1ECCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051D69AF-45A7-466D-A8FE-0C29B10D91B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051D69AF-45A7-466D-A8FE-0C29B10D91B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051D69AF-45A7-466D-A8FE-0C29B10D91B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051D69AF-45A7-466D-A8FE-0C29B10D91B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
