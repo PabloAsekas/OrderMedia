@@ -1,4 +1,6 @@
-﻿using OrderMedia.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services.Processors
@@ -19,7 +21,25 @@ namespace OrderMedia.Services.Processors
 
         public override void Execute(Media media)
         {
-            string aaeName = _renameService.GetAaeName(media.NameWithoutExtension);
+            var possibleNames = new List<string>()
+            {
+                $"{media.NameWithoutExtension}.aae",
+                _renameService.GetAaeName(media.NameWithoutExtension),
+            };
+
+            foreach (var aaeName in possibleNames)
+            {
+                var result = FindAndMove(aaeName, media);
+
+                if (result)
+                    break;
+            }
+
+            ExecuteProcessors(media);
+        }
+
+        private bool FindAndMove(string aaeName, Media media)
+        {
             string aaeLocation = _ioService.Combine(new string[] { media.MediaFolder, aaeName });
 
             if (_ioService.Exists(aaeLocation))
@@ -28,10 +48,11 @@ namespace OrderMedia.Services.Processors
                 string newAaeLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newAaeName });
 
                 _ioService.MoveMedia(aaeLocation, newAaeLocation);
+
+                return true;
             }
 
-            ExecuteProcessors(media);
+            return false;
         }
     }
 }
-
