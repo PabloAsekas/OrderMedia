@@ -17,15 +17,18 @@ namespace OrderMediaTests.Factories
 
 			var metadataExtractorServiceMock = _autoMocker.GetMock<IMetadataExtractorService>();
 
+			var ioServiceMock = _autoMocker.GetMock<IIOService>();
+			var xmpExtractorServiceMock = _autoMocker.GetMock<IXmpExtractorService>();
+
 			_serviceProviderMock = _autoMocker.GetMock<IServiceProvider>();
 			_serviceProviderMock.Setup(x => x.GetService(typeof(ImageCreatedDateExtractor)))
 				.Returns(new ImageCreatedDateExtractor(metadataExtractorServiceMock.Object));
 			_serviceProviderMock.Setup(x => x.GetService(typeof(RawCreatedDateExtractor)))
-				.Returns(new RawCreatedDateExtractor(metadataExtractorServiceMock.Object));
+				.Returns(new RawCreatedDateExtractor(metadataExtractorServiceMock.Object, ioServiceMock.Object, xmpExtractorServiceMock.Object));
 			_serviceProviderMock.Setup(x => x.GetService(typeof(VideoCreatedDateExtractor)))
 				.Returns(new VideoCreatedDateExtractor(metadataExtractorServiceMock.Object));
 			_serviceProviderMock.Setup(x => x.GetService(typeof(WhatsAppCreatedDateExtractor)))
-				.Returns(new WhatsAppCreatedDateExtractor());
+				.Returns(new WhatsAppCreatedDateExtractor(ioServiceMock.Object));
 		}
 
 		[Test]

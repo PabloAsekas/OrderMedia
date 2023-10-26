@@ -24,15 +24,8 @@ namespace OrderMediaTests.Services.CreatedDateExtractors
 			var dateTime = new DateTime(2014, 07, 31, 22, 15, 15);
 			var dateTimeAsString = dateTime.ToString("yyyy:MM:dd HH:mm:ss");
 
-			var directoryList = new List<MetadataExtractor.Directory>();
-
-			var exifSubIfdDirectory = new ExifSubIfdDirectory();
-			exifSubIfdDirectory.Set(ExifDirectoryBase.TagDateTimeOriginal, dateTimeAsString);
-
-			directoryList.Add(exifSubIfdDirectory);
-
-			_metadataExtractor.Setup(x => x.GetImageDirectories(It.IsAny<string>()))
-				.Returns(directoryList);
+			_metadataExtractor.Setup(x => x.GetImageCreatedDate(It.IsAny<string>()))
+				.Returns(dateTimeAsString);
 
 			var sut = _autoMocker.CreateInstance<ImageCreatedDateExtractor>();
 

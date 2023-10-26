@@ -44,7 +44,8 @@ namespace OrderMedia.Extensions
                 .AddScoped<IProcessor, XmpProcessor>(s => s.GetService<XmpProcessor>())
                 .AddScoped<IProcessorFactory, ProcessorFactory>()
                 .AddScoped<IRandomizerService, RandomizerService>()
-                .AddScoped<IRenameService, RenameService>();
+                .AddScoped<IRenameService, RenameService>()
+                .AddScoped<IXmpExtractorService, XmpExtractorService>();
 
             return services;
         }
