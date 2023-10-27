@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Text.RegularExpressions;
 using OrderMedia.Interfaces;
 
@@ -9,11 +8,18 @@ namespace OrderMedia.Services.CreatedDateExtractors
     /// <summary>
     /// Date Extractor for media type WhatsApp.
     /// </summary>
-	public class WhatsAppCreatedDateExtractor : ICreatedDateExtractor
+	public class WhatsAppCreatedDateExtractor : BaseCreatedDateExtractor
     {
-        public DateTime GetCreatedDateTime(string mediaPath)
+        private readonly IIOService _ioService;
+
+        public WhatsAppCreatedDateExtractor(IIOService ioService)
         {
-            string name = GetName(mediaPath);
+            _ioService = ioService;
+        }
+
+        public override DateTime GetCreatedDateTime(string mediaPath)
+        {
+            string name = _ioService.GetFileNameWithoutExtension(mediaPath);
 
             string pattern = @"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])";
 
@@ -21,19 +27,7 @@ namespace OrderMedia.Services.CreatedDateExtractors
 
             // We assume that the regex will succeed.
 
-            return GetCreatedDateTimeFromMetadataString(m.Value);
-        }
-
-        private string GetName(string mediaPath)
-        {
-            return Path.GetFileNameWithoutExtension(mediaPath);
-        }
-
-        private DateTime GetCreatedDateTimeFromMetadataString(string metadataString)
-        {
-            DateTime.TryParseExact(metadataString, "yyyy-MM-dd-HH-mm-ss", new CultureInfo("es-ES", false), System.Globalization.DateTimeStyles.None, out DateTime imageDate);
-
-            return imageDate;
+            return GetDateTimeFromStringWithFormat(m.Value, "yyyy-MM-dd-HH-mm-ss", new CultureInfo("es-ES", false));
         }
     }
 }

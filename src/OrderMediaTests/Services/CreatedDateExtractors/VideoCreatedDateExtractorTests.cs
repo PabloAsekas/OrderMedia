@@ -25,15 +25,8 @@ namespace OrderMediaTests.Services.CreatedDateExtractors
             var dateTime = new DateTime(2014, 07, 31, 22, 15, 15);
             var dateTimeAsString = dateTime.ToString("ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("en-UK", false));
 
-            var directoryList = new List<MetadataExtractor.Directory>();
-
-            var quickTimeMetadataHeaderDirectory = new QuickTimeMetadataHeaderDirectory();
-            quickTimeMetadataHeaderDirectory.Set(QuickTimeMetadataHeaderDirectory.TagCreationDate, dateTimeAsString);
-
-            directoryList.Add(quickTimeMetadataHeaderDirectory);
-
-            _metadataExtractor.Setup(x => x.GetImageDirectories(It.IsAny<string>()))
-                .Returns(directoryList);
+            _metadataExtractor.Setup(x => x.GetVideoCreatedDate(It.IsAny<string>()))
+                .Returns(dateTimeAsString);
 
             var sut = _autoMocker.CreateInstance<VideoCreatedDateExtractor>();
 

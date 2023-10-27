@@ -1,4 +1,5 @@
-﻿using OrderMedia.Interfaces;
+﻿using System.Collections.Generic;
+using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services.Processors
@@ -6,35 +7,51 @@ namespace OrderMedia.Services.Processors
     /// <summary>
     /// Processor for LivePhoto files.
     /// </summary>
-	public class LivePhotoProcessor : IProcessor
+	public class LivePhotoProcessor : BaseProcessor
 	{
         private readonly IIOService _ioService;
-        private IProcessor Processor;
 
-        public LivePhotoProcessor(IIOService ioService)
+        public LivePhotoProcessor(IIOService ioService) : base()
         {
             _ioService = ioService;
         }
 
-        public void SetProcessor(IProcessor processor)
+        public override void Execute(Media media)
         {
-            Processor = processor;
+            var possibleNames = new List<string>()
+            {
+                $"{media.NameWithoutExtension}.mov",
+                $"{media.NameWithoutExtension}.mp4"
+            };
+
+            foreach (var videoName in possibleNames)
+            {
+                var result = FindAndMove(videoName, media);
+
+                if (result)
+                    break;
+            }
+
+            ExecuteProcessors(media);
         }
 
-        public void Execute(Media media)
+        private bool FindAndMove(string videoName, Media media)
         {
-            Processor?.Execute(media);
-
-            string videoName = $"{media.NameWithoutExtension}.mov";
             string videoLocation = _ioService.Combine(new string[] { media.MediaFolder, videoName });
+
+            string extension = _ioService.GetExtension(videoName);
 
             if (_ioService.Exists(videoLocation))
             {
-                string newVideoName = $"{media.NewNameWithoutExtension}.mov";
+                string newVideoName = $"{media.NewNameWithoutExtension}{extension}";
                 string newVideoLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newVideoName });
 
                 _ioService.MoveMedia(videoLocation, newVideoLocation);
+
+                return true;
             }
+
+            return false;
         }
     }
 }

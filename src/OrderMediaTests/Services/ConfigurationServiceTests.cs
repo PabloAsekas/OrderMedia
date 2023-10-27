@@ -14,6 +14,8 @@ namespace OrderMediaTests.Services
         private string[] imageExtensions = new string[] { ".heic", ".jpg", ".jpeg", ".gif", ".png", ".arw", ".dng" };
         private string videoExtensionsName = "VideoExtensions";
         private string[] videoExtensions = new string[] { ".mov", ".mp4" };
+        private string OverwriteFilesName = "OverwriteFiles";
+        private bool OverwriteFiles = true;
         private string RenameMediaFilesName = "RenameMediaFiles";
         private bool RenameMediaFiles = true;
         private string ReplaceLongNamesName = "ReplaceLongNames";
@@ -41,6 +43,7 @@ namespace OrderMediaTests.Services
                 { $"{imageExtensionsName}:6", imageExtensions[6]},
                 { $"{videoExtensionsName}:0", videoExtensions[0]},
                 { $"{videoExtensionsName}:1", videoExtensions[1]},
+                { OverwriteFilesName, OverwriteFiles.ToString() },
                 { RenameMediaFilesName, RenameMediaFiles.ToString() },
                 { ReplaceLongNamesName, ReplaceLongNames.ToString() },
                 { MaxMediaNameLengthName, MaxMediaNameLength.ToString() },
@@ -130,6 +133,19 @@ namespace OrderMediaTests.Services
 
             // Assert
             result.Should().Be(RenameMediaFiles);
+        }
+
+        [Test]
+        public void GetOverwriteFiles_Success()
+        {
+            // Arrange
+            var sut = _autoMocker.CreateInstance<ConfigurationService>();
+
+            // Act
+            var result = sut.GetOverwriteFiles();
+
+            // Assert
+            result.Should().Be(OverwriteFiles);
         }
 
         [Test]

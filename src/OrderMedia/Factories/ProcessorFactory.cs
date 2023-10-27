@@ -29,25 +29,25 @@ namespace OrderMedia.Factories
 
         private IProcessor CreateImageProcessor()
         {
+            var livePhotoProcessor = (IProcessor) _serviceProvider.GetService(typeof(LivePhotoProcessor));
+            var aaeProcessor = (IProcessor) _serviceProvider.GetService(typeof(AaeProcessor));
+
             var mainProcessor = CreateDefaultProcessor();
 
-            var livePhotoProcessor = (IProcessor) _serviceProvider.GetService(typeof(LivePhotoProcessor));
-            livePhotoProcessor.SetProcessor(mainProcessor);
+            mainProcessor.AddProcessor(livePhotoProcessor);
+            mainProcessor.AddProcessor(aaeProcessor);
 
-            var aaeProcessor = (IProcessor) _serviceProvider.GetService(typeof(AaeProcessor));
-            aaeProcessor.SetProcessor(livePhotoProcessor);
-
-            return aaeProcessor;
+            return mainProcessor;
         }
 
         private IProcessor CreateRawProcessor()
         {
-            var mainProcessor = CreateDefaultProcessor();
-
             var xmpProcessor = (IProcessor)_serviceProvider.GetService(typeof(XmpProcessor));
-            xmpProcessor.SetProcessor(mainProcessor);
 
-            return xmpProcessor;
+            var mainProcessor = CreateDefaultProcessor();
+            mainProcessor.AddProcessor(xmpProcessor);
+
+            return mainProcessor;
         }
 
         private IProcessor CreateVideoProcessor()
@@ -60,9 +60,9 @@ namespace OrderMedia.Factories
             return CreateDefaultProcessor();
         }
 
-        private IProcessor CreateDefaultProcessor()
+        private BaseProcessor CreateDefaultProcessor()
         {
-            return (IProcessor) _serviceProvider.GetService(typeof(MainProcessor));
+            return (BaseProcessor) _serviceProvider.GetService(typeof(MainProcessor));
         }
     }
 }

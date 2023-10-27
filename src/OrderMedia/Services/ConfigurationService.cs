@@ -45,6 +45,12 @@ namespace OrderMedia.Services
             return section.Get<string>();
         }
 
+        public bool GetOverwriteFiles()
+        {
+            var section = _configuration.GetSection("OverwriteFiles");
+            return section.Get<bool>();
+        }
+
         public bool GetRenameMediaFiles()
         {
             var section = _configuration.GetSection("RenameMediaFiles");

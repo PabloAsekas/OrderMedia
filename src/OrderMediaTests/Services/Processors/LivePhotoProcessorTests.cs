@@ -40,6 +40,9 @@ namespace OrderMediaTests.Services.Processors
             _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, videoName }))
                 .Returns(videoLocation);
 
+            _ioServiceMock.Setup(x => x.GetExtension(It.IsAny<string>()))
+                .Returns(".mov");
+
             _ioServiceMock.Setup(x => x.Exists(videoLocation))
                 .Returns(true);
 

@@ -6,7 +6,7 @@ Order Media is a .NET 6 console application made to classify media files based o
 
 To have an ordered media catalog, this application will move each file to the corresponding folder based on the captured date.
 
-The default name of the files produced by cameras or phones are arbitrary and useless, the application will rename each file adding the captured date to the name. It will replace the original name if it is too long with a shorter one.
+The default name of the files produced by cameras or phones are arbitrary and useless, the application will rename each file adding the captured date to the name. It will replace the original name if it is too long with a shorter one if configured.
 
 ## How it works
 
@@ -34,9 +34,11 @@ Video:
 
 It also supports:
 
-- LivePhoto: if a `.heic` or `.jpg` file is a LivePhoto, the application will move and rename the video.
+- LivePhoto: if a `.heic` or `.jpg` file is a LivePhoto, the application will move and rename the video. Compatible video formats: `.mov` and `.mp4`.
 - Aae files: sometimes, Apple photos (like Portrait photos) export a `.aae` file with metadata related to the Portrait effect. The application will move and rename the file.
-- Xmp files: for raw media files, sometimes there is a sidecar file with `.xmp` extension. This file contains metadata about the photo. The application will move and rename the file.
+- Xmp files: For raw media files, sometimes there is a sidecar file with `.xmp` extension. This file contains metadata about the photo.
+    - The application will move and rename the file.
+    - The application will get the Created date from the file and not the raw file.
 - WhatsApp media:  if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss` or `VIDEO-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification.
 
 ## Configuration
@@ -48,6 +50,7 @@ The application can be configured through the `appsettings.json` file:
 - `VideoFolderName` *(string)*: Name of the folder where all the classified videos will be located.
 - `ImageExtensions` *(string array)*: Image extensions list the application will check for. If a compatible extension is not specified, the application will not read those files.
 - `VideoExtensions` *(string)*: Video extensions list the application will check for.  If a compatible extension is not specified, the application will not read those files.
+- `OverwriteFiles` *(boolena)*: Setting to allow overwrite files if the media type is already in the destination.
 - `RenameMediaFiles` *(boolean)*: Setting to allow rename media files with the created date or not. Ex: From `IMG_0001,heic` to `yyyy-MM-dd_HH-mm:ss_IMG_0001.heic`.
 - `ReplaceLongNames` *(boolean)*: Setting to allow replace the original long names with another one (composed by the setting `NewMediaName` and a 4-digit random number) when the original name is higher than the `MaxMediaNameLength` setting.
 - `NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
