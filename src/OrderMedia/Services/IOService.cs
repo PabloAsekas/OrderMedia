@@ -10,6 +10,13 @@ namespace OrderMedia.Services
     /// </summary>
     public class IOService : IIOService
     {
+        private readonly IConfigurationService _configurationService;
+
+        public IOService(IConfigurationService configurationService)
+        {
+            _configurationService = configurationService;
+        }
+
         public IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
         {
             var directory = new DirectoryInfo(path);
@@ -18,7 +25,7 @@ namespace OrderMedia.Services
 
         public void MoveMedia(string oldPath, string newPath)
         {
-            File.Move(oldPath, newPath);
+            File.Move(oldPath, newPath, _configurationService.GetOverwriteFiles());
         }
 
         public void CreateFolder(string path)

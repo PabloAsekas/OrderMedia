@@ -9,12 +9,10 @@ namespace OrderMedia.Services.Processors
     public class XmpProcessor : BaseProcessor
     {
         private readonly IIOService _ioService;
-        private readonly IRenameService _renameService;
 
-        public XmpProcessor(IIOService ioService, IRenameService renameService) : base()
+        public XmpProcessor(IIOService ioService) : base()
         {
             _ioService = ioService;
-            _renameService = renameService;
         }
 
         public override void Execute(Media media)

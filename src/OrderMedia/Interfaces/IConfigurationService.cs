@@ -36,6 +36,12 @@
         string GetVideoFolderName();
 
         /// <summary>
+        /// Gets the setting to overwrite files or not.
+        /// </summary>
+        /// <returns>Bool with the overwrite files setting.</returns>
+        bool GetOverwriteFiles();
+
+        /// <summary>
         /// Gets the setting to rename media files or not.
         /// </summary>
         /// <returns>Bool with the rename meda file setting.</returns>

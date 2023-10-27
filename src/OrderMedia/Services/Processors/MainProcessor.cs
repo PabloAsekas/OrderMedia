@@ -24,9 +24,16 @@ namespace OrderMedia.Services.Processors
             }
 
             _ioService.CreateFolder(media.NewMediaFolder);
-            _ioService.MoveMedia(media.MediaPath, media.NewMediaPath);
 
-            ExecuteProcessors(media);
+            try
+            {
+                _ioService.MoveMedia(media.MediaPath, media.NewMediaPath);
+                ExecuteProcessors(media);
+            }
+            catch (Exception e)
+            {
+                return;
+            }
         }
     }
 }
