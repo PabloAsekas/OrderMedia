@@ -23,6 +23,7 @@ namespace OrderMedia.Services
 
             extension = AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
             extension = AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);
+            extension = AnalyzeMediaName(name, "GIF", ".WhatsAppImage", extension);
 
             return extension.ToLower() switch
             {

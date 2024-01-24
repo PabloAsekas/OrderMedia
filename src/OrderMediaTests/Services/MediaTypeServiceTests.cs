@@ -27,6 +27,7 @@ namespace OrderMediaTests.Services
         [TestCase("test", ".mp4", MediaType.Video)]
         [TestCase("PHOTO_WHATSAPP", ".jpg", MediaType.WhatsAppImage)]
         [TestCase("VIDEO_WHATSAPP", ".mov", MediaType.WhatsAppVideo)]
+        [TestCase("GIF_WHATSAPP", ".gif", MediaType.WhatsAppImage)]
         [TestCase("test", ".arw", MediaType.Raw)]
         [TestCase("test", ".dng", MediaType.Raw)]
         public void GetMediaType_Returns_MediaType_Successfully(string name, string extension, MediaType mediaType)

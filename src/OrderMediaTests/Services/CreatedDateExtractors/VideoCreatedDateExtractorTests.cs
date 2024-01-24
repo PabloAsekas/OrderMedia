@@ -23,7 +23,7 @@ namespace OrderMediaTests.Services.CreatedDateExtractors
         {
             // Arrange
             var dateTime = new DateTime(2014, 07, 31, 22, 15, 15);
-            var dateTimeAsString = dateTime.ToString("ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("en-UK", false));
+            var dateTimeAsString = dateTime.ToString("ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("es-ES", false));
 
             _metadataExtractor.Setup(x => x.GetVideoCreatedDate(It.IsAny<string>()))
                 .Returns(dateTimeAsString);
