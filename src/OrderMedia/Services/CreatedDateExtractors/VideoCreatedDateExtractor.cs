@@ -20,7 +20,8 @@ namespace OrderMedia.Services.CreatedDateExtractors
         {
             var metadataDateTime = _metadataExtractor.GetVideoCreatedDate(mediaPath);
 
-            return GetDateTimeFromStringWithFormat(metadataDateTime, "ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("en-UK", false));
+            //return GetDateTimeFromStringWithFormat(metadataDateTime, "ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("en-UK", false));
+            return GetDateTimeFromStringWithFormat(metadataDateTime, "ddd MMM dd HH:mm:ss zzz yyyy", new CultureInfo("es-ES", false));
         }
     }
 }
