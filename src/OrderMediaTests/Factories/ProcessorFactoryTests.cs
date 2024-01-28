@@ -17,7 +17,8 @@ namespace OrderMediaTests.Factories
 
 			var ioServiceMock = _autoMocker.GetMock<IIOService>();
 			var renameServiceMock = _autoMocker.GetMock<IRenameService>();
-
+			var metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
+			
             var mainProcessor = new MainProcessor(ioServiceMock.Object);
 
 			var livePhotoProcessor = new LivePhotoProcessor(ioServiceMock.Object);
@@ -25,6 +26,8 @@ namespace OrderMediaTests.Factories
 			var aaeProcessor = new AaeProcessor(ioServiceMock.Object, renameServiceMock.Object);
 
             var xmpProcessor = new XmpProcessor(ioServiceMock.Object);
+
+            var createdDateProcessor = new CreatedDateProcessor(metadataAggregatorServiceMock.Object);
 
             _serviceProviderMock = _autoMocker.GetMock<IServiceProvider>();
 			_serviceProviderMock.Setup(x => x.GetService(typeof(MainProcessor)))
@@ -35,6 +38,8 @@ namespace OrderMediaTests.Factories
                 .Returns(aaeProcessor);
             _serviceProviderMock.Setup(x => x.GetService(typeof(XmpProcessor)))
                 .Returns(xmpProcessor);
+            _serviceProviderMock.Setup(x => x.GetService(typeof(CreatedDateProcessor)))
+                .Returns(createdDateProcessor);
         }
 
 		[Test]
@@ -43,7 +48,7 @@ namespace OrderMediaTests.Factories
         [TestCase(MediaType.Video, typeof(MainProcessor))]
         [TestCase(MediaType.WhatsAppImage, typeof(MainProcessor))]
         [TestCase(MediaType.WhatsAppVideo, typeof(MainProcessor))]
-        public void CreateProcessor_Returns_Succesfully(MediaType mediaType, Type processor)
+        public void CreateProcessor_Returns_Successfully(MediaType mediaType, Type processor)
 		{
 			// Arrange
 			var sut = _autoMocker.CreateInstance<ProcessorFactory>();

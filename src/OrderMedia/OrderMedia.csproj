@@ -27,12 +27,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
     <PackageReference Include="XmpCore" Version="6.1.10.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Services\CreatedDateExtractors\" />
     <Folder Include="Enums\" />
     <Folder Include="Models\" />

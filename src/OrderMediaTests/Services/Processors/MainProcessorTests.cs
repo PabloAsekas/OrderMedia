@@ -18,7 +18,7 @@ namespace OrderMediaTests.Services.Processors
         }
 
         [Test]
-        public void Execute_Runs_Succesfully()
+        public void Execute_Runs_Successfully()
         {
             // Arrange
             var media = new Media()
@@ -40,7 +40,7 @@ namespace OrderMediaTests.Services.Processors
         }
 
         [Test]
-        public void Execute_Runs_WithNoClassificableMedia()
+        public void Execute_Runs_WithNoClassifiableMedia()
         {
             // Arrange
             var media = new Media()

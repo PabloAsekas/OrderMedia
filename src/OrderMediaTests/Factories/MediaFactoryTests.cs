@@ -77,7 +77,7 @@ namespace OrderMediaTests.Factories
         [TestCase(MediaType.WhatsAppImage, false)]
         [TestCase(MediaType.WhatsAppVideo, true)]
         [TestCase(MediaType.WhatsAppVideo, false)]
-        public void CreateMedia_Returns_Succesfully(MediaType mediaType, bool renamed)
+        public void CreateMedia_Returns_Successfully(MediaType mediaType, bool renamed)
         {
             // Arrange
             var finalNewName = renamed ? newName : name;

@@ -21,7 +21,7 @@ namespace OrderMediaTests.Services.Processors
         }
 
         [Test]
-        public void Execute_Runs_Succesfully()
+        public void Execute_Runs_Successfully()
         {
             // Arrange
             string xmpName = "IMG_0001.xmp";
