@@ -6,18 +6,18 @@ namespace OrderMedia.Services.Processors
 {
 	public abstract class BaseProcessor : IProcessor
 	{
-		protected List<IProcessor> processors = new List<IProcessor>();
+		protected List<IProcessor> Processors = new List<IProcessor>();
 
 		public abstract void Execute(Media media);
 
         public void AddProcessor(IProcessor processor)
 		{
-			processors.Add(processor);
+			Processors.Add(processor);
 		}
 
 		protected void ExecuteProcessors(Media media)
 		{
-			foreach(var processor in processors)
+			foreach(var processor in Processors)
 			{
 				processor.Execute(media);
 			}

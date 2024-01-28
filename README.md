@@ -12,8 +12,8 @@ The default name of the files produced by cameras or phones are arbitrary and us
 
 1. Gets all the media files.
 2. Extracts the captured date.
-3. Renames the media with the format `yyyy-MM-dd_originalName`. If the name is bigger than 9 characters, it creates a new random name.
-3. Creates a folder with the captured date (format `yyyy-MM-dd`) and moves the media.
+3. Renames the media with the format `yyyy-MM-dd_originalName`. If the name is bigger than 9 characters, it creates a new random name, if configured.
+3. Creates a folder with the captured date (format `yyyy-MM-dd`) and moves the media to the folder.
 
 ## Supported media
 
@@ -35,11 +35,11 @@ Video:
 It also supports:
 
 - LivePhoto: if a `.heic` or `.jpg` file is a LivePhoto, the application will move and rename the video. Compatible video formats: `.mov` and `.mp4`.
-- Aae files: sometimes, Apple photos (like Portrait photos) export a `.aae` file with metadata related to the Portrait effect. The application will move and rename the file.
+- Aae files: sometimes, Apple photos (like Portrait photos) export an `.aae` file with metadata related to the Portrait effect. The application will move and rename the file too.
 - Xmp files: For raw media files, sometimes there is a sidecar file with `.xmp` extension. This file contains metadata about the photo.
     - The application will move and rename the file.
-    - The application will get the Created date from the file and not the raw file.
-- WhatsApp media:  if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss` or `VIDEO-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification.
+    - The application will get the Created date from the file and not the raw file. It is like this because when you update the date of a raw file, it doesn't update the main file, it changes the XMP file.
+- WhatsApp media:  if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss`, `VIDEO-yyyy-MM-dd-HH-mm-ss` or `GIF-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification. It will also add the extracted date to the metadata of the photo so every other program will detect it automatically.
 
 ## Configuration
 
@@ -55,3 +55,11 @@ The application can be configured through the `appsettings.json` file:
 - `ReplaceLongNames` *(boolean)*: Setting to allow replace the original long names with another one (composed by the setting `NewMediaName` and a 4-digit random number) when the original name is higher than the `MaxMediaNameLength` setting.
 - `NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
 - `MaxMediaNamelength` *(integer)*: Maximum media name length to replace the name. If a media name length is higher than this setting, the name will be replaced with a concatenation of the setting `NewMediaName` and a 4-digit random number.
+
+## Credits
+
+This application could not be possible without the amazing job performed by:
+
+- [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet): used to get the metadata of the files.
+- [ImageSharp](https://github.com/SixLabors/ImageSharp): used to modify image's metadata.
+- [XMP Core](https://github.com/drewnoakes/xmp-core-dotnet/): used to interact with XMP files.

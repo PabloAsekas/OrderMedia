@@ -21,8 +21,8 @@ namespace OrderMedia.Factories
                 MediaType.Image => CreateImageProcessor(),
                 MediaType.Raw => CreateRawProcessor(),
                 MediaType.Video => CreateVideoProcessor(),
-                MediaType.WhatsAppImage => CreateWhatsAppProcessor(),
-                MediaType.WhatsAppVideo => CreateWhatsAppProcessor(),
+                MediaType.WhatsAppImage => CreateWhatsAppImageProcessor(),
+                MediaType.WhatsAppVideo => CreateWhatsAppVideoProcessor(),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
         }
@@ -31,7 +31,7 @@ namespace OrderMedia.Factories
         {
             var livePhotoProcessor = (IProcessor) _serviceProvider.GetService(typeof(LivePhotoProcessor));
             var aaeProcessor = (IProcessor) _serviceProvider.GetService(typeof(AaeProcessor));
-
+            
             var mainProcessor = CreateDefaultProcessor();
 
             mainProcessor.AddProcessor(livePhotoProcessor);
@@ -55,7 +55,17 @@ namespace OrderMedia.Factories
             return CreateDefaultProcessor();
         }
 
-        private IProcessor CreateWhatsAppProcessor()
+        private IProcessor CreateWhatsAppImageProcessor()
+        {
+            var createdDateProcessor = (IProcessor)_serviceProvider.GetService(typeof(CreatedDateProcessor));
+            
+            var mainProcessor = CreateDefaultProcessor();
+            mainProcessor.AddProcessor(createdDateProcessor);
+
+            return mainProcessor;
+        }
+        
+        private IProcessor CreateWhatsAppVideoProcessor()
         {
             return CreateDefaultProcessor();
         }
