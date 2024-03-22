@@ -1,6 +1,7 @@
 using System.IO;
 using OrderMedia.Interfaces;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace OrderMedia.Services;
 
@@ -25,6 +26,11 @@ public class MetadataAggregatorService : IMetadataAggregatorService
 
     public void SaveImage(Image image, string path)
     {
-        image.Save(path);
+        var encoder = new JpegEncoder()
+        {
+            Quality = 100,
+        };
+        
+        image.SaveAsJpeg(path, encoder);
     }
 }
