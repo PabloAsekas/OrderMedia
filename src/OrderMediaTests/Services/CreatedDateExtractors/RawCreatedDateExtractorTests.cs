@@ -30,7 +30,7 @@ namespace OrderMediaTests.Services.CreatedDateExtractors
             var dateTime = new DateTime(2014, 07, 31, 22, 15, 15);
             var dateTimeAsString = dateTime.ToString("yyyy:MM:dd HH:mm:ss");
 
-            _ioServiceMock.Setup(x => x.Exists(It.IsAny<string>()))
+            _ioServiceMock.Setup(x => x.FileExists(It.IsAny<string>()))
                 .Returns(false);
 
             _metadataExtractorMock.Setup(x => x.GetRawCreatedDate(It.IsAny<string>()))
@@ -68,7 +68,7 @@ namespace OrderMediaTests.Services.CreatedDateExtractors
             _ioServiceMock.Setup(x => x.Combine(new string[] { mediaFileFolder, xmpFileName }))
                 .Returns(xmpFilePath);
 
-            _ioServiceMock.Setup(x => x.Exists(xmpFilePath))
+            _ioServiceMock.Setup(x => x.FileExists(xmpFilePath))
                 .Returns(true);
 
             _xmpExtractorServiceMock.Setup(x => x.GetCreatedDate(xmpFilePath))

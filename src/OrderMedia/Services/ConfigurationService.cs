@@ -74,5 +74,17 @@ namespace OrderMedia.Services
             var section = _configuration.GetSection("NewMediaName");
             return section.Get<string>();
         }
+        
+        public string GetMediaPostProcessPath()
+        {
+            var section = _configuration.GetSection("MediaPostProcessPath");
+            return section.Get<string>();
+        }
+        
+        public string GetMediaPostProcessSource()
+        {
+            var section = _configuration.GetSection("MediaPostProcessSource");
+            return section.Get<string>();
+        }
     }
 }

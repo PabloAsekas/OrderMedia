@@ -58,9 +58,24 @@ namespace OrderMedia.Services
             return Path.GetFileName(path);
         }
 
-        public bool Exists(string path)
+        public bool FileExists(string path)
         {
             return File.Exists(path);
+        }
+        
+        public bool DirectoryExists(string path)
+        {
+            return Directory.Exists(path);
+        }
+
+        public IEnumerable<string> GetDirectories(string path)
+        {
+            return Directory.GetDirectories(path);
+        }
+
+        public void CopyFile(string sourceFileName, string destFileName)
+        {
+            File.Copy(sourceFileName, destFileName);
         }
     }
 }

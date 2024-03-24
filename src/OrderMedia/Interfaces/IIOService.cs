@@ -67,7 +67,28 @@ namespace OrderMedia.Interfaces
         /// Determines whether the specified file exists.
         /// </summary>
         /// <param name="path">Path.</param>
-        /// <returns>True if path contains the name of an existing file. False otherwise.</returns>
-        bool Exists(string path);
+        /// <returns>True if file exists. False otherwise.</returns>
+        bool FileExists(string path);
+        
+        /// <summary>
+        /// Determines whether the specified directory exists.
+        /// </summary>
+        /// <param name="path">Path.</param>
+        /// <returns>True if directory exists. False otherwise.</returns>
+        bool DirectoryExists(string path);
+
+        /// <summary>
+        /// Gets directories inside the provided path.
+        /// </summary>
+        /// <param name="path">Path.</param>
+        /// <returns><see cref="IEnumerable{T}"/> of directories inside the provided path.</returns>
+        IEnumerable<string> GetDirectories(string path);
+
+        /// <summary>
+        /// Copies an existing file to a new file.
+        /// </summary>
+        /// <param name="sourceFileName">Source file name.</param>
+        /// <param name="destFileName">Destination file name.</param>
+        void CopyFile(string sourceFileName, string destFileName);
     }
 }

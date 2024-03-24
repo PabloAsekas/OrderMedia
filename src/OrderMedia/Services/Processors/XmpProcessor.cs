@@ -20,7 +20,7 @@ namespace OrderMedia.Services.Processors
             string xmpName = $"{media.NameWithoutExtension}.xmp";
             string xmpLocation = _ioService.Combine(new string[] { media.MediaFolder, xmpName });
 
-            if (_ioService.Exists(xmpLocation))
+            if (_ioService.FileExists(xmpLocation))
             {
                 string newXmpName = $"{media.NewNameWithoutExtension}.xmp";
                 string newXmpLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newXmpName });

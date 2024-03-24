@@ -18,9 +18,12 @@ namespace OrderMedia
         /// <returns>Nothing.</returns>
         public static void Main(string[] args)
         {
+            
             var sp = CreateServiceProvider();
 
             var mcs = sp.GetRequiredService<OrderMediaService>();
+            //var mcs = sp.GetRequiredService<ExportAaeFilesService>();
+            //var mcs = sp.GetRequiredService<CopyLivePhotoVideoService>();
 
             mcs.Run();
         }
@@ -35,6 +38,7 @@ namespace OrderMedia
                 .AddLogging(configure => configure.AddConsole())
                 .AddOrderMediaServiceClient()
                 .AddScoped<OrderMediaService>()
+                .AddScoped<CopyAaeFilesService>()
                 .AddSingleton<IConfiguration>(configuration);
 
             return serviceCollection.BuildServiceProvider();

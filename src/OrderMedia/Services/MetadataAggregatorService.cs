@@ -16,7 +16,7 @@ public class MetadataAggregatorService : IMetadataAggregatorService
 
     public Image GetImage(string imagePath)
     {
-        if (!_ioService.Exists(imagePath))
+        if (!_ioService.FileExists(imagePath))
         {
             throw new FileNotFoundException();
         }

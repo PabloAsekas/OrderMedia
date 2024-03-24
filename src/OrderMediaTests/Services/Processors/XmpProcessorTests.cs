@@ -46,7 +46,7 @@ namespace OrderMediaTests.Services.Processors
             _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, xmpName }))
                 .Returns(xmpLocation);
 
-            _ioServiceMock.Setup(x => x.Exists(xmpLocation))
+            _ioServiceMock.Setup(x => x.FileExists(xmpLocation))
                 .Returns(true);
 
             _ioServiceMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newXmpName }))
