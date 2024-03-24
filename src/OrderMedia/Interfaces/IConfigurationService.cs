@@ -64,5 +64,18 @@
         /// </summary>
         /// <returns>String with the new media name.</returns>
         string GetNewMediaName();
+
+        /// <summary>
+        /// Gets the media post process path.
+        /// </summary>
+        /// <returns>String with the media export path.</returns>
+        string GetMediaPostProcessPath();
+
+        /// <summary>
+        /// Gets the media post process source path.
+        /// </summary>
+        /// <returns>String with the media export path.</returns>
+        string GetMediaPostProcessSource();
+
     }
 }

@@ -27,7 +27,7 @@ namespace OrderMedia.Services.CreatedDateExtractors
             string dateTimeAsString;
             string format;
 
-            if (_ioService.Exists(xmpFilePath))
+            if (_ioService.FileExists(xmpFilePath))
             {
                 dateTimeAsString = _xmpExtractorService.GetCreatedDate(xmpFilePath);
                 // we assume that the date will come with the format yyyy-MM-ddTHH:mm:ss

@@ -41,7 +41,7 @@ namespace OrderMedia.Services.Processors
 
             string extension = _ioService.GetExtension(videoName);
 
-            if (_ioService.Exists(videoLocation))
+            if (_ioService.FileExists(videoLocation))
             {
                 string newVideoName = $"{media.NewNameWithoutExtension}{extension}";
                 string newVideoLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newVideoName });

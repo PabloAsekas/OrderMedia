@@ -42,7 +42,7 @@ namespace OrderMedia.Services.Processors
         {
             string aaeLocation = _ioService.Combine(new string[] { media.MediaFolder, aaeName });
 
-            if (_ioService.Exists(aaeLocation))
+            if (_ioService.FileExists(aaeLocation))
             {
                 string newAaeName = $"{media.NewNameWithoutExtension}.aae";
                 string newAaeLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newAaeName });

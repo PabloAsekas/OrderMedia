@@ -2,11 +2,11 @@
 
 ![Order Media](https://github.com/PabloAsekas/OrderMedia/assets/2021846/f46b7ba6-0302-46a6-b67f-bcc77240d61e)
 
-Order Media is a .NET 6 console application made to classify media files based on the captured date.
+Order Media is a .NET 7 console application made to classify media files based on the captured date.
 
 To have an ordered media catalog, this application will move each file to the corresponding folder based on the captured date.
 
-The default name of the files produced by cameras or phones are arbitrary and useless, the application will rename each file adding the captured date to the name. It will replace the original name if it is too long with a shorter one if configured.
+The default name of the files produced by cameras or phones is arbitrary and useless, the application will rename each file adding the captured date to the name. It will replace the original name if it is too long with a shorter one if configured.
 
 ## How it works
 
@@ -39,7 +39,7 @@ It also supports:
 - Xmp files: For raw media files, sometimes there is a sidecar file with `.xmp` extension. This file contains metadata about the photo.
     - The application will move and rename the file.
     - The application will get the Created date from the file and not the raw file. It is like this because when you update the date of a raw file, it doesn't update the main file, it changes the XMP file.
-- WhatsApp media:  if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss`, `VIDEO-yyyy-MM-dd-HH-mm-ss` or `GIF-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification. It will also add the extracted date to the metadata of the photo so every other program will detect it automatically.
+- WhatsApp media: if you share a photo or video from the iPhone to the Mac with AirDrop, the file will be called `PHOTO-yyyy-MM-dd-HH-mm-ss`, `VIDEO-yyyy-MM-dd-HH-mm-ss` or `GIF-yyyy-MM-dd-HH-mm-ss`. The application will extract the created date from this name and perform the classification. It will also add the extracted date to the metadata of the photo so every other program will detect it automatically.
 
 ## Configuration
 
@@ -55,6 +55,8 @@ The application can be configured through the `appsettings.json` file:
 - `ReplaceLongNames` *(boolean)*: Setting to allow replace the original long names with another one (composed by the setting `NewMediaName` and a 4-digit random number) when the original name is higher than the `MaxMediaNameLength` setting.
 - `NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
 - `MaxMediaNamelength` *(integer)*: Maximum media name length to replace the name. If a media name length is higher than this setting, the name will be replaced with a concatenation of the setting `NewMediaName` and a 4-digit random number.
+- `MediaPostProcessPath` *(string)*: The folder where all the exported photos are located.
+- `MediaPostProcessSource` *(string)*: The folder where the original photos and files are located.
 
 ## Credits
 

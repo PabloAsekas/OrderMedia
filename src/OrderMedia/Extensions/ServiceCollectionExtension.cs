@@ -22,6 +22,7 @@ namespace OrderMedia.Extensions
                 .AddScoped<IClassificationService, ClassificationService>()
                 .AddScoped<IConfigurationService, ConfigurationService>()
                 .AddScoped<ImageCreatedDateExtractor>()
+                .AddScoped<ICopyComplementFilesService, CopyComplementFilesService>()
                 .AddScoped<ICreatedDateExtractor, ImageCreatedDateExtractor>(s => s.GetService<ImageCreatedDateExtractor>())
                 .AddScoped<RawCreatedDateExtractor>()
                 .AddScoped<ICreatedDateExtractor, RawCreatedDateExtractor>(s => s.GetService<RawCreatedDateExtractor>())
