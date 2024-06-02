@@ -36,7 +36,7 @@ namespace OrderMedia.Interfaces
         string Combine(string[] paths);
 
         /// <summary>
-        /// Returns the extension (includin the period ".") of the specified paths string.
+        /// Returns the extension (including the period ".") of the specified paths string.
         /// </summary>
         /// <param name="path">Path to file.</param>
         /// <returns>The extension of the specified path (including the period "."), null if <paramref name="path"/> is null, or string.Empty if <paramref name="path"/> does not have extension information.</returns>

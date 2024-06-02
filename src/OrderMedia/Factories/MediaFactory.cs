@@ -14,19 +14,19 @@ namespace OrderMedia.Factories
         private readonly IIOService _ioService;
         private readonly IRenameService _renameService;
         private readonly IMediaTypeService _mediaTypeService;
-        private readonly ICreatedDateExtractorsFactory _createdDateTimeServiceFactory;
+        private readonly ICreatedDateExtractorService _createdDateExtractorService;
 
         public MediaFactory(IConfigurationService configurationService,
             IIOService ioService,
             IRenameService renameService,
             IMediaTypeService mediaTypeService,
-            ICreatedDateExtractorsFactory createdDateTimeServiceFactory)
+            ICreatedDateExtractorService createdDateExtractorService)
         {
             _configurationService = configurationService;
             _ioService = ioService;
             _renameService = renameService;
             _mediaTypeService = mediaTypeService;
-            _createdDateTimeServiceFactory = createdDateTimeServiceFactory;
+            _createdDateExtractorService = createdDateExtractorService;
         }
 
         public Media CreateMedia(string path)
@@ -40,10 +40,8 @@ namespace OrderMedia.Factories
             var fullName = _ioService.GetFileName(path);
 
             var nameWithoutExtension = _ioService.GetFileNameWithoutExtension(path);
-
-            var createdDateTimeService = _createdDateTimeServiceFactory.GetExtractor(mediaType);
-
-            var createdDateTime = createdDateTimeService.GetCreatedDateTime(path);
+            
+            var createdDateTime = _createdDateExtractorService.GetCreatedDateTime(path);
 
             var createdDateTimeAsString = createdDateTime.ToString("yyyy-MM-dd");
 

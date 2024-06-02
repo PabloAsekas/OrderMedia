@@ -13,7 +13,7 @@ namespace OrderMediaTests.Factories
         private Mock<IIOService> _ioServiceMock;
         private Mock<IRenameService> _renameServiceMock;
         private Mock<IMediaTypeService> _mediaTypeServiceMock;
-        private Mock<ICreatedDateExtractorsFactory> _createdDateTimeServiceFactoryMock;
+        private Mock<ICreatedDateExtractorService> _createdDateExtractorService;
 
         private const string mediaPath = $"{mediaFolder}/{name}";
         private const string mediaFolder = "test/path";
@@ -57,13 +57,9 @@ namespace OrderMediaTests.Factories
 
             _mediaTypeServiceMock = _autoMocker.GetMock<IMediaTypeService>();
 
-            var createdDateExtractor = _autoMocker.GetMock<ICreatedDateExtractor>();
-            createdDateExtractor.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
+            _createdDateExtractorService = _autoMocker.GetMock<ICreatedDateExtractorService>();
+            _createdDateExtractorService.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
                 .Returns(createdDateTime);
-
-            _createdDateTimeServiceFactoryMock = _autoMocker.GetMock<ICreatedDateExtractorsFactory>();
-            _createdDateTimeServiceFactoryMock.Setup(x => x.GetExtractor(It.IsAny<MediaType>()))
-                .Returns(createdDateExtractor.Object);
         }
 
         [Test]

@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿
 using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
-using OrderMedia.Services.CreatedDateExtractors;
 using OrderMedia.Services.Processors;
+using OrderMedia.Wrappers;
 
 namespace OrderMedia.Extensions
 {
@@ -21,16 +20,9 @@ namespace OrderMedia.Extensions
             services
                 .AddScoped<IClassificationService, ClassificationService>()
                 .AddScoped<IConfigurationService, ConfigurationService>()
-                .AddScoped<ImageCreatedDateExtractor>()
                 .AddScoped<ICopyComplementFilesService, CopyComplementFilesService>()
-                .AddScoped<ICreatedDateExtractor, ImageCreatedDateExtractor>(s => s.GetService<ImageCreatedDateExtractor>())
-                .AddScoped<RawCreatedDateExtractor>()
-                .AddScoped<ICreatedDateExtractor, RawCreatedDateExtractor>(s => s.GetService<RawCreatedDateExtractor>())
-                .AddScoped<VideoCreatedDateExtractor>()
-                .AddScoped<ICreatedDateExtractor, VideoCreatedDateExtractor>(s => s.GetService<VideoCreatedDateExtractor>())
-                .AddScoped<WhatsAppCreatedDateExtractor>()
-                .AddScoped<ICreatedDateExtractor, WhatsAppCreatedDateExtractor>(s => s.GetService<WhatsAppCreatedDateExtractor>())
-                .AddScoped<ICreatedDateExtractorsFactory, CreatedDateExtractorsFactory>()
+                .AddScoped<ICreatedDateExtractorService, CreatedDateExtractorService>()
+                .AddScoped<IImageMetadataReader, ImageMetadataReaderWrapper>()
                 .AddScoped<IIOService, IOService>()
                 .AddScoped<IMediaFactory, MediaFactory>()
                 .AddScoped<IMediaTypeService, MediaTypeService>()
@@ -50,7 +42,7 @@ namespace OrderMedia.Extensions
                 .AddScoped<IRandomizerService, RandomizerService>()
                 .AddScoped<IRenameService, RenameService>()
                 .AddScoped<IXmpExtractorService, XmpExtractorService>();
-
+            
             return services;
         }
     }

@@ -2,6 +2,9 @@ using SixLabors.ImageSharp;
 
 namespace OrderMedia.Interfaces;
 
+/// <summary>
+/// Metadata Aggregator Service Interface.
+/// </summary>
 public interface IMetadataAggregatorService
 {
     /// <summary>
