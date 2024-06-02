@@ -5,7 +5,7 @@ namespace OrderMedia.Interfaces
     /// <summary>
     /// Created DateTime extractors interface.
     /// </summary>
-    public interface ICreatedDateExtractor
+    public interface ICreatedDateExtractorService
 	{
 		/// <summary>
 		/// Gets the Created DateTime of the passed file.

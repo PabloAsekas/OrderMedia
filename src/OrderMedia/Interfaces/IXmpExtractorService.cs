@@ -1,5 +1,8 @@
 ﻿namespace OrderMedia.Interfaces
 {
+	/// <summary>
+	/// Xmp Extractor Service Interface.
+	/// </summary>
 	public interface IXmpExtractorService
 	{
         /// <summary>

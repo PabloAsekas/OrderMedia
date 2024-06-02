@@ -22,19 +22,17 @@
     <None Remove="Factories\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MetadataExtractor" Version="2.8.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
+    <PackageReference Include="MetadataExtractor" Version="2.8.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
     <PackageReference Include="XmpCore" Version="6.1.10.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Services\CreatedDateExtractors\" />
     <Folder Include="Enums\" />
-    <Folder Include="Models\" />
     <Folder Include="Factories\" />
   </ItemGroup>
   <ItemGroup>

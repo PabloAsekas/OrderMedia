@@ -1,40 +1,32 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MetadataExtractor;
-using MetadataExtractor.Formats.Exif;
-using MetadataExtractor.Formats.QuickTime;
+﻿using OrderMedia.Handlers.CreatedDate;
 using OrderMedia.Interfaces;
+using OrderMedia.Models;
 
 namespace OrderMedia.Services
 {
     public class MetadataExtractorService : IMetadataExtractorService
-	{
-        public IEnumerable<Directory> GetImageDirectories(string mediaPath)
+    {
+        private readonly ICreatedDateHandler _createdDateHandler;
+        
+        public MetadataExtractorService(IImageMetadataReader imageMetadataReader, IIOService ioService, IXmpExtractorService xmpExtractorService)
         {
-            return ImageMetadataReader.ReadMetadata(mediaPath);
+            var xmpHandler = new XmpCreatedDateHandler(ioService, xmpExtractorService);
+            var exifSubIfdDirectoryHandler = new ExifSubIfdDirectoryCreatedDateHandler(imageMetadataReader);
+            var exifIfd0DirectoryHandler = new ExifIfd0DirectoryCreatedDateHandler(imageMetadataReader);
+            var quickTimeMetadataHeaderDirectoryHandler = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(imageMetadataReader);
+            var whatsAppHandler = new WhatsAppCreatedDateHandler(ioService);
+
+            xmpHandler
+                .SetNext(exifSubIfdDirectoryHandler)
+                .SetNext(exifIfd0DirectoryHandler)
+                .SetNext(quickTimeMetadataHeaderDirectoryHandler)
+                .SetNext(whatsAppHandler);
+
+            _createdDateHandler = xmpHandler;
         }
-
-        private string GetCreatedDate<T>(string mediaPath, int tagType)
+        public CreatedDateInfo GetCreatedDate(string mediaPath)
         {
-            var directories = GetImageDirectories(mediaPath);
-            var dateDirectory = directories.OfType<T>().FirstOrDefault() as Directory;
-
-            return dateDirectory?.GetDescription(tagType);
-        }
-
-        public string GetImageCreatedDate(string mediaPath)
-        {
-            return GetCreatedDate< ExifSubIfdDirectory>(mediaPath, ExifDirectoryBase.TagDateTimeOriginal);
-        }
-
-        public string GetRawCreatedDate(string mediaPath)
-        {
-            return GetCreatedDate<ExifIfd0Directory>(mediaPath, ExifIfd0Directory.TagDateTime);
-        }
-
-        public string GetVideoCreatedDate(string mediaPath)
-        {
-            return GetCreatedDate<QuickTimeMetadataHeaderDirectory>(mediaPath, QuickTimeMetadataHeaderDirectory.TagCreationDate);
+            return _createdDateHandler.GetCreatedDateInfo(mediaPath);
         }
     }
 }

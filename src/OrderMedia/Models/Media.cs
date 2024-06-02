@@ -11,7 +11,7 @@ namespace OrderMedia.Models
         /// </summary>
         public MediaType MediaType { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Gets or sets current media path.
         /// Ex. /pablo/photos/img_0001.heic
         /// </summary>
