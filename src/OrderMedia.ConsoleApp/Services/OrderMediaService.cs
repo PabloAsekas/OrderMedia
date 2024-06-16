@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
 
 namespace OrderMedia.ConsoleApp.Services
 {

@@ -1,27 +1,27 @@
+using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Services.Processors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace OrderMediaTests.Services.Processors;
+namespace OrderMediaTests.Handlers.Processor;
 
-public class CreatedDateProcessorTests
+public class CreatedDateAggregatorProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
     private Mock<IMetadataAggregatorService> _metadataAggregatorServiceMock;
-
+    
     [SetUp]
     public void SetUp()
     {
         _autoMocker = new AutoMocker();
-
+        
         _metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
     }
 
-    [Test]
-    public void Execute_Runs_Successfully()
+    [TestCase]
+    public void Process_Runs_Successfully()
     {
         // Arrange
         var media = new Media()
@@ -35,10 +35,10 @@ public class CreatedDateProcessorTests
         _metadataAggregatorServiceMock.Setup(x => x.GetImage(It.IsAny<string>()))
             .Returns(image);
         
-        var sut = _autoMocker.CreateInstance<CreatedDateProcessor>();
+        var sut = _autoMocker.CreateInstance<CreatedDateAggregatorProcessorHandler>();
 
         // Act
-        sut.Execute(media);
+        sut.Process(media);
         
         // Assert
         var mediaDateTime = media.CreatedDateTime.ToString("yyyy:MM:dd HH:mm:ss");
@@ -53,7 +53,7 @@ public class CreatedDateProcessorTests
         TryGetValue(image, ExifTag.OffsetTimeOriginal).Should().Be(offset);
         TryGetValue(image, ExifTag.OffsetTimeDigitized).Should().Be(offset);
     }
-
+    
     private static string TryGetValue(Image image, ExifTag<string> tag)
     {
         image.Metadata.ExifProfile.TryGetValue(tag, out var tagValue);

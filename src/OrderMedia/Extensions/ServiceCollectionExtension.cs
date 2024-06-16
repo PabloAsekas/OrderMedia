@@ -1,9 +1,10 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
+using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
+using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Services;
-using OrderMedia.Services.Processors;
 using OrderMedia.Wrappers;
 
 namespace OrderMedia.Extensions
@@ -28,17 +29,17 @@ namespace OrderMedia.Extensions
                 .AddScoped<IMediaTypeService, MediaTypeService>()
                 .AddScoped<IMetadataAggregatorService, MetadataAggregatorService>()
                 .AddScoped<IMetadataExtractorService, MetadataExtractorService>()
-                .AddScoped<MainProcessor>()
-                .AddScoped<IProcessor, MainProcessor>(s => s.GetService<MainProcessor>())
-                .AddScoped<AaeProcessor>()
-                .AddScoped<IProcessor, AaeProcessor>(s => s.GetService<AaeProcessor>())
-                .AddScoped<LivePhotoProcessor>()
-                .AddScoped<IProcessor, LivePhotoProcessor>(s => s.GetService<LivePhotoProcessor>())
-                .AddScoped<XmpProcessor>()
-                .AddScoped<IProcessor, XmpProcessor>(s => s.GetService<XmpProcessor>())
-                .AddScoped<CreatedDateProcessor>()
-                .AddScoped<IProcessor, CreatedDateProcessor>(s => s.GetService<CreatedDateProcessor>())
-                .AddScoped<IProcessorFactory, ProcessorFactory>()
+                .AddScoped<MoveMediaProcessorHandler>()
+                .AddScoped<IProcessorHandler, MoveMediaProcessorHandler>(s => s.GetService<MoveMediaProcessorHandler>())
+                .AddScoped<MoveAaeProcessorHandler>()
+                .AddScoped<IProcessorHandler, MoveAaeProcessorHandler>(s => s.GetService<MoveAaeProcessorHandler>())
+                .AddScoped<MoveLivePhotoProcessorHandler>()
+                .AddScoped<IProcessorHandler, MoveLivePhotoProcessorHandler>(s => s.GetService<MoveLivePhotoProcessorHandler>())
+                .AddScoped<MoveXmpProcessorHandler>()
+                .AddScoped<IProcessorHandler, MoveXmpProcessorHandler>(s => s.GetService<MoveXmpProcessorHandler>())
+                .AddScoped<CreatedDateAggregatorProcessorHandler>()
+                .AddScoped<IProcessorHandler, CreatedDateAggregatorProcessorHandler>(s => s.GetService<CreatedDateAggregatorProcessorHandler>())
+                .AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>()
                 .AddScoped<IRandomizerService, RandomizerService>()
                 .AddScoped<IRenameService, RenameService>()
                 .AddScoped<IXmpExtractorService, XmpExtractorService>();

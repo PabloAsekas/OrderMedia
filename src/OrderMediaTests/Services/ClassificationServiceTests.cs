@@ -1,5 +1,6 @@
 ﻿using OrderMedia.Enums;
-using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
+using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Models;
 using OrderMedia.Services;
 
@@ -8,19 +9,19 @@ namespace OrderMediaTests.Services
     public class ClassificationServiceTests
 	{
 		private AutoMocker _autoMocker;
-		private Mock<IProcessor> _processorMock;
-		private Mock<IProcessorFactory> _processorFactoryMock;
+		private Mock<IProcessorHandler> _processorHandlerMock;
+		private Mock<IProcessorHandlerFactory> _processorHandlerFactoryMock;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_autoMocker = new AutoMocker();
 
-			_processorMock = _autoMocker.GetMock<IProcessor>();
+			_processorHandlerMock = _autoMocker.GetMock<IProcessorHandler>();
 
-			_processorFactoryMock = _autoMocker.GetMock<IProcessorFactory>();
-			_processorFactoryMock.Setup(x => x.CreateProcessor(It.IsAny<MediaType>()))
-				.Returns(_processorMock.Object);
+			_processorHandlerFactoryMock = _autoMocker.GetMock<IProcessorHandlerFactory>();
+			_processorHandlerFactoryMock.Setup(x => x.CreateProcessorHandler(It.IsAny<MediaType>()))
+				.Returns(_processorHandlerMock.Object);
 		}
 
 		[Test]
@@ -38,8 +39,8 @@ namespace OrderMediaTests.Services
 			sut.Process(media);
 
 			// Assert
-			_processorFactoryMock.Verify(x => x.CreateProcessor(media.MediaType), Times.Once);
-			_processorMock.Verify(x => x.Execute(media), Times.Once);
+			_processorHandlerFactoryMock.Verify(x => x.CreateProcessorHandler(media.MediaType), Times.Once);
+			_processorHandlerMock.Verify(x => x.Process(media), Times.Once);
 		}
 	}
 }
