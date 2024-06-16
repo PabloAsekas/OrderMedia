@@ -2,18 +2,18 @@ using OrderMedia.Interfaces;
 using OrderMedia.Models;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
-namespace OrderMedia.Services.Processors;
+namespace OrderMedia.Handlers.Processor;
 
-public class CreatedDateProcessor : BaseProcessor
+public class CreatedDateAggregatorProcessorHandler : BaseProcessorHandler
 {
     private readonly IMetadataAggregatorService _metadataAggregatorService;
 
-    public CreatedDateProcessor(IMetadataAggregatorService metadataAggregatorService)
+    public CreatedDateAggregatorProcessorHandler(IMetadataAggregatorService metadataAggregatorService)
     {
         _metadataAggregatorService = metadataAggregatorService;
     }
 
-    public override void Execute(Media media)
+    public override void Process(Media media)
     {
         using var image = _metadataAggregatorService.GetImage(media.NewMediaPath);
         
@@ -32,6 +32,6 @@ public class CreatedDateProcessor : BaseProcessor
         
         _metadataAggregatorService.SaveImage(image, media.NewMediaPath);
         
-        ExecuteProcessors(media);
+        base.Process(media);
     }
 }

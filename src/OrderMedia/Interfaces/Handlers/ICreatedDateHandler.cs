@@ -1,6 +1,6 @@
 using OrderMedia.Models;
 
-namespace OrderMedia.Interfaces;
+namespace OrderMedia.Interfaces.Handlers;
 
 /// <summary>
 /// Created Date Handler interface.

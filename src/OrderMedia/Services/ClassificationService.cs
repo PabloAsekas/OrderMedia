@@ -1,4 +1,5 @@
 ﻿using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services
@@ -8,18 +9,18 @@ namespace OrderMedia.Services
     /// </summary>
 	public class ClassificationService : IClassificationService
     {
-        private readonly IProcessorFactory _processorFactory;
+        private readonly IProcessorHandlerFactory _processorHandlerFactory;
 
-        public ClassificationService(IProcessorFactory processorFactory)
+        public ClassificationService(IProcessorHandlerFactory processorHandlerFactory)
         {
-            _processorFactory = processorFactory;
+            _processorHandlerFactory = processorHandlerFactory;
         }
 
         public void Process(Media media)
         {
-            var processor = _processorFactory.CreateProcessor(media.MediaType);
+            var processor = _processorHandlerFactory.CreateProcessorHandler(media.MediaType);
 
-            processor.Execute(media);
+            processor.Process(media);
         }
     }
 }

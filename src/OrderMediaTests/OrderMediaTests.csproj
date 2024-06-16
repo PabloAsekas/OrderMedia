@@ -37,6 +37,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Factories\" />
-    <Folder Include="Services\Processors\" />
   </ItemGroup>
 </Project>

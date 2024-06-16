@@ -1,6 +1,6 @@
 ﻿using OrderMedia.Models;
 
-namespace OrderMedia.Interfaces
+namespace OrderMedia.Interfaces.Factories
 {
     /// <summary>
     /// Media factory service interface.
