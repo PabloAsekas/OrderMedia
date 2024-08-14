@@ -4,24 +4,26 @@ using OrderMedia.Models;
 
 namespace OrderMedia.Handlers.CreatedDate;
 
-public class WhatsAppCreatedDateHandler : BaseCreatedDateHandler
+public class RegexCreatedDateHandler : BaseCreatedDateHandler
 {
     private readonly IIOService _ioService;
+    private readonly string _pattern;
+    private readonly string _format;
 
-    public WhatsAppCreatedDateHandler(IIOService ioService)
+    public RegexCreatedDateHandler(IIOService ioService, string pattern, string format)
     {
         _ioService = ioService;
+        _pattern = pattern;
+        _format = format;
     }
 
     public override CreatedDateInfo GetCreatedDateInfo(string mediaPath)
     {
         var name = _ioService.GetFileNameWithoutExtension(mediaPath);
         
-        const string pattern = @"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])";
+        var m = Regex.Match(name, _pattern, RegexOptions.IgnoreCase);
 
-        var m = Regex.Match(name, pattern, RegexOptions.IgnoreCase);
-
-        var createdDateInfo = CreateCreatedDateInfo(m.Value, "yyyy-MM-dd-HH-mm-ss");
+        var createdDateInfo = CreateCreatedDateInfo(m.Value, _format);
         
         return createdDateInfo ?? base.GetCreatedDateInfo(mediaPath);
     }
