@@ -3,7 +3,7 @@ using OrderMedia.Interfaces;
 
 namespace OrderMediaTests.Handlers.CreatedDate;
 
-public class WhatsAppCreatedDateHandlerTests
+public class RegexCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;
     private Mock<IIOService> _ioServiceMock;
@@ -16,19 +16,17 @@ public class WhatsAppCreatedDateHandlerTests
         _ioServiceMock = _autoMocker.GetMock<IIOService>();
     }
 
-    [Test]
-    public void GetCreatedDateInfo_ReturnsData_Successfully()
+    [TestCase("PHOTO-2014-07-31-22-15-00", "2014-07-31-22-15-00", "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss")]
+    [TestCase("IMG_20140731_221500", "20140731_221500", "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])_(0[0-9]|[1-2][0-9])([0-5][0-9])([0-5][0-9])", "yyyyMMdd_HHmmss")]
+    public void GetCreatedDateInfo_ReturnsData_Successfully(string name, string date, string pattern, string format)
     {
         // Arrange
-        const string name = "PHOTO-2014-07-31-22-15-00";
-        const string mediaPath = $"test/{name}.jpg";
-        const string date = "2014-07-31-22-15-00";
-        const string format = "yyyy-MM-dd-HH-mm-ss";
+        var mediaPath = $"test/{name}.jpg";
 
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
             .Returns(name);
         
-        var sut = _autoMocker.CreateInstance<WhatsAppCreatedDateHandler>();
+        var sut = new RegexCreatedDateHandler(_ioServiceMock.Object, pattern, format);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
@@ -50,7 +48,7 @@ public class WhatsAppCreatedDateHandlerTests
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
             .Returns(name);
         
-        var sut = _autoMocker.CreateInstance<WhatsAppCreatedDateHandler>();
+        var sut = new RegexCreatedDateHandler(_ioServiceMock.Object, "", "");
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
