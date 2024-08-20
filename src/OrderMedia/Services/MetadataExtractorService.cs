@@ -18,8 +18,8 @@ namespace OrderMedia.Services
             var quickTimeMetadataHeaderDirectoryHandler = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(imageMetadataReader);
             var quickTimeMovieHeaderDirectoryHandler = new QuickTimeMovieHeaderDirectoryCreatedDateHandler(imageMetadataReader);
             var whatsAppHandler = new RegexCreatedDateHandler(ioService, "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss"); // Names like PHOTO-2024-04-09-19-45-45.jpg
-            var insta360Handler = new RegexCreatedDateHandler(ioService,
-                "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])_(0[0-9]|[1-2][0-9])([0-5][0-9])([0-5][0-9])", "yyyyMMdd_HHmmss"); // Names like IMG_20240713_164531.jpg
+            var insta360Handler = new RegexCreatedDateHandler(ioService, "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])_(0[0-9]|[1-2][0-9])([0-5][0-9])([0-5][0-9])", "yyyyMMdd_HHmmss"); // Names like IMG_20240713_164531.jpg
+            var nextCloudHandler = new RegexCreatedDateHandler(ioService, "[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yy-MM-dd HH-mm-ss"); // Names like 24-08-03 18-29-44 1005.png
 
             xmpHandler
                 .SetNext(exifSubIfdDirectoryHandler)
@@ -28,7 +28,8 @@ namespace OrderMedia.Services
                 .SetNext(quickTimeMetadataHeaderDirectoryHandler)
                 .SetNext(quickTimeMovieHeaderDirectoryHandler)
                 .SetNext(whatsAppHandler)
-                .SetNext(insta360Handler);
+                .SetNext(insta360Handler)
+                .SetNext(nextCloudHandler);
 
             _createdDateHandler = xmpHandler;
         }
