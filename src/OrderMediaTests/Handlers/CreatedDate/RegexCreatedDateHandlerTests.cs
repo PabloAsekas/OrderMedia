@@ -18,6 +18,7 @@ public class RegexCreatedDateHandlerTests
 
     [TestCase("PHOTO-2014-07-31-22-15-00", "2014-07-31-22-15-00", "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss")]
     [TestCase("IMG_20140731_221500", "20140731_221500", "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])_(0[0-9]|[1-2][0-9])([0-5][0-9])([0-5][0-9])", "yyyyMMdd_HHmmss")]
+    [TestCase("24-08-03 18-29-44 1005", "24-08-03 18-29-44", "[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yy-MM-dd HH-mm-ss")]
     public void GetCreatedDateInfo_ReturnsData_Successfully(string name, string date, string pattern, string format)
     {
         // Arrange
