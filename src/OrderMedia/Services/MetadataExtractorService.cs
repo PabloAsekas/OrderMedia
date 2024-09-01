@@ -22,14 +22,14 @@ namespace OrderMedia.Services
             var nextCloudHandler = new RegexCreatedDateHandler(ioService, "[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yy-MM-dd HH-mm-ss"); // Names like 24-08-03 18-29-44 1005.png
 
             xmpHandler
+                .SetNext(insta360Handler)
+                .SetNext(whatsAppHandler)
+                .SetNext(nextCloudHandler)
                 .SetNext(exifSubIfdDirectoryHandler)
                 .SetNext(exifIfd0DirectoryHandler)
                 .SetNext(fileMetadataDirectoryCreatedDateHandler)
                 .SetNext(quickTimeMetadataHeaderDirectoryHandler)
-                .SetNext(quickTimeMovieHeaderDirectoryHandler)
-                .SetNext(whatsAppHandler)
-                .SetNext(insta360Handler)
-                .SetNext(nextCloudHandler);
+                .SetNext(quickTimeMovieHeaderDirectoryHandler);
 
             _createdDateHandler = xmpHandler;
         }

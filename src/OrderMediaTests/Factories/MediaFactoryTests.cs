@@ -1,6 +1,7 @@
 ﻿using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
 using OrderMedia.Models;
 
 namespace OrderMediaTests.Factories
@@ -11,9 +12,9 @@ namespace OrderMediaTests.Factories
 
         private Mock<IConfigurationService> _configurationServiceMock;
         private Mock<IIOService> _ioServiceMock;
-        private Mock<IRenameService> _renameServiceMock;
+        private Mock<IRenameStrategyFactory> _renameStrategyFactoryMock;
         private Mock<IMediaTypeService> _mediaTypeServiceMock;
-        private Mock<ICreatedDateExtractorService> _createdDateExtractorService;
+        private Mock<ICreatedDateExtractorService> _createdDateExtractorServiceMock;
 
         private const string mediaPath = $"{mediaFolder}/{name}";
         private const string mediaFolder = "test/path";
@@ -51,15 +52,19 @@ namespace OrderMediaTests.Factories
             _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(name))
                 .Returns(nameWithoutExtension);
 
-            _renameServiceMock = _autoMocker.GetMock<IRenameService>();
-            _renameServiceMock.Setup(x => x.Rename(It.IsAny<string>(), It.IsAny<DateTime>()))
+            var renameServiceMock = _autoMocker.GetMock<IRenameStrategy>();
+            renameServiceMock.Setup(x => x.Rename(It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(newName);
 
             _mediaTypeServiceMock = _autoMocker.GetMock<IMediaTypeService>();
 
-            _createdDateExtractorService = _autoMocker.GetMock<ICreatedDateExtractorService>();
-            _createdDateExtractorService.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
+            _createdDateExtractorServiceMock = _autoMocker.GetMock<ICreatedDateExtractorService>();
+            _createdDateExtractorServiceMock.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
                 .Returns(createdDateTime);
+
+            _renameStrategyFactoryMock = _autoMocker.GetMock<IRenameStrategyFactory>();
+            _renameStrategyFactoryMock.Setup(x => x.GetRenameStrategy(It.IsAny<MediaType>()))
+                .Returns(renameServiceMock.Object);
         }
 
         [Test]
@@ -73,6 +78,8 @@ namespace OrderMediaTests.Factories
         [TestCase(MediaType.WhatsAppImage, false)]
         [TestCase(MediaType.WhatsAppVideo, true)]
         [TestCase(MediaType.WhatsAppVideo, false)]
+        [TestCase(MediaType.Insv, true)]
+        [TestCase(MediaType.Insv, false)]
         public void CreateMedia_Returns_Successfully(MediaType mediaType, bool renamed)
         {
             // Arrange

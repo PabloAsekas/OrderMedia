@@ -16,14 +16,14 @@ namespace OrderMediaTests.Factories
 			_autoMocker = new AutoMocker();
 
 			var ioServiceMock = _autoMocker.GetMock<IIOService>();
-			var renameServiceMock = _autoMocker.GetMock<IRenameService>();
+			var aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
 			var metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
 			
             var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioServiceMock.Object);
 
 			var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioServiceMock.Object);
 
-			var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioServiceMock.Object, renameServiceMock.Object);
+			var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioServiceMock.Object, aaeHelperServiceMock.Object);
 
             var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioServiceMock.Object);
 
@@ -48,6 +48,7 @@ namespace OrderMediaTests.Factories
         [TestCase(MediaType.Video, typeof(MoveMediaProcessorHandler))]
         [TestCase(MediaType.WhatsAppImage, typeof(MoveMediaProcessorHandler))]
         [TestCase(MediaType.WhatsAppVideo, typeof(MoveMediaProcessorHandler))]
+        [TestCase(MediaType.Insv, typeof(MoveMediaProcessorHandler))]
         public void CreateProcessor_Returns_Successfully(MediaType mediaType, Type processor)
 		{
 			// Arrange

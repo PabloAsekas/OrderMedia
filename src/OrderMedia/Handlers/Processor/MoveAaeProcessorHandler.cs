@@ -7,12 +7,12 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveAaeProcessorHandler : BaseProcessorHandler
 {
     private readonly IIOService _ioService;
-    private readonly IRenameService _renameService;
+    private readonly IAaeHelperService _aaeHelperService;
 
-    public MoveAaeProcessorHandler(IIOService ioService, IRenameService renameService)
+    public MoveAaeProcessorHandler(IIOService ioService, IAaeHelperService aaeHelperService)
     {
         _ioService = ioService;
-        _renameService = renameService;
+        _aaeHelperService = aaeHelperService;
     }
     
     public override void Process(Media media)
@@ -20,7 +20,7 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
         var possibleNames = new List<string>()
         {
             $"{media.NameWithoutExtension}.aae",
-            _renameService.GetAaeName(media.NameWithoutExtension),
+            _aaeHelperService.GetAaeName(media.NameWithoutExtension),
         };
 
         foreach (var aaeName in possibleNames)

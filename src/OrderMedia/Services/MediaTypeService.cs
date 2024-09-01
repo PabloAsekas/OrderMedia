@@ -18,8 +18,8 @@ namespace OrderMedia.Services
 
         public MediaType GetMediaType(string path)
         {
-            string extension = _ioService.GetExtension(path);
-            string name = _ioService.GetFileNameWithoutExtension(path);
+            var extension = _ioService.GetExtension(path);
+            var name = _ioService.GetFileNameWithoutExtension(path);
 
             extension = AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
             extension = AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);
@@ -38,6 +38,8 @@ namespace OrderMedia.Services
                 ".whatsappvideo" => MediaType.WhatsAppVideo,
                 ".arw" => MediaType.Raw,
                 ".dng" => MediaType.Raw,
+                ".insp" => MediaType.Image,
+                ".insv" => MediaType.Insv,
                 _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
             };
         }

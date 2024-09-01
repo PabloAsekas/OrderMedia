@@ -8,7 +8,7 @@ public class MoveXmpProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
     private Mock<IIOService> _ioServiceMock;
-    private Mock<IRenameService> _renameServiceMock;
+    private Mock<IAaeHelperService> _aaeHelperServiceMock;
 
     [SetUp]
     public void SetUp()
@@ -17,7 +17,7 @@ public class MoveXmpProcessorHandlerTests
 
         _ioServiceMock = _autoMocker.GetMock<IIOService>();
 
-        _renameServiceMock = _autoMocker.GetMock<IRenameService>();
+        _aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
     }
 
     [Test]
@@ -40,7 +40,7 @@ public class MoveXmpProcessorHandlerTests
 
         var newXmpLocation = $"{media.NewMediaFolder}/{newXmpName}";
 
-        _renameServiceMock.Setup(x => x.GetAaeName(media.NameWithoutExtension))
+        _aaeHelperServiceMock.Setup(x => x.GetAaeName(media.NameWithoutExtension))
             .Returns(xmpName);
 
         _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, xmpName }))
