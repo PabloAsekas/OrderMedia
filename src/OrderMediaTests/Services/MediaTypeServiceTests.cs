@@ -30,6 +30,8 @@ namespace OrderMediaTests.Services
         [TestCase("GIF_WHATSAPP", ".gif", MediaType.WhatsAppImage)]
         [TestCase("test", ".arw", MediaType.Raw)]
         [TestCase("test", ".dng", MediaType.Raw)]
+        [TestCase("test", ".insp", MediaType.Image)]
+        [TestCase("test", ".insv", MediaType.Insv)]
         public void GetMediaType_Returns_MediaType_Successfully(string name, string extension, MediaType mediaType)
 		{
 			// Arrange

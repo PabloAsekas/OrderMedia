@@ -5,6 +5,7 @@ using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Services;
+using OrderMedia.Strategies.RenameStrategy;
 using OrderMedia.Wrappers;
 
 namespace OrderMedia.Extensions
@@ -41,7 +42,12 @@ namespace OrderMedia.Extensions
                 .AddScoped<IProcessorHandler, CreatedDateAggregatorProcessorHandler>(s => s.GetService<CreatedDateAggregatorProcessorHandler>())
                 .AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>()
                 .AddScoped<IRandomizerService, RandomizerService>()
-                .AddScoped<IRenameService, RenameService>()
+                .AddScoped<IAaeHelperService, AaeHelperService>()
+                .AddScoped<DefaultRenameStrategy>()
+                .AddScoped<IRenameStrategy, DefaultRenameStrategy>()
+                .AddScoped<Insta360RenameStrategy>()
+                .AddScoped<IRenameStrategy, Insta360RenameStrategy>()
+                .AddScoped<IRenameStrategyFactory, RenameStrategyFactory>()
                 .AddScoped<IXmpExtractorService, XmpExtractorService>();
             
             return services;

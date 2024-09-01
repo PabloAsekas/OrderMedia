@@ -7,7 +7,8 @@
 		Raw,
 		Video,
 		WhatsAppImage,
-		WhatsAppVideo
+		WhatsAppVideo,
+		Insv,
 	}
 }
 

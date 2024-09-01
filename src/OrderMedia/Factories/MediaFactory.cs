@@ -13,19 +13,19 @@ namespace OrderMedia.Factories
     {
         private readonly IConfigurationService _configurationService;
         private readonly IIOService _ioService;
-        private readonly IRenameService _renameService;
+        private readonly IRenameStrategyFactory _renameStrategyFactory;
         private readonly IMediaTypeService _mediaTypeService;
         private readonly ICreatedDateExtractorService _createdDateExtractorService;
 
         public MediaFactory(IConfigurationService configurationService,
             IIOService ioService,
-            IRenameService renameService,
+            IRenameStrategyFactory renameStrategyFactory,
             IMediaTypeService mediaTypeService,
             ICreatedDateExtractorService createdDateExtractorService)
         {
             _configurationService = configurationService;
             _ioService = ioService;
-            _renameService = renameService;
+            _renameStrategyFactory = renameStrategyFactory;
             _mediaTypeService = mediaTypeService;
             _createdDateExtractorService = createdDateExtractorService;
         }
@@ -48,7 +48,7 @@ namespace OrderMedia.Factories
 
             var newMediaFolder = _ioService.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeAsString });
 
-            var newName = GetNewName(fullName, createdDateTime);
+            var newName = GetNewName(mediaType, fullName, createdDateTime);
 
             var newNameWithoutExtension = _ioService.GetFileNameWithoutExtension(newName);
 
@@ -78,18 +78,21 @@ namespace OrderMedia.Factories
                 MediaType.Video => _configurationService.GetVideoFolderName(),
                 MediaType.WhatsAppImage => _configurationService.GetImageFolderName(),
                 MediaType.WhatsAppVideo => _configurationService.GetVideoFolderName(),
+                MediaType.Insv => _configurationService.GetVideoFolderName(),
                 _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
             };
         }
 
-        private string GetNewName(string originalName, DateTime createdDateTime)
+        private string GetNewName(MediaType mediaType, string originalName, DateTime createdDateTime)
         {
-            if (_configurationService.GetRenameMediaFiles())
+            if (!_configurationService.GetRenameMediaFiles())
             {
-                return _renameService.Rename(originalName, createdDateTime);
+                return originalName;
             }
 
-            return originalName;
+            var renameStrategy = _renameStrategyFactory.GetRenameStrategy(mediaType);
+            
+            return renameStrategy.Rename(originalName, createdDateTime);
         }
     }
 }
