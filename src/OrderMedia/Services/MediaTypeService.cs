@@ -40,6 +40,8 @@ namespace OrderMedia.Services
                 ".dng" => MediaType.Raw,
                 ".insp" => MediaType.Image,
                 ".insv" => MediaType.Insv,
+                ".cr2" => MediaType.Image,
+                ".cr3" => MediaType.Image,
                 _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
             };
         }
