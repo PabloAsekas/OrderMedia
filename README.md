@@ -12,7 +12,7 @@ The default name of the files produced by cameras or phones is arbitrary and use
 
 1. Gets all the media files.
 2. Extracts the captured date.
-3. Renames the media with the format `yyyy-MM-dd_originalName`. If the name is bigger than 9 characters, it creates a new random name, if configured.
+3. Renames the media with the format `yyyy-MM-dd_originalName`. The `originalName` can be replaced by a random name with random numbers if the `originalName` lenght exceeds the configured limit. The rename behavior and the new name can be configured.
 3. Creates a folder with the captured date (format `yyyy-MM-dd`) and moves the media to the folder.
 
 ## Supported media
@@ -21,6 +21,8 @@ The application supports the following formats:
 
 Image:
 - ARW
+- CR2
+- CR3
 - DNG
 - Gif
 - Heic
