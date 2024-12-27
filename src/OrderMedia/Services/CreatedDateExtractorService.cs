@@ -17,13 +17,13 @@ public class CreatedDateExtractorService : ICreatedDateExtractorService
     {
         var createdDateInfo = _metadataExtractor.GetCreatedDate(mediaPath);
 
-        return GetDateTimeFromStringWithFormat(createdDateInfo?.CreatedDate, createdDateInfo?.Format, new CultureInfo("es-ES", false));
+        return createdDateInfo is null ? default : GetDateTimeFromStringWithFormat(createdDateInfo.CreatedDate, createdDateInfo.Format, CultureInfo.CurrentCulture);
     }
     
     private static DateTime GetDateTimeFromStringWithFormat(string metadataString, string format, CultureInfo cultureInfo)
     {
         DateTime.TryParseExact(metadataString, format, cultureInfo, DateTimeStyles.None, out DateTime imageDate);
-
+        
         return imageDate;
     }
 }

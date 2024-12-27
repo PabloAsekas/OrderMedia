@@ -1,0 +1,28 @@
+services:
+    OrderMediaConsoleApp:
+        image: ordermedia/consoleapp:dev.1
+        container_name: ordermedia.consoleapp.dev
+        volumes:
+          - /Users/pablo/Downloads/fotis/:/app/media
+        environment:
+          - MediaSourcePath=/app/media
+          - ImageFolderName=img
+          - VideoFolderName=vid
+          - ImageExtensions:0=.heic
+          - ImageExtensions:1=.jpg
+          - ImageExtensions:2=.jpeg
+          - ImageExtensions:3=.gif
+          - ImageExtensions:4=.png
+          - ImageExtensions:5=.arw
+          - ImageExtensions:6=.dng
+          - ImageExtensions:7=.insp
+          - ImageExtensions:8=.cr2
+          - ImageExtensions:9=.cr3
+          - VideoExtensions:0=.mov
+          - VideoExtensions:1=.mp4
+          - VideoExtensions:2=.insv
+          - OverwriteFiles=false
+          - RenameMediaFiles=true
+          - ReplaceLongNames=true
+          - MaxMediaNameLength=8
+          - NewMediaName=pbg

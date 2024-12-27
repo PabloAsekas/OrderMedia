@@ -12,6 +12,6 @@ namespace OrderMedia.Interfaces
 	    /// </summary>
 	    /// <param name="mediaPath">Media path.</param>
 	    /// <returns>Created Date info, if found.</returns>
-	    CreatedDateInfo GetCreatedDate(string mediaPath);
+	    CreatedDateInfo? GetCreatedDate(string mediaPath);
     }
 }

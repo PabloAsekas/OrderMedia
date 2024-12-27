@@ -13,7 +13,7 @@ public class QuickTimeMovieHeaderDirectoryCreatedDateHandler: BaseCreatedDateHan
         _imageMetadataReader = imageMetadataReader;
     }
         
-    public override CreatedDateInfo GetCreatedDateInfo(string mediaPath)
+    public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
         var createdDate = _imageMetadataReader.GetMetadataByDirectoryTypeAndTag<QuickTimeMovieHeaderDirectory>(mediaPath, QuickTimeMovieHeaderDirectory.TagCreated);
 

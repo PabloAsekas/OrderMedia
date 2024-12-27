@@ -19,5 +19,5 @@ public interface ICreatedDateHandler
     /// </summary>
     /// <param name="mediaPath">Media Path.</param>
     /// <returns>CreatedDate info, if found.</returns>
-    CreatedDateInfo GetCreatedDateInfo(string mediaPath);
+    CreatedDateInfo? GetCreatedDateInfo(string mediaPath);
 }

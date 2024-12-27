@@ -13,7 +13,7 @@ public class ExifSubIfdDirectoryCreatedDateHandler : BaseCreatedDateHandler
         _imageMetadataReader = imageMetadataReader;
     }
     
-    public override CreatedDateInfo GetCreatedDateInfo(string mediaPath)
+    public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
         var createdDate = _imageMetadataReader.GetMetadataByDirectoryTypeAndTag<ExifSubIfdDirectory>(mediaPath, ExifDirectoryBase.TagDateTimeOriginal);
 
