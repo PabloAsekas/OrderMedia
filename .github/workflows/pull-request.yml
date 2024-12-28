@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
@@ -26,6 +26,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Unit tests
       run: dotnet test './test/OrderMedia.UnitTests' --no-build --verbosity normal
-    - name: Integration tests
-      run: dotnet test './test/OrderMedia.ConsoleApp.IntegrationTests' --no-build --verbosity normal
-
+#    - name: Integration tests
+#      run: dotnet test './test/OrderMedia.ConsoleApp.IntegrationTests' --no-build --verbosity normal

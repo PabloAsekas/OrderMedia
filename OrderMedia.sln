@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{AF1EA57D-9B98-4067-AE95-C7FA6F0800BB}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.ConsoleApp.IntegrationTests", "test\OrderMedia.ConsoleApp.IntegrationTests\OrderMedia.ConsoleApp.IntegrationTests.csproj", "{4057BBCE-8E83-4DC8-BB73-AD97363268D3}"

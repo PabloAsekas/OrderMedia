@@ -8,8 +8,8 @@ namespace OrderMedia.IntegrationTests;
 [TestFixture]
 public class MediaClassificationIntegrationTests
 {
-    private readonly string _mediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "media");
-    private readonly string _newMediaPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testmedia");
+    private readonly string _mediaPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "media");
+    private readonly string _newMediaPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "testmedia");
     private IFutureDockerImage _dockerImage;
     private IContainer _container;
     
