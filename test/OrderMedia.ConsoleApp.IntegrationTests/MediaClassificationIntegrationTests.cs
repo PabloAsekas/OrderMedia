@@ -70,7 +70,7 @@ public class MediaClassificationIntegrationTests
         
         await _container.StartAsync();
         
-        Thread.Sleep(TimeSpan.FromSeconds(10));
+        Thread.Sleep(TimeSpan.FromSeconds(20));
     }
 
     [OneTimeTearDown]
@@ -83,33 +83,33 @@ public class MediaClassificationIntegrationTests
     
     [Test]
     // Raw
-    [TestCase("img/2024-05-25/2024-05-25_19-48-49_DSC00397.ARW")] // Arw
+    [TestCase("img/2024-03-09/2024-03-09_19-11-36_DSC01943.ARW")] // Arw
     [TestCase("img/2024-05-26/2024-05-26_16-50-17_IMG_3739.DNG")] // Dng
-    [TestCase("img/2024-08-03/2024-08-03_19-52-35_IMG_5391.cr2")] // Cr2
+    [TestCase("img/2016-10-06/2016-10-06_18-13-33_IMG_1234.cr2")] // Cr2
     [TestCase("img/2024-07-04/2024-07-04_20-03-26_IMG_0006.cr3")] // Cr3
     // Common photo types
-    [TestCase("img/2024-11-24/2024-11-24_14-29-22_IMG_5920.heic")] // Heic
+    [TestCase("img/2024-02-03/2024-02-03_20-05-42_IMG_1599.heic")] // Heic
     [TestCase("img/2021-06-05/2021-06-05_20-34-26_IMG_3107.jpeg")] // Jpeg
     [TestCase("img/2021-05-12/2021-05-12_19-03-02_IMG_1749.jpg")] // Jpg
     [TestCase("img/2020-05-07/2020-05-07_18-04-01_IMG_1234.png")] // Png
-    [TestCase("img/2024-08-14/2024-08-14_19-38-41_IMG_20240814_193841_00_004.insp")] // Insp
+    [TestCase("img/2024-08-14/2024-08-14_19-38-41_IMG_20240814_193841_00_004.insp")] // Insp - This example is not a real insp file
     // Common video types
-    [TestCase("vid/2023-05-02/2023-05-02_10-06-42_IMG_4782.MOV")] // Mov
-    [TestCase("vid/2022-03-02/2022-03-02_16-43-11_IMG_7043.mp4")] // Mp4
-    [TestCase("vid/2024-08-24/LRV_2024-08-24_09-46-46_11_005.insv")] // Insta 360 video
-    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_00_005.insv")] // Insta 360 video
-    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video
+    [TestCase("vid/2024-12-27/2024-12-27_14-04-11_IMG_6254.MOV")] // Mov
+    [TestCase("vid/1904-01-01/1904-01-01_00-00-00_IMG_7354.mp4")] // Mp4
+    [TestCase("vid/2024-08-24/LRV_2024-08-24_09-46-46_11_005.insv")] // Insta 360 video - This example is not a real insv file
+    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_00_005.insv")] // Insta 360 video - This example is not a real insv file
+    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video - This example is not a real insv file
     // Behaviours
-    [TestCase("img/2024-02-03/2024-02-03_14-01-33_DSC09930.ARW")] // RAW with xmp file
-    [TestCase("img/2024-02-03/2024-02-03_14-01-33_DSC09930.xmp")] // RAW with xmp file
-    [TestCase("img/2024-05-26/2024-05-26_16-03-47_IMG_3635.HEIC")] // LivePhoto
-    [TestCase("img/2024-05-26/2024-05-26_16-03-47_IMG_3635.mov")] // LivePhoto
+    [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.ARW")] // RAW with xmp file
+    [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.xmp")] // RAW with xmp file
+    [TestCase("img/2024-12-27/2024-12-27_13-58-31_IMG_6252.HEIC")] // LivePhoto
+    [TestCase("img/2024-12-27/2024-12-27_13-58-31_IMG_6252.mov")] // LivePhoto
     [TestCase("img/2024-04-09/2024-04-09_19-45-45_PHOTO-2024-04-09-19-45-45.jpg")] // WhatsApp photo
     [TestCase("img/2014-07-31/2014-07-31_22-15-15_GIF-2014-07-31-22-15-15-15.gif")] // WhatsApp Gif
     [TestCase("vid/2024-10-12/2024-10-12_09-34-10_VIDEO-2024-10-12-09-34-10.mp4")] // WhatsApp Video
     [TestCase("img/2024-08-03/2024-08-03_18-29-44_24-08-03 18-29-44 1005.png")] // NextCloud photo
-    [TestCase("img/2024-12-11/2024-12-11_20-16-21_IMG_6135.HEIC")] // Photo with aae file
-    [TestCase("img/2024-12-11/2024-12-11_20-16-21_IMG_6135.aae")] // Photo with aae file
+    [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.HEIC")] // Photo with aae file
+    [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.aae")] // Photo with aae file
     // No classify
     [TestCase("no-classify.jpg")] // No classification
     public void GivenMediaFile_WhenExecuted_ClassificationIsPerformedSuccessfully(string mediaPath)
