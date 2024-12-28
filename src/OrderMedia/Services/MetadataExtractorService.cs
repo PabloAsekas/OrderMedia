@@ -29,12 +29,13 @@ namespace OrderMedia.Services
                 .SetNext(exifIfd0DirectoryHandler)
                 .SetNext(quickTimeMetadataHeaderDirectoryHandler)
                 .SetNext(quickTimeMovieHeaderDirectoryHandler)
-                .SetNext(fileMetadataDirectoryCreatedDateHandler);
+                // .SetNext(fileMetadataDirectoryCreatedDateHandler)
+                ;
             
             _createdDateHandler = xmpHandler;
         }
         
-        public CreatedDateInfo GetCreatedDate(string mediaPath)
+        public CreatedDateInfo? GetCreatedDate(string mediaPath)
         {
             return _createdDateHandler.GetCreatedDateInfo(mediaPath);
         }

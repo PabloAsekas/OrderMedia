@@ -17,7 +17,7 @@ public class RegexCreatedDateHandler : BaseCreatedDateHandler
         _format = format;
     }
 
-    public override CreatedDateInfo GetCreatedDateInfo(string mediaPath)
+    public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
         var name = _ioService.GetFileNameWithoutExtension(mediaPath);
         

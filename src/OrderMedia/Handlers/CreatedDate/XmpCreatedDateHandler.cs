@@ -14,7 +14,7 @@ public class XmpCreatedDateHandler : BaseCreatedDateHandler
         _xmpExtractorService = xmpExtractorService;
     }
 
-    public override CreatedDateInfo GetCreatedDateInfo(string mediaPath)
+    public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
         var xmpFilePath = GetXmpFilePath(mediaPath);
 

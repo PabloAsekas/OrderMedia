@@ -1,47 +1,40 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OrderMedia.ConsoleApp.Services;
 using OrderMedia.Extensions;
 
-namespace OrderMedia
+namespace OrderMedia.ConsoleApp;
+
+/// <summary>
+/// Main program class.
+/// </summary>
+public class Program
 {
-    /// <summary>
-    /// Main program class.
-    /// </summary>
-    public class Program
+    public static async Task Main(string[] args)
     {
-        /// <summary>
-        /// Main method.
-        /// </summary>
-        /// <param name="args">Arguments.</param>
-        /// <returns>Nothing.</returns>
-        public static void Main(string[] args)
-        {
-            
-            var sp = CreateServiceProvider();
+        ConfigureDefaultCulture();
+        
+        var hostBuilder = CreateAppBuilder(args);
+        IHost host = hostBuilder.Build();
+        await host.RunAsync();
+    }
 
-            var mcs = sp.GetRequiredService<OrderMediaService>();
-            //var mcs = sp.GetRequiredService<ExportAaeFilesService>();
-            //var mcs = sp.GetRequiredService<CopyLivePhotoVideoService>();
+    private static void ConfigureDefaultCulture()
+    {
+        var defaultCulture = new CultureInfo("en-US");
 
-            mcs.Run();
-        }
+        Thread.CurrentThread.CurrentCulture ??= defaultCulture;
+    }
 
-        private static ServiceProvider CreateServiceProvider()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            var serviceCollection = new ServiceCollection()
-                .AddLogging(configure => configure.AddConsole())
-                .AddOrderMediaServiceClient()
-                .AddScoped<OrderMediaService>()
-                .AddScoped<CopyAaeFilesService>()
-                .AddSingleton<IConfiguration>(configuration);
-
-            return serviceCollection.BuildServiceProvider();
-        }
+    internal static HostApplicationBuilder CreateAppBuilder(string[] args)
+    {
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+        builder.Logging.AddConsole();
+        builder.Services.AddOrderMediaServiceClient();
+        builder.Services.AddHostedService<OrderMediaService>();
+        
+        return builder;
     }
 }
