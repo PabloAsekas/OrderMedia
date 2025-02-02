@@ -13,16 +13,16 @@ namespace OrderMedia.Services
             _ioService = ioService;
         }
 
-        public string GetCreatedDate(string xmpFilePath)
+        public string GetValue(string xmpFilePath, string schemaName, string propertyName)
         {
             if (!_ioService.FileExists(xmpFilePath))
             {
                 return null;
             }
-                
+            
             var xmpFile = GetXmpMeta(xmpFilePath);
-
-            return xmpFile.GetPropertyString("http://ns.adobe.com/exif/1.0/", "exif:DateTimeOriginal");
+            
+            return xmpFile.GetPropertyString(schemaName, propertyName);
         }
 
         private static IXmpMeta GetXmpMeta(string xmpFilePath)

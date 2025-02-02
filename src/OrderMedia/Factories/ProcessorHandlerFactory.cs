@@ -58,7 +58,14 @@ namespace OrderMedia.Factories
 
         private IProcessorHandler CreateVideoProcessorHandler()
         {
-            return GetProcessorHandler<MoveMediaProcessorHandler>();
+            var moveM01XmlProcessorHandler = GetProcessorHandler<MoveM01XmlProcessorHandler>();
+            
+            var moveMediaProcessorHandler = GetProcessorHandler<MoveMediaProcessorHandler>();
+            
+            moveMediaProcessorHandler
+                .SetNext(moveM01XmlProcessorHandler);
+            
+            return moveMediaProcessorHandler;
         }
 
         private IProcessorHandler CreateWhatsAppImageProcessorHandler()

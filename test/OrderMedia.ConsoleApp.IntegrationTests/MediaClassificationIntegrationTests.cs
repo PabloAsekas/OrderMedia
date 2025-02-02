@@ -102,6 +102,8 @@ public class MediaClassificationIntegrationTests
     // Behaviours
     [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.ARW")] // RAW with xmp file
     [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.xmp")] // RAW with xmp file
+    [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01945.ARW")] // RAW with xmp file
+    [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01945.xmp")] // RAW with xmp file
     [TestCase("img/2024-12-27/2024-12-27_13-58-31_IMG_6252.HEIC")] // LivePhoto
     [TestCase("img/2024-12-27/2024-12-27_13-58-31_IMG_6252.mov")] // LivePhoto
     [TestCase("img/2024-04-09/2024-04-09_19-45-45_PHOTO-2024-04-09-19-45-45.jpg")] // WhatsApp photo
