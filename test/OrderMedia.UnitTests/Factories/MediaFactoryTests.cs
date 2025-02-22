@@ -20,10 +20,10 @@ namespace OrderMedia.UnitTests.Factories
         private const string mediaFolder = "test/path";
         private const string name = "test.jpg";
         private const string nameWithoutExtension = "test";
-        private static DateTime createdDateTime = new DateTime(2014, 7, 31, 22, 15, 15);
-        private const string createdDateTimeFolder = "2014-07-31";
+        private static DateTimeOffset createdDateTimeOffset = new DateTimeOffset(new DateTime(2014, 7, 31, 22, 15, 15));
+        private const string createdDateTimeOffsetFolder = "2014-07-31";
         private const string classificationFolderName = "img";
-        private const string newMediaFolder = $"{mediaFolder}/{classificationFolderName}/{createdDateTimeFolder}/";
+        private const string newMediaFolder = $"{mediaFolder}/{classificationFolderName}/{createdDateTimeOffsetFolder}/";
         private const string newName = "renamed.jpg";
         private const string newNameWithoutExtension = "renamed";
 
@@ -45,7 +45,7 @@ namespace OrderMedia.UnitTests.Factories
                 .Returns(name);
             _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
                 .Returns(nameWithoutExtension);
-            _ioServiceMock.Setup(x => x.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTime.ToString("yyyy-MM-dd") }))
+            _ioServiceMock.Setup(x => x.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeOffset.ToString("yyyy-MM-dd") }))
                 .Returns(newMediaFolder);
             _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(newName))
                 .Returns(newNameWithoutExtension);
@@ -53,14 +53,14 @@ namespace OrderMedia.UnitTests.Factories
                 .Returns(nameWithoutExtension);
 
             var renameServiceMock = _autoMocker.GetMock<IRenameStrategy>();
-            renameServiceMock.Setup(x => x.Rename(It.IsAny<string>(), It.IsAny<DateTime>()))
+            renameServiceMock.Setup(x => x.Rename(It.IsAny<string>(), It.IsAny<DateTimeOffset>()))
                 .Returns(newName);
 
             _mediaTypeServiceMock = _autoMocker.GetMock<IMediaTypeService>();
 
             _createdDateExtractorServiceMock = _autoMocker.GetMock<ICreatedDateExtractorService>();
-            _createdDateExtractorServiceMock.Setup(x => x.GetCreatedDateTime(It.IsAny<string>()))
-                .Returns(createdDateTime);
+            _createdDateExtractorServiceMock.Setup(x => x.GetCreatedDateTimeOffset(It.IsAny<string>()))
+                .Returns(createdDateTimeOffset);
 
             _renameStrategyFactoryMock = _autoMocker.GetMock<IRenameStrategyFactory>();
             _renameStrategyFactoryMock.Setup(x => x.GetRenameStrategy(It.IsAny<MediaType>()))
@@ -110,7 +110,7 @@ namespace OrderMedia.UnitTests.Factories
             result.MediaFolder.Should().Be(mediaFolder);
             result.Name.Should().Be(name);
             result.NameWithoutExtension.Should().Be(nameWithoutExtension);
-            result.CreatedDateTime.Should().Be(createdDateTime);
+            result.CreatedDateTimeOffset.Should().Be(createdDateTimeOffset);
             result.NewMediaPath.Should().Be(finalMediaPath);
             result.NewMediaFolder.Should().Be(newMediaFolder);
             result.NewName.Should().Be(finalNewName);

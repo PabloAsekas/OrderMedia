@@ -12,6 +12,7 @@ namespace OrderMedia.Services
         public MetadataExtractorService(IImageMetadataReader imageMetadataReader, IIOService ioService, IXmpExtractorService xmpExtractorService)
         {
             var xmpHandler = new XmpCreatedDateHandler(ioService, xmpExtractorService);
+            var m01XmlHandler = new M01XmlCreatedDateHandler(ioService);
             var exifSubIfdDirectoryHandler = new ExifSubIfdDirectoryCreatedDateHandler(imageMetadataReader);
             var exifIfd0DirectoryHandler = new ExifIfd0DirectoryCreatedDateHandler(imageMetadataReader);
             var quickTimeMetadataHeaderDirectoryHandler = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(imageMetadataReader);
@@ -22,6 +23,7 @@ namespace OrderMedia.Services
             var nextCloudHandler = new RegexCreatedDateHandler(ioService, "[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yy-MM-dd HH-mm-ss"); // Names like 24-08-03 18-29-44 1005.png
             
             xmpHandler
+                .SetNext(m01XmlHandler)
                 .SetNext(insta360Handler)
                 .SetNext(whatsAppHandler)
                 .SetNext(nextCloudHandler)
@@ -31,7 +33,7 @@ namespace OrderMedia.Services
                 .SetNext(quickTimeMovieHeaderDirectoryHandler)
                 // .SetNext(fileMetadataDirectoryCreatedDateHandler)
                 ;
-            
+
             _createdDateHandler = xmpHandler;
         }
         

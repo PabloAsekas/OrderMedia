@@ -17,9 +17,9 @@ public class DefaultRenameStrategy : IRenameStrategy
         _configurationService = configurationService;
     }
 
-    public string Rename(string name, DateTime createdDateTime)
+    public string Rename(string name, DateTimeOffset createdDateTimeOffset)
     {
-        var finalName = createdDateTime.ToString("yyyy-MM-dd_HH-mm-ss");
+        var finalName = createdDateTimeOffset.ToString("yyyy-MM-dd_HH-mm-ss");
 
         var extension = _ioService.GetExtension(name);
 

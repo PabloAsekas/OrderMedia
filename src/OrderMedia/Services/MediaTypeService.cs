@@ -42,6 +42,7 @@ namespace OrderMedia.Services
                 ".insv" => MediaType.Insv,
                 ".cr2" => MediaType.Image,
                 ".cr3" => MediaType.Image,
+                ".m4v" => MediaType.Video,
                 _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
             };
         }

@@ -99,6 +99,7 @@ public class MediaClassificationIntegrationTests
     [TestCase("vid/2024-08-24/LRV_2024-08-24_09-46-46_11_005.insv")] // Insta 360 video - This example is not a real insv file
     [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_00_005.insv")] // Insta 360 video - This example is not a real insv file
     [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video - This example is not a real insv file
+    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video - This example is not a real insv file
     // Behaviours
     [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.ARW")] // RAW with xmp file
     [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.xmp")] // RAW with xmp file
@@ -110,6 +111,8 @@ public class MediaClassificationIntegrationTests
     [TestCase("img/2024-08-03/2024-08-03_18-29-44_24-08-03 18-29-44 1005.png")] // NextCloud photo
     [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.HEIC")] // Photo with aae file
     [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.aae")] // Photo with aae file
+    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001.mp4")] //Mp4 with xml file
+    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001M01.XML")] //Mp4 with xml file
     // No classify
     [TestCase("no-classify.jpg")] // No classification
     public void GivenMediaFile_WhenExecuted_ClassificationIsPerformedSuccessfully(string mediaPath)

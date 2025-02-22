@@ -19,9 +19,9 @@ namespace OrderMedia.Services
             {
                 return null;
             }
-                
+            
             var xmpFile = GetXmpMeta(xmpFilePath);
-
+            
             return xmpFile.GetPropertyString("http://ns.adobe.com/exif/1.0/", "exif:DateTimeOriginal");
         }
 

@@ -39,9 +39,9 @@ namespace OrderMedia.Models
         public string NameWithoutExtension { get; set; }
 
         /// <summary>
-        /// Gets or sets the Created Date Time.
+        /// Gets or sets the Created DateTimeOffset.
         /// </summary>
-        public DateTime CreatedDateTime { get; set; }
+        public DateTimeOffset CreatedDateTimeOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the new renamed name with extension included.

@@ -1,16 +1,16 @@
 ﻿namespace OrderMedia.Interfaces
 {
 	/// <summary>
-	/// Xmp Extractor Service Interface.
+	/// XML Extractor Service Interface.
 	/// </summary>
 	public interface IXmpExtractorService
 	{
         /// <summary>
-        /// Gets the Created Date from an XMP file.
+        /// Gets the Created Date from an XML file.
         /// </summary>
-        /// <param name="xmpFilePath">XMP file path.</param>
-        /// <returns>Created Date with yyyy-MM-ddTHH:mm:ss format.</returns>
-        public string GetCreatedDate(string xmpFilePath);
+        /// <param name="xmlFilePath">XML file path.</param>
+        /// <returns>Created date.</returns>
+        public string GetCreatedDate(string xmlFilePath);
 	}
 }
 

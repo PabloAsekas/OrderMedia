@@ -26,7 +26,7 @@ public class MoveMediaProcessorHandlerTests
             NewMediaFolder = "/2014-07-31/",
             MediaPath = "test/photos/IMG_0001.jpg",
             NewMediaPath = "test/photos/img/2014-07-31/2014-07-31_22-15-15_IMG_0001.jpg",
-            CreatedDateTime = new DateTime(2014, 07, 31, 22, 15, 15),
+            CreatedDateTimeOffset = new DateTimeOffset(new DateTime(2014, 07, 31, 22, 15, 15)),
         };
 
         var sut = _autoMocker.CreateInstance<MoveMediaProcessorHandler>();
