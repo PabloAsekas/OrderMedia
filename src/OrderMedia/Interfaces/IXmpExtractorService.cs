@@ -6,13 +6,11 @@
 	public interface IXmpExtractorService
 	{
         /// <summary>
-        /// Gets the value from an XML file given by its schema name and its property name.
+        /// Gets the Created Date from an XML file.
         /// </summary>
         /// <param name="xmlFilePath">XML file path.</param>
-        /// <param name="schemaName">Schema name.</param>
-        /// <param name="propertyName">Property name.</param>
-        /// <returns>The value.</returns>
-        public string GetValue(string xmlFilePath, string schemaName, string propertyName);
+        /// <returns>Created date.</returns>
+        public string GetCreatedDate(string xmlFilePath);
 	}
 }
 

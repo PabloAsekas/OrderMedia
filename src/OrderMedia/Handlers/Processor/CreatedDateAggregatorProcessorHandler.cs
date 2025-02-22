@@ -19,7 +19,7 @@ public class CreatedDateAggregatorProcessorHandler : BaseProcessorHandler
         
         var exifProfile = image.Metadata.ExifProfile ?? new ExifProfile();
 
-        var mediaDateTime = media.CreatedDateTime.ToString("yyyy:MM:dd HH:mm:ss");
+        var mediaDateTime = media.CreatedDateTimeOffset.ToString("yyyy:MM:dd HH:mm:ss");
         
         exifProfile.SetValue(ExifTag.DateTimeOriginal, mediaDateTime);
         exifProfile.SetValue(ExifTag.DateTime, mediaDateTime);

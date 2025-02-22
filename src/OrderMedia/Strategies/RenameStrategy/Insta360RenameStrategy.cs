@@ -16,7 +16,7 @@ public class Insta360RenameStrategy : IRenameStrategy
         _configurationService = configurationService;
     }
 
-    public string Rename(string name, DateTime createdDateTime)
+    public string Rename(string name, DateTimeOffset createdDateTimeOffset)
     {
         var extension = _ioService.GetExtension(name);
         
@@ -24,7 +24,7 @@ public class Insta360RenameStrategy : IRenameStrategy
         
         var nameSplit = name.Split("_");
 
-        var date = createdDateTime.ToString("yyyy-MM-dd_HH-mm-ss");
+        var date = createdDateTimeOffset.ToString("yyyy-MM-dd_HH-mm-ss");
 
         var mediaName = string.Empty;
         

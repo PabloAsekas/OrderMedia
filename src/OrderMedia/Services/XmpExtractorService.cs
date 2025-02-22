@@ -13,7 +13,7 @@ namespace OrderMedia.Services
             _ioService = ioService;
         }
 
-        public string GetValue(string xmpFilePath, string schemaName, string propertyName)
+        public string GetCreatedDate(string xmpFilePath)
         {
             if (!_ioService.FileExists(xmpFilePath))
             {
@@ -22,7 +22,7 @@ namespace OrderMedia.Services
             
             var xmpFile = GetXmpMeta(xmpFilePath);
             
-            return xmpFile.GetPropertyString(schemaName, propertyName);
+            return xmpFile.GetPropertyString("http://ns.adobe.com/exif/1.0/", "exif:DateTimeOriginal");
         }
 
         private static IXmpMeta GetXmpMeta(string xmpFilePath)

@@ -3,16 +3,16 @@
 namespace OrderMedia.Interfaces
 {
     /// <summary>
-    /// Created DateTime extractors interface.
+    /// Created DateTimeOffset extractors interface.
     /// </summary>
     public interface ICreatedDateExtractorService
 	{
 		/// <summary>
-		/// Gets the Created DateTime of the passed file.
+		/// Gets the Created DateTimeOffset of the passed file.
 		/// </summary>
 		/// <param name="mediaPath">Media full path.</param>
-		/// <returns>Media's created DateTime.</returns>
-		public DateTime GetCreatedDateTime(string mediaPath);
+		/// <returns>Media's created DateTimeOffset.</returns>
+		public DateTimeOffset GetCreatedDateTimeOffset(string mediaPath);
 	}
 }
 

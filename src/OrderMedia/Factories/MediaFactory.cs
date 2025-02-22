@@ -42,13 +42,13 @@ namespace OrderMedia.Factories
 
             var nameWithoutExtension = _ioService.GetFileNameWithoutExtension(path);
             
-            var createdDateTime = _createdDateExtractorService.GetCreatedDateTime(path);
+            var createdDateTimeOffset = _createdDateExtractorService.GetCreatedDateTimeOffset(path);
 
-            var createdDateTimeAsString = createdDateTime.ToString("yyyy-MM-dd");
+            var createdDateTimeOffsetAsString = createdDateTimeOffset.ToString("yyyy-MM-dd");
 
-            var newMediaFolder = _ioService.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeAsString });
+            var newMediaFolder = _ioService.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeOffsetAsString });
 
-            var newName = GetNewName(mediaType, fullName, createdDateTime);
+            var newName = GetNewName(mediaType, fullName, createdDateTimeOffset);
 
             var newNameWithoutExtension = _ioService.GetFileNameWithoutExtension(newName);
 
@@ -61,7 +61,7 @@ namespace OrderMedia.Factories
                 MediaFolder = mediaFolder,
                 Name = fullName,
                 NameWithoutExtension = nameWithoutExtension,
-                CreatedDateTime = createdDateTime,
+                CreatedDateTimeOffset = createdDateTimeOffset,
                 NewMediaPath = newMediaPath,
                 NewMediaFolder = newMediaFolder,
                 NewName = newName,
@@ -83,7 +83,7 @@ namespace OrderMedia.Factories
             };
         }
 
-        private string GetNewName(MediaType mediaType, string originalName, DateTime createdDateTime)
+        private string GetNewName(MediaType mediaType, string originalName, DateTimeOffset createdDateTimeOffset)
         {
             if (!_configurationService.GetRenameMediaFiles())
             {
@@ -92,7 +92,7 @@ namespace OrderMedia.Factories
 
             var renameStrategy = _renameStrategyFactory.GetRenameStrategy(mediaType);
             
-            return renameStrategy.Rename(originalName, createdDateTime);
+            return renameStrategy.Rename(originalName, createdDateTimeOffset);
         }
     }
 }

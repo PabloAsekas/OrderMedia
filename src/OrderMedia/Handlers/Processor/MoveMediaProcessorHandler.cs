@@ -15,7 +15,7 @@ public class MoveMediaProcessorHandler : BaseProcessorHandler
 
     public override void Process(Media media)
     {
-        if (media.CreatedDateTime == default(DateTime))
+        if (media.CreatedDateTimeOffset == default(DateTimeOffset))
         {
             return;
         }

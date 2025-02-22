@@ -34,7 +34,7 @@ public class CreatedDateExtractorServiceTests
         var sut = _autoMocker.CreateInstance<CreatedDateExtractorService>();
         
         // Act
-        var result = sut.GetCreatedDateTime(mediaPath);
+        var result = sut.GetCreatedDateTimeOffset(mediaPath);
         
         // Assert
         result.ToString(createdDateInfo.Format).Should().BeEquivalentTo(createdDateInfo.CreatedDate);
@@ -54,7 +54,7 @@ public class CreatedDateExtractorServiceTests
         var sut = _autoMocker.CreateInstance<CreatedDateExtractorService>();
         
         // Act
-        var result = sut.GetCreatedDateTime(mediaPath);
+        var result = sut.GetCreatedDateTimeOffset(mediaPath);
         
         // Assert
         result.Should().BeSameDateAs(defaultDate);
