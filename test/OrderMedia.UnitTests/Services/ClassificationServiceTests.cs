@@ -4,43 +4,43 @@ using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Models;
 using OrderMedia.Services;
 
-namespace OrderMedia.UnitTests.Services
+namespace OrderMedia.UnitTests.Services;
+
+[TestFixture]
+public class ClassificationServiceTests
 {
-    public class ClassificationServiceTests
+	private AutoMocker _autoMocker;
+	private Mock<IProcessorHandler> _processorHandlerMock;
+	private Mock<IProcessorHandlerFactory> _processorHandlerFactoryMock;
+
+	[SetUp]
+	public void SetUp()
 	{
-		private AutoMocker _autoMocker;
-		private Mock<IProcessorHandler> _processorHandlerMock;
-		private Mock<IProcessorHandlerFactory> _processorHandlerFactoryMock;
+		_autoMocker = new AutoMocker();
 
-		[SetUp]
-		public void SetUp()
+		_processorHandlerMock = _autoMocker.GetMock<IProcessorHandler>();
+
+		_processorHandlerFactoryMock = _autoMocker.GetMock<IProcessorHandlerFactory>();
+		_processorHandlerFactoryMock.Setup(x => x.CreateProcessorHandler(It.IsAny<MediaType>()))
+			.Returns(_processorHandlerMock.Object);
+	}
+
+	[Test]
+	public void Process_Runs_Successfully()
+	{
+		// Arrange
+		var media = new Media()
 		{
-			_autoMocker = new AutoMocker();
+			MediaType = MediaType.Image,
+		};
 
-			_processorHandlerMock = _autoMocker.GetMock<IProcessorHandler>();
+		var sut = _autoMocker.CreateInstance<ClassificationService>();
 
-			_processorHandlerFactoryMock = _autoMocker.GetMock<IProcessorHandlerFactory>();
-			_processorHandlerFactoryMock.Setup(x => x.CreateProcessorHandler(It.IsAny<MediaType>()))
-				.Returns(_processorHandlerMock.Object);
-		}
+		// Act
+		sut.Process(media);
 
-		[Test]
-		public void Process_Runs_Successfully()
-		{
-			// Arrange
-			var media = new Media()
-			{
-				MediaType = MediaType.Image,
-			};
-
-			var sut = _autoMocker.CreateInstance<ClassificationService>();
-
-			// Act
-			sut.Process(media);
-
-			// Assert
-			_processorHandlerFactoryMock.Verify(x => x.CreateProcessorHandler(media.MediaType), Times.Once);
-			_processorHandlerMock.Verify(x => x.Process(media), Times.Once);
-		}
+		// Assert
+		_processorHandlerFactoryMock.Verify(x => x.CreateProcessorHandler(media.MediaType), Times.Once);
+		_processorHandlerMock.Verify(x => x.Process(media), Times.Once);
 	}
 }

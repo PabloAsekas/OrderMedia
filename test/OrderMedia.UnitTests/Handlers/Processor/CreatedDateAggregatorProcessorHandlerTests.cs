@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace OrderMedia.UnitTests.Handlers.Processor;
 
+[TestFixture]
 public class CreatedDateAggregatorProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
@@ -20,7 +21,7 @@ public class CreatedDateAggregatorProcessorHandlerTests
         _metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
     }
 
-    [TestCase]
+    [Test]
     public void Process_Runs_Successfully()
     {
         // Arrange

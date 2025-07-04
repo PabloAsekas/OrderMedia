@@ -1,17 +1,16 @@
 ﻿using OrderMedia.Models;
 
-namespace OrderMedia.Interfaces.Factories
+namespace OrderMedia.Interfaces.Factories;
+
+/// <summary>
+/// Media factory service interface.
+/// </summary>
+public interface IMediaFactory
 {
     /// <summary>
-    /// Media factory service interface.
+    /// Creates media object based on the path of the file.
     /// </summary>
-    public interface IMediaFactory
-    {
-        /// <summary>
-        /// Creates media object based on the path of the file.
-        /// </summary>
-        /// <param name="path">Full path.</param>
-        /// <returns>Media object.</returns>
-        Media CreateMedia(string path);
-    }
+    /// <param name="path">Full path.</param>
+    /// <returns>Media object.</returns>
+    Media CreateMedia(string path);
 }

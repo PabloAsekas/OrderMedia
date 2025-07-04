@@ -4,6 +4,7 @@ using OrderMedia.Interfaces;
 
 namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 
+[TestFixture]
 public class ExifIfd0DirectoryCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;

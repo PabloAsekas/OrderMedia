@@ -3,6 +3,7 @@ using OrderMedia.Interfaces;
 
 namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 
+[TestFixture]
 public class XmpCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;

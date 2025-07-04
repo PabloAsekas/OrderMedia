@@ -1,32 +1,30 @@
 ﻿using OrderMedia.Services;
 
-namespace OrderMedia.UnitTests.Services
+namespace OrderMedia.UnitTests.Services;
+
+[TestFixture]
+public class AaeHelperServiceTests
 {
-    public class AaeHelperServiceTests
+	private AutoMocker _autoMocker;
+
+	[SetUp]
+	public void SetUp()
 	{
-		private AutoMocker _autoMocker;
+		_autoMocker = new AutoMocker();
+	}
+	
+	[TestCase("IMG_0001", "IMG_O0001.aae")]
+    [TestCase("IMG_0001 (1)", "IMG_0001 (1)O.aae")]
+    [TestCase("Test", "Test.aae")]
+    public void GetAaeName_Returns_AaeName_Successfully(string nameWithoutExtension, string aaeName)
+	{
+		// Arrange
+		var sut = _autoMocker.CreateInstance<AaeHelperService>();
 
-		[SetUp]
-		public void SetUp()
-		{
-			_autoMocker = new AutoMocker();
-		}
+		// Act
+		var result = sut.GetAaeName(nameWithoutExtension);
 
-        [Test]
-		[TestCase("IMG_0001", "IMG_O0001.aae")]
-        [TestCase("IMG_0001 (1)", "IMG_0001 (1)O.aae")]
-        [TestCase("Test", "Test.aae")]
-        public void GetAaeName_Returns_AaeName_Successfully(string nameWithoutExtension, string aaeName)
-		{
-			// Arrange
-			var sut = _autoMocker.CreateInstance<AaeHelperService>();
-
-			// Act
-			var result = sut.GetAaeName(nameWithoutExtension);
-
-			// Assert
-			result.Should().Be(aaeName);
-		}
+		// Assert
+		result.Should().Be(aaeName);
 	}
 }
-

@@ -2,36 +2,34 @@
 using OrderMedia.Interfaces;
 using XmpCore;
 
-namespace OrderMedia.Services
+namespace OrderMedia.Services;
+
+public class XmpExtractorService : IXmpExtractorService
 {
-	public class XmpExtractorService : IXmpExtractorService
+    private readonly IIOService _ioService;
+
+    public XmpExtractorService(IIOService ioService)
     {
-        private readonly IIOService _ioService;
+        _ioService = ioService;
+    }
 
-        public XmpExtractorService(IIOService ioService)
+    public string GetCreatedDate(string xmpFilePath)
+    {
+        if (!_ioService.FileExists(xmpFilePath))
         {
-            _ioService = ioService;
+            return null;
         }
-
-        public string GetCreatedDate(string xmpFilePath)
-        {
-            if (!_ioService.FileExists(xmpFilePath))
-            {
-                return null;
-            }
             
-            var xmpFile = GetXmpMeta(xmpFilePath);
+        var xmpFile = GetXmpMeta(xmpFilePath);
             
-            return xmpFile.GetPropertyString("http://ns.adobe.com/exif/1.0/", "exif:DateTimeOriginal");
-        }
+        return xmpFile.GetPropertyString("http://ns.adobe.com/exif/1.0/", "exif:DateTimeOriginal");
+    }
 
-        private static IXmpMeta GetXmpMeta(string xmpFilePath)
-        {
-            using var stream = File.OpenRead(xmpFilePath);
-            var xmp = XmpMetaFactory.Parse(stream);
+    private static IXmpMeta GetXmpMeta(string xmpFilePath)
+    {
+        using var stream = File.OpenRead(xmpFilePath);
+        var xmp = XmpMetaFactory.Parse(stream);
 
-            return xmp;
-        }
+        return xmp;
     }
 }
-

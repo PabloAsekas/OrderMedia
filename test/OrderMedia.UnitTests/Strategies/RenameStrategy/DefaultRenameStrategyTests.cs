@@ -3,6 +3,7 @@ using OrderMedia.Strategies.RenameStrategy;
 
 namespace OrderMedia.UnitTests.Strategies.RenameStrategy;
 
+[TestFixture]
 public class DefaultRenameStrategyTests
 {
     private AutoMocker _autoMocker;
