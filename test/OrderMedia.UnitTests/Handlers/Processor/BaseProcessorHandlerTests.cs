@@ -8,6 +8,7 @@ public class BaseProcessorHandlerConcrete : BaseProcessorHandler
 {
 }
 
+[TestFixture]
 public class BaseProcessorHandlerTests
 {
     

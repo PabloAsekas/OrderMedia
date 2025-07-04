@@ -79,9 +79,10 @@ public class MediaClassificationIntegrationTests
         await _container.StopAsync();
         await _dockerImage.DeleteAsync();
         Directory.Delete(_newMediaPath, true);
+        await _container.DisposeAsync();
+        await _dockerImage.DisposeAsync();
     }
     
-    [Test]
     // Raw
     [TestCase("img/2024-03-09/2024-03-09_19-11-36_DSC01943.ARW")] // Arw
     [TestCase("img/2024-05-26/2024-05-26_16-50-17_IMG_3739.DNG")] // Dng

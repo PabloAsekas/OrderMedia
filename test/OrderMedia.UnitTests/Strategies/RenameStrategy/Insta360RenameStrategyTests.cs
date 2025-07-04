@@ -3,6 +3,7 @@ using OrderMedia.Strategies.RenameStrategy;
 
 namespace OrderMedia.UnitTests.Strategies.RenameStrategy;
 
+[TestFixture]
 public class Insta360RenameStrategyTests
 {
     private AutoMocker _autoMocker;

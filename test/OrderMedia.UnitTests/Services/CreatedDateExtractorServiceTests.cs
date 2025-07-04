@@ -4,6 +4,7 @@ using OrderMedia.Services;
 
 namespace OrderMedia.UnitTests.Services;
 
+[TestFixture]
 public class CreatedDateExtractorServiceTests
 {
     private AutoMocker _autoMocker;

@@ -12,6 +12,7 @@ public class BaseCreatedDateHandlerConcrete : BaseCreatedDateHandler
     }
 }
 
+[TestFixture]
 public class BaseCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;

@@ -4,6 +4,7 @@ using OrderMedia.Models;
 
 namespace OrderMedia.UnitTests.Handlers.Processor;
 
+[TestFixture]
 public class MoveMediaProcessorHandlerTests
 {
     private AutoMocker _autoMocker;

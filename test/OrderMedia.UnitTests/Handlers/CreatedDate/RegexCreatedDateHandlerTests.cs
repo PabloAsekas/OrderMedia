@@ -3,6 +3,7 @@ using OrderMedia.Interfaces;
 
 namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 
+[TestFixture]
 public class RegexCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;
