@@ -9,25 +9,18 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 [TestFixture]
 public class MoveXmpProcessorHandlerTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
-    private Mock<IAaeHelperService> _aaeHelperServiceMock;
+    private Mock<IIoWrapper> _ioWrapperMock;
+    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
-
-        _aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
+        _ioWrapperMock = new Mock<IIoWrapper>();
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
             RenameMediaFiles = true
         });
-        
-        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -49,25 +42,24 @@ public class MoveXmpProcessorHandlerTests
         var newXmpName = $"{media.NewNameWithoutExtension}.xmp";
 
         var newXmpLocation = $"{media.NewMediaFolder}/{newXmpName}";
-
-        _aaeHelperServiceMock.Setup(x => x.GetAaeName(media.NameWithoutExtension))
-            .Returns(xmpName);
-
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, xmpName }))
+        
+        _ioWrapperMock.Setup(x => x.Combine(new[] { media.MediaFolder, xmpName }))
             .Returns(xmpLocation);
 
-        _ioServiceMock.Setup(x => x.FileExists(xmpLocation))
+        _ioWrapperMock.Setup(x => x.FileExists(xmpLocation))
             .Returns(true);
 
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newXmpName }))
+        _ioWrapperMock.Setup(x => x.Combine(new[] { media.NewMediaFolder, newXmpName }))
             .Returns(newXmpLocation);
 
-        var sut = _autoMocker.CreateInstance<MoveXmpProcessorHandler>();
+        var sut = new MoveXmpProcessorHandler(
+            _ioWrapperMock.Object,
+            _classificationSettingsOptions);
 
         // Act
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(xmpLocation, newXmpLocation, It.IsAny<bool>()), Times.Once);
+        _ioWrapperMock.Verify(x => x.MoveMedia(xmpLocation, newXmpLocation, It.IsAny<bool>()), Times.Once);
     }
 }

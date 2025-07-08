@@ -52,15 +52,15 @@ public class MediaFactory : IMediaFactory
 
         var createdDateTimeOffsetAsString = createdDateTimeOffset.ToString("yyyy-MM-dd");
 
-        var newMediaFolder = _ioWrapper.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeOffsetAsString });
+        var newMediaFolder = _ioWrapper.Combine(new[] { mediaFolder, classificationFolderName, createdDateTimeOffsetAsString });
 
         var newName = GetNewName(mediaType, fullName, createdDateTimeOffset);
 
         var newNameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(newName);
 
-        var newMediaPath = _ioWrapper.Combine(new string[] { newMediaFolder, newName });
+        var newMediaPath = _ioWrapper.Combine(new[] { newMediaFolder, newName });
 
-        return new Media()
+        return new Media
         {
             MediaType = mediaType,
             MediaPath = path,

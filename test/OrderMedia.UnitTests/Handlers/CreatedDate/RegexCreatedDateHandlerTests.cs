@@ -6,15 +6,12 @@ namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 [TestFixture]
 public class RegexCreatedDateHandlerTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
+    private Mock<IIoWrapper> _ioWrapperMock;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-        
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+        _ioWrapperMock = new Mock<IIoWrapper>();
     }
 
     [TestCase("PHOTO-2014-07-31-22-15-00", "2014-07-31-22-15-00", "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss")]
@@ -25,10 +22,10 @@ public class RegexCreatedDateHandlerTests
         // Arrange
         var mediaPath = $"test/{name}.jpg";
 
-        _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
+        _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
             .Returns(name);
         
-        var sut = new RegexCreatedDateHandler(_ioServiceMock.Object, pattern, format);
+        var sut = new RegexCreatedDateHandler(_ioWrapperMock.Object, pattern, format);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
@@ -37,7 +34,7 @@ public class RegexCreatedDateHandlerTests
         result.Should().NotBeNull();
         result.CreatedDate.Should().BeEquivalentTo(date);
         result.Format.Should().BeEquivalentTo(format);
-        _ioServiceMock.Verify(x => x.GetFileNameWithoutExtension(mediaPath), Times.Once);
+        _ioWrapperMock.Verify(x => x.GetFileNameWithoutExtension(mediaPath), Times.Once);
     }
     
     [Test]
@@ -47,16 +44,16 @@ public class RegexCreatedDateHandlerTests
         const string name = "photo-test";
         const string mediaPath = $"test/{name}.jpg";
         
-        _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
+        _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(mediaPath))
             .Returns(name);
         
-        var sut = new RegexCreatedDateHandler(_ioServiceMock.Object, "", "");
+        var sut = new RegexCreatedDateHandler(_ioWrapperMock.Object, "", "");
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
         
         // Assert
         result.Should().BeNull();
-        _ioServiceMock.Verify(x => x.GetFileNameWithoutExtension(mediaPath), Times.Once);
+        _ioWrapperMock.Verify(x => x.GetFileNameWithoutExtension(mediaPath), Times.Once);
     }
 }

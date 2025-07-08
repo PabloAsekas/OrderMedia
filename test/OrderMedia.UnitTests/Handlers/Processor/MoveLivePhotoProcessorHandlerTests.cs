@@ -9,22 +9,18 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 [TestFixture]
 public class MoveLivePhotoProcessorHandlerTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
+    private Mock<IIoWrapper> _ioWrapperMock;
+    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+        _ioWrapperMock = new Mock<IIoWrapper>();
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
             RenameMediaFiles = true
         });
-        
-        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -47,24 +43,27 @@ public class MoveLivePhotoProcessorHandlerTests
 
         var newVideoLocation = $"{media.NewMediaFolder}/{newVideoName}";
 
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, videoName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.MediaFolder, videoName }))
             .Returns(videoLocation);
 
-        _ioServiceMock.Setup(x => x.GetExtension(It.IsAny<string>()))
+        _ioWrapperMock.Setup(x => x.GetExtension(It.IsAny<string>()))
             .Returns(".mov");
 
-        _ioServiceMock.Setup(x => x.FileExists(videoLocation))
+        _ioWrapperMock.Setup(x => x.FileExists(videoLocation))
             .Returns(true);
 
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newVideoName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newVideoName }))
             .Returns(newVideoLocation);
 
-        var sut = _autoMocker.CreateInstance<MoveLivePhotoProcessorHandler>();
+        var sut = new MoveLivePhotoProcessorHandler(
+            _ioWrapperMock.Object,
+            _classificationSettingsOptions
+            );
 
         // Act
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(videoLocation, newVideoLocation, It.IsAny<bool>()), Times.Once);
+        _ioWrapperMock.Verify(x => x.MoveMedia(videoLocation, newVideoLocation, It.IsAny<bool>()), Times.Once);
     }
 }

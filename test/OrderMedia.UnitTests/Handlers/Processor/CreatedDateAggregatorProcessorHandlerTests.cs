@@ -10,15 +10,12 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 [TestFixture]
 public class CreatedDateAggregatorProcessorHandlerTests
 {
-    private AutoMocker _autoMocker;
     private Mock<IMetadataAggregatorService> _metadataAggregatorServiceMock;
     
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-        
-        _metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
+        _metadataAggregatorServiceMock = new Mock<IMetadataAggregatorService>();
     }
 
     [Test]
@@ -36,7 +33,7 @@ public class CreatedDateAggregatorProcessorHandlerTests
         _metadataAggregatorServiceMock.Setup(x => x.GetImage(It.IsAny<string>()))
             .Returns(image);
         
-        var sut = _autoMocker.CreateInstance<CreatedDateAggregatorProcessorHandler>();
+        var sut = new CreatedDateAggregatorProcessorHandler(_metadataAggregatorServiceMock.Object);
 
         // Act
         sut.Process(media);
@@ -57,8 +54,8 @@ public class CreatedDateAggregatorProcessorHandlerTests
     
     private static string TryGetValue(Image image, ExifTag<string> tag)
     {
-        image.Metadata.ExifProfile.TryGetValue(tag, out var tagValue);
+        image.Metadata.ExifProfile!.TryGetValue(tag, out var tagValue);
         
-        return tagValue.Value;
+        return tagValue!.Value!;
     }
 }

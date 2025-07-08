@@ -10,30 +10,27 @@ namespace OrderMedia.UnitTests.Factories;
 [TestFixture]
 public class ProcessorHandlerFactoryTests
 {
-    private AutoMocker _autoMocker;
 	private Mock<IServiceProvider> _serviceProviderMock;
 
 	[SetUp]
 	public void SetUp()
 	{
-		_autoMocker = new AutoMocker();
-
-		var ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
-		var aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
-		var metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
-		var classificationSettingsOptions = _autoMocker.GetMock<IOptions<ClassificationSettingsOptions>>();
+		var ioWrapperMock = new Mock<IIoWrapper>();
+		var aaeHelperServiceMock = new Mock<IAaeHelperService>();
+		var metadataAggregatorServiceMock = new Mock<IMetadataAggregatorService>();
+		var classificationSettingsOptions = new Mock<IOptions<ClassificationSettingsOptions>>();
 		
-        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
+        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
 
-		var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
+		var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
 
-		var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioServiceMock.Object, aaeHelperServiceMock.Object, classificationSettingsOptions.Object);
+		var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioWrapperMock.Object, aaeHelperServiceMock.Object, classificationSettingsOptions.Object);
 
-        var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
+        var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
 
         var createdDateAggregatorProcessor = new CreatedDateAggregatorProcessorHandler(metadataAggregatorServiceMock.Object);
 
-        _serviceProviderMock = _autoMocker.GetMock<IServiceProvider>();
+        _serviceProviderMock = new Mock<IServiceProvider>();
 		_serviceProviderMock.Setup(x => x.GetService(typeof(MoveMediaProcessorHandler)))
 			.Returns(moveMediaProcessorHandler);
         _serviceProviderMock.Setup(x => x.GetService(typeof(MoveLivePhotoProcessorHandler)))
@@ -55,7 +52,7 @@ public class ProcessorHandlerFactoryTests
     public void CreateProcessor_Returns_Successfully(MediaType mediaType, Type processor)
 	{
 		// Arrange
-		var sut = _autoMocker.CreateInstance<ProcessorHandlerFactory>();
+		var sut = new ProcessorHandlerFactory(_serviceProviderMock.Object);
 
 		// Act
 		var result = sut.CreateProcessorHandler(mediaType);
@@ -68,7 +65,7 @@ public class ProcessorHandlerFactoryTests
 	public void CreateProcessor_Throws_Exception()
 	{
 		// Arrange
-		var sut = _autoMocker.CreateInstance<ProcessorHandlerFactory>();
+		var sut = new ProcessorHandlerFactory(_serviceProviderMock.Object);
 
 		// Act
 		Action act = () => sut.CreateProcessorHandler(MediaType.None);

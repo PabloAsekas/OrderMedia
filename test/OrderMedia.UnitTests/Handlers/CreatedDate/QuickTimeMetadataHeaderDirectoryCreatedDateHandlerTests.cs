@@ -7,15 +7,12 @@ namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 [TestFixture]
 public class QuickTimeMetadataHeaderDirectoryCreatedDateHandlerTests
 {
-    private AutoMocker _autoMocker;
     private Mock<IImageMetadataReader> _imageMetadataReaderMock;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-        
-        _imageMetadataReaderMock = _autoMocker.GetMock<IImageMetadataReader>();
+        _imageMetadataReaderMock = new Mock<IImageMetadataReader>();
     }
 
     [Test]
@@ -30,7 +27,7 @@ public class QuickTimeMetadataHeaderDirectoryCreatedDateHandlerTests
                 x.GetMetadataByDirectoryTypeAndTag<QuickTimeMetadataHeaderDirectory>(mediaPath, QuickTimeMetadataHeaderDirectory.TagCreationDate))
             .Returns(date);
         
-        var sut = _autoMocker.CreateInstance<QuickTimeMetadataHeaderDirectoryCreatedDateHandler>();
+        var sut = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(_imageMetadataReaderMock.Object);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
@@ -51,9 +48,9 @@ public class QuickTimeMetadataHeaderDirectoryCreatedDateHandlerTests
 
         _imageMetadataReaderMock.Setup(x =>
                 x.GetMetadataByDirectoryTypeAndTag<QuickTimeMetadataHeaderDirectory>(mediaPath, QuickTimeMetadataHeaderDirectory.TagCreationDate))
-            .Returns((string)null);
+            .Returns((string)null!);
         
-        var sut = _autoMocker.CreateInstance<QuickTimeMetadataHeaderDirectoryCreatedDateHandler>();
+        var sut = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(_imageMetadataReaderMock.Object);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
