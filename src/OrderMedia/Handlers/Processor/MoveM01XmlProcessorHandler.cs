@@ -1,28 +1,40 @@
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveM01XmlProcessorHandler : BaseProcessorHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
+    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
 
-    public MoveM01XmlProcessorHandler(IIOService ioService)
+    public MoveM01XmlProcessorHandler(
+        IIoWrapper ioWrapper,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
     {
         var m01XmlName = $"{media.NameWithoutExtension}M01.XML";
-        var m01XmlLocation = _ioService.Combine(new string[] { media.MediaFolder, m01XmlName });
+        var m01XmlLocation = _ioWrapper.Combine([
+            media.MediaFolder,
+            m01XmlName
+        ]);
 
-        if (_ioService.FileExists(m01XmlLocation))
+        if (_ioWrapper.FileExists(m01XmlLocation))
         {
             var newM01XmlName = $"{media.NewNameWithoutExtension}M01.XML";
-            var newM01XmlLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newM01XmlName });
+            var newM01XmlLocation = _ioWrapper.Combine([
+                media.NewMediaFolder,
+                newM01XmlName
+            ]);
 
-            _ioService.MoveMedia(m01XmlLocation, newM01XmlLocation);
+            _ioWrapper.MoveMedia(m01XmlLocation, newM01XmlLocation, _classificationSettingsOptions.OverwriteFiles);
         }
 
         base.Process(media);

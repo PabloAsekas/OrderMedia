@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using OrderMedia.Configuration;
 using OrderMedia.Interfaces;
 using OrderMedia.Strategies.RenameStrategy;
 
@@ -7,20 +9,18 @@ namespace OrderMedia.UnitTests.Strategies.RenameStrategy;
 public class DefaultRenameStrategyTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<IRandomizerService> _randomizerService;
-    private Mock<IConfigurationService> _configurationService;
 
     [SetUp]
     public void SetUp()
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 
         _randomizerService = _autoMocker.GetMock<IRandomizerService>();
 
-        _configurationService = _autoMocker.GetMock<IConfigurationService>();
     }
     
     [Test]
@@ -38,12 +38,14 @@ public class DefaultRenameStrategyTests
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
             .Returns(name);
 
-        _configurationService.Setup(x => x.GetReplaceLongNames())
-            .Returns(replaceLongName);
-        _configurationService.Setup(x => x.GetMaxMediaNameLength())
-            .Returns(8);
-        _configurationService.Setup(x => x.GetNewMediaName())
-            .Returns("pbg");
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            ReplaceLongNames = replaceLongName,
+            MaxMediaNameLength = 8,
+            NewMediaName = "pbg"
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
 
         _randomizerService.Setup(x => x.GetRandomNumberAsD4())
             .Returns("1234");

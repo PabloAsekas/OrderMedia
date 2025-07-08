@@ -1,34 +1,40 @@
 using System;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Strategies.RenameStrategy;
 
 public class DefaultRenameStrategy : IRenameStrategy
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly IRandomizerService _randomizerService;
-    private readonly IConfigurationService _configurationService;
+    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
 
-    public DefaultRenameStrategy(IIOService ioService, IRandomizerService randomizerService, IConfigurationService configurationService)
+    public DefaultRenameStrategy(
+        IIoWrapper ioWrapper,
+        IRandomizerService randomizerService,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions
+        )
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
         _randomizerService = randomizerService;
-        _configurationService = configurationService;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
 
     public string Rename(string name, DateTimeOffset createdDateTimeOffset)
     {
         var finalName = createdDateTimeOffset.ToString("yyyy-MM-dd_HH-mm-ss");
 
-        var extension = _ioService.GetExtension(name);
+        var extension = _ioWrapper.GetExtension(name);
 
         var cleanedName = GetCleanedName(name);
 
         if (ReplaceName(cleanedName.Length))
         {
             var randomNumber = _randomizerService.GetRandomNumberAsD4();
-            finalName += $"_{_configurationService.GetNewMediaName()}_{randomNumber}";
+            finalName += $"_{_classificationSettingsOptions.NewMediaName}_{randomNumber}";
         }
         else
         {
@@ -41,7 +47,7 @@ public class DefaultRenameStrategy : IRenameStrategy
     private string GetCleanedName(string name)
     {
         // Remove extension.
-        var cleanedName = _ioService.GetFileNameWithoutExtension(name);
+        var cleanedName = _ioWrapper.GetFileNameWithoutExtension(name);
 
         // Remove possible (1), (2), etc. from the name.
         cleanedName = Regex.Replace(cleanedName, @"\([\d]\)", string.Empty);
@@ -53,6 +59,6 @@ public class DefaultRenameStrategy : IRenameStrategy
     }
 
     private bool ReplaceName(int cleanedNameLength) {
-        return cleanedNameLength > _configurationService.GetMaxMediaNameLength() && _configurationService.GetReplaceLongNames();
+        return cleanedNameLength > _classificationSettingsOptions.MaxMediaNameLength && _classificationSettingsOptions.ReplaceLongNames;
     }
 }

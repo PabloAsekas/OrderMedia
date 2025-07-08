@@ -1,16 +1,22 @@
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
+    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
 
-    public MoveLivePhotoProcessorHandler(IIOService ioService)
+    public MoveLivePhotoProcessorHandler(
+        IIoWrapper ioWrapper,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
@@ -34,19 +40,25 @@ public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
     
     private bool FindAndMove(string videoName, Media media)
     {
-        var videoLocation = _ioService.Combine(new string[] { media.MediaFolder, videoName });
+        var videoLocation = _ioWrapper.Combine([
+            media.MediaFolder,
+            videoName
+        ]);
 
-        var extension = _ioService.GetExtension(videoName);
+        var extension = _ioWrapper.GetExtension(videoName);
 
-        if (!_ioService.FileExists(videoLocation))
+        if (!_ioWrapper.FileExists(videoLocation))
         {
             return false;
         }
         
         var newVideoName = $"{media.NewNameWithoutExtension}{extension}";
-        var newVideoLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newVideoName });
+        var newVideoLocation = _ioWrapper.Combine([
+            media.NewMediaFolder,
+            newVideoName
+        ]);
 
-        _ioService.MoveMedia(videoLocation, newVideoLocation);
+        _ioWrapper.MoveMedia(videoLocation, newVideoLocation, _classificationSettingsOptions.OverwriteFiles);
 
         return true;
 

@@ -1,16 +1,22 @@
 using System;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveMediaProcessorHandler : BaseProcessorHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
+    private readonly ClassificationSettingsOptions  _classificationSettingsOptions;
 
-    public MoveMediaProcessorHandler(IIOService ioService)
+    public MoveMediaProcessorHandler(
+        IIoWrapper ioWrapper,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
@@ -20,11 +26,11 @@ public class MoveMediaProcessorHandler : BaseProcessorHandler
             return;
         }
 
-        _ioService.CreateFolder(media.NewMediaFolder);
+        _ioWrapper.CreateFolder(media.NewMediaFolder);
 
         try
         {
-            _ioService.MoveMedia(media.MediaPath, media.NewMediaPath);
+            _ioWrapper.MoveMedia(media.MediaPath, media.NewMediaPath, _classificationSettingsOptions.OverwriteFiles);
             base.Process(media);
         }
         catch (Exception e)

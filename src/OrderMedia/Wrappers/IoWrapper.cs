@@ -3,28 +3,22 @@ using System.IO;
 using OrderMedia.Extensions;
 using OrderMedia.Interfaces;
 
-namespace OrderMedia.Services;
+namespace OrderMedia.Wrappers;
+
 /// <summary>
 /// IO service class.
 /// </summary>
-public class IOService : IIOService
+public class IoWrapper : IIoWrapper
 {
-    private readonly IConfigurationService _configurationService;
-
-    public IOService(IConfigurationService configurationService)
-    {
-        _configurationService = configurationService;
-    }
-
     public IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
     {
         var directory = new DirectoryInfo(path);
         return directory.GetFilesByExtensions(extensions);
     }
 
-    public void MoveMedia(string oldPath, string newPath)
+    public void MoveMedia(string oldPath, string newPath, bool overwrite)
     {
-        File.Move(oldPath, newPath, _configurationService.GetOverwriteFiles());
+        File.Move(oldPath, newPath, overwrite);
     }
 
     public void CreateFolder(string path)
@@ -49,7 +43,7 @@ public class IOService : IIOService
 
     public string GetDirectoryName(string path)
     {
-        return Path.GetDirectoryName(path);
+        return Path.GetDirectoryName(path)!;
     }
 
     public string GetFileName(string path)

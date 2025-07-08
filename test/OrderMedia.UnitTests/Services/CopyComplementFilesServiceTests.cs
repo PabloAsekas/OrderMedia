@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using OrderMedia.Configuration;
 using OrderMedia.Interfaces;
 using OrderMedia.Services;
 
@@ -8,8 +10,7 @@ namespace OrderMedia.UnitTests.Services;
 public class CopyComplementFilesServiceTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
-    private Mock<IConfigurationService> _configurationServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<ILogger<CopyComplementFilesService>> _loggerMock;
 
     [SetUp]
@@ -17,9 +18,8 @@ public class CopyComplementFilesServiceTests
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 
-        _configurationServiceMock = _autoMocker.GetMock<IConfigurationService>();
 
         _loggerMock = _autoMocker.GetMock<ILogger<CopyComplementFilesService>>();
     }
@@ -35,10 +35,14 @@ public class CopyComplementFilesServiceTests
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(fileToApply))
             .Returns("2014-07-31_22-22-22_IMG_0001");
 
-        _configurationServiceMock.Setup(x => x.GetMediaPostProcessSource())
-            .Returns(folderToSearch);
+        var mediaPathsOptions = Options.Create(new MediaPathsOptions()
+        {
+            MediaPostProcessSource = folderToSearch
+        });
+        
+        _autoMocker.Use(mediaPathsOptions);
 
-        var combinedArray = new string[] { folderToSearch, "2014" };
+        string[] combinedArray = [folderToSearch, "2014"];
 
         var folderToSearchWithYear = folderToSearch + "2014";
         
@@ -78,10 +82,7 @@ public class CopyComplementFilesServiceTests
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(fileToApply))
             .Returns(nameWithoutExtension);
 
-        _configurationServiceMock.Setup(x => x.GetMediaPostProcessSource())
-            .Returns(folderToSearch);
-
-        var combinedArray = new string[] { folderToSearch, "2014" };
+        var combinedArray = new[] { folderToSearch, "2014" };
 
         var folderToSearchWithYear = folderToSearch + "/2014";
         
@@ -101,9 +102,14 @@ public class CopyComplementFilesServiceTests
 
         _ioServiceMock.Setup(x => x.FileExists(fileToSearch))
             .Returns(true);
-
-        _configurationServiceMock.Setup(x => x.GetMediaPostProcessPath())
-            .Returns(folderToApply);
+        
+        var mediaPaths = Options.Create(new MediaPathsOptions()
+        {
+            MediaPostProcessPath = folderToApply,
+            MediaPostProcessSource = folderToSearch,
+        });
+        
+        _autoMocker.Use(mediaPaths);
 
         var finalFileName = folderToApply + nameWithoutExtension + extensionToSearch;
 
@@ -118,7 +124,6 @@ public class CopyComplementFilesServiceTests
         _ioServiceMock.Verify(x => x.DirectoryExists(folderToSearchWithYear), Times.Once);
         _ioServiceMock.Verify(x => x.GetDirectories(folderToSearchWithYear), Times.Once);
         _ioServiceMock.Verify(x => x.FileExists(fileToSearch), Times.Once);
-        _configurationServiceMock.Verify(x => x.GetMediaPostProcessPath(), Times.Once);
         _ioServiceMock.Verify(x => x.CopyFile(fileToSearch, finalFileName), Times.Once);
     }
     
@@ -133,11 +138,15 @@ public class CopyComplementFilesServiceTests
         
         _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(fileToApply))
             .Returns(nameWithoutExtension);
+        
+        var mediaPaths = Options.Create(new MediaPathsOptions
+        {
+            MediaPostProcessSource = folderToSearch
+        });
+        
+        _autoMocker.Use(mediaPaths);
 
-        _configurationServiceMock.Setup(x => x.GetMediaPostProcessSource())
-            .Returns(folderToSearch);
-
-        var combinedArray = new string[] { folderToSearch, "2014" };
+        var combinedArray = new[] { folderToSearch, "2014" };
 
         var folderToSearchWithYear = folderToSearch + "/2014";
         
@@ -169,7 +178,6 @@ public class CopyComplementFilesServiceTests
         _ioServiceMock.Verify(x => x.DirectoryExists(folderToSearchWithYear), Times.Once);
         _ioServiceMock.Verify(x => x.GetDirectories(folderToSearchWithYear), Times.Once);
         _ioServiceMock.Verify(x => x.FileExists(fileToSearch), Times.Once);
-        _configurationServiceMock.Verify(x => x.GetMediaPostProcessPath(), Times.Never);
         _ioServiceMock.Verify(x => x.CopyFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
     }
 }

@@ -1,8 +1,10 @@
-﻿using OrderMedia.Enums;
+﻿using Microsoft.Extensions.Options;
+using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.UnitTests.Factories;
 
@@ -11,8 +13,7 @@ public class MediaFactoryTests
 {
     private AutoMocker _autoMocker;
 
-    private Mock<IConfigurationService> _configurationServiceMock;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<IRenameStrategyFactory> _renameStrategyFactoryMock;
     private Mock<IMediaTypeService> _mediaTypeServiceMock;
     private Mock<ICreatedDateExtractorService> _createdDateExtractorServiceMock;
@@ -33,13 +34,16 @@ public class MediaFactoryTests
     {
         _autoMocker = new AutoMocker();
 
-        _configurationServiceMock = _autoMocker.GetMock<IConfigurationService>();
-        _configurationServiceMock.Setup(x => x.GetImageFolderName())
-            .Returns(classificationFolderName);
-        _configurationServiceMock.Setup(x => x.GetVideoFolderName())
-            .Returns(classificationFolderName);
+        var classificationFoldersOptions = Options.Create(
+            new ClassificationFoldersOptions
+            {
+                ImageFolderName = classificationFolderName,
+                VideoFolderName = classificationFolderName,
+            });
+        
+        _autoMocker.Use(classificationFoldersOptions);
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
         _ioServiceMock.Setup(x => x.GetDirectoryName(It.IsAny<string>()))
             .Returns(mediaFolder);
         _ioServiceMock.Setup(x => x.GetFileName(mediaPath))
@@ -95,8 +99,12 @@ public class MediaFactoryTests
         _mediaTypeServiceMock.Setup(x => x.GetMediaType(It.IsAny<string>()))
             .Returns(mediaType);
 
-        _configurationServiceMock.Setup(x => x.GetRenameMediaFiles())
-            .Returns(renamed);
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            RenameMediaFiles = renamed
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
 
         var sut = _autoMocker.CreateInstance<MediaFactory>();
 

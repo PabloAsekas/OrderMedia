@@ -7,14 +7,14 @@ namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 public class RegexCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
 
     [SetUp]
     public void SetUp()
     {
         _autoMocker = new AutoMocker();
         
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
     }
 
     [TestCase("PHOTO-2014-07-31-22-15-00", "2014-07-31-22-15-00", "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss")]

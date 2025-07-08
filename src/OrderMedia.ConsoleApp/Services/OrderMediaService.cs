@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.ConsoleApp.Services;
 /// <summary>
@@ -10,32 +12,44 @@ namespace OrderMedia.ConsoleApp.Services;
 public class OrderMediaService : IHostedService
 {
     private readonly ILogger<OrderMediaService> _logger;
-    private readonly IIOService _ioService;
-    private readonly IConfigurationService _configurationService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly IMediaFactory _mediaFactory;
     private readonly IClassificationService _classificationService;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
+    private readonly MediaPathsOptions _mediaPathsOptions;
+    private readonly MediaExtensionsOptions _mediaExtensionsOptions;
+    private readonly ClassificationFoldersOptions _classificationFoldersOptions;
 
     public OrderMediaService(
         ILogger<OrderMediaService> logger,
-        IIOService ioService,
-        IConfigurationService configurationService,
+        IIoWrapper ioWrapper,
         IMediaFactory mediaFactoryService,
         IClassificationService classificationService,
-        IHostApplicationLifetime hostApplicationLifetime)
+        IHostApplicationLifetime hostApplicationLifetime,
+        IOptions<MediaPathsOptions> mediaPathsOptions,
+        IOptions<MediaExtensionsOptions> mediaExtensionsOptions,
+        IOptions<ClassificationFoldersOptions> classificationFoldersOptions)
     {
         _logger = logger;
-        _ioService = ioService;
-        _configurationService = configurationService;
+        _ioWrapper = ioWrapper;
         _mediaFactory = mediaFactoryService;
         _classificationService = classificationService;
         _hostApplicationLifetime = hostApplicationLifetime;
+        _mediaPathsOptions = mediaPathsOptions.Value;
+        _mediaExtensionsOptions = mediaExtensionsOptions.Value;
+        _classificationFoldersOptions = classificationFoldersOptions.Value;
     }
     
     private void CreateMediaFolders()
     {
-        _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetMediaSourcePath(), _configurationService.GetImageFolderName() }));
-        _ioService.CreateFolder(_ioService.Combine(new string[] { _configurationService.GetMediaSourcePath(), _configurationService.GetVideoFolderName() }));
+        _ioWrapper.CreateFolder(_ioWrapper.Combine([
+            _mediaPathsOptions.MediaSourcePath,
+            _classificationFoldersOptions.ImageFolderName
+        ]));
+        _ioWrapper.CreateFolder(_ioWrapper.Combine([
+            _mediaPathsOptions.MediaSourcePath,
+            _classificationFoldersOptions.VideoFolderName
+        ]));
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -45,9 +59,7 @@ public class OrderMediaService : IHostedService
         CreateMediaFolders();
 
         Manage();
-
         
-        // Thread.Sleep(100000);
         _hostApplicationLifetime.StopApplication();
     }
 
@@ -58,7 +70,7 @@ public class OrderMediaService : IHostedService
     
     private void ManageMedia(params string[] extensions)
     {
-        var allMedia = _ioService.GetFilesByExtensions(_configurationService.GetMediaSourcePath(), extensions);
+        var allMedia = _ioWrapper.GetFilesByExtensions(_mediaPathsOptions.MediaSourcePath, extensions);
 
         foreach (var media in allMedia)
         {
@@ -71,8 +83,8 @@ public class OrderMediaService : IHostedService
     private void Manage()
     {
         // Images first because of livePhotos classification.
-        ManageMedia(_configurationService.GetImageExtensions());
-        ManageMedia(_configurationService.GetVideoExtensions());
+        ManageMedia(_mediaExtensionsOptions.ImageExtensions);
+        ManageMedia(_mediaExtensionsOptions.VideoExtensions);
     }
 }
 
