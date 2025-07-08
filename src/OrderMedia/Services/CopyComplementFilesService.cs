@@ -1,40 +1,48 @@
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Services;
 
 public class CopyComplementFilesService : ICopyComplementFilesService
 {
-    private readonly IIOService _ioService;
-    private readonly IConfigurationService _configurationService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly ILogger<CopyComplementFilesService> _logger;
+    private readonly MediaPathsOptions _mediaPathsOptions;
 
-    public CopyComplementFilesService(IIOService ioService, IConfigurationService configurationService, ILogger<CopyComplementFilesService> logger)
+    public CopyComplementFilesService(
+        IIoWrapper ioWrapper,
+        ILogger<CopyComplementFilesService> logger,
+        IOptions<MediaPathsOptions> mediaPathsOptions)
     {
-        _ioService = ioService;
-        _configurationService = configurationService;
+        _ioWrapper = ioWrapper;
         _logger = logger;
+        _mediaPathsOptions = mediaPathsOptions.Value;
     }
 
     public void CopyComplementFiles(string fileToApply, string extensionToSearch)
     {
-        var name = _ioService.GetFileNameWithoutExtension(fileToApply);
+        var name = _ioWrapper.GetFileNameWithoutExtension(fileToApply);
 
         var date = name[..10];
 
         var year = date[..4];
 
-        var yearFolder = _ioService.Combine(new string[] { _configurationService.GetMediaPostProcessSource(), year });
+        var yearFolder = _ioWrapper.Combine([
+            _mediaPathsOptions.MediaPostProcessSource,
+            year
+        ]);
         
-        if (!_ioService.DirectoryExists(yearFolder))
+        if (!_ioWrapper.DirectoryExists(yearFolder))
         {
             _logger.LogInformation("La carpeta no existe {0}", yearFolder);
             
             return;
         }
 
-        var directories = _ioService.GetDirectories(yearFolder);
+        var directories = _ioWrapper.GetDirectories(yearFolder);
 
         var directoriesByDate = directories.Where(d => d.Contains(yearFolder + "/" + date));
 
@@ -42,14 +50,14 @@ public class CopyComplementFilesService : ICopyComplementFilesService
         {
             var searchFile = folder + "/" + name + extensionToSearch;
 
-            if (!_ioService.FileExists(searchFile))
+            if (!_ioWrapper.FileExists(searchFile))
             {
                 continue;
             }
             
-            var finalName = _configurationService.GetMediaPostProcessPath() + name + extensionToSearch;
+            var finalName = _mediaPathsOptions.MediaPostProcessPath + name + extensionToSearch;
                 
-            _ioService.CopyFile(searchFile, finalName);
+            _ioWrapper.CopyFile(searchFile, finalName);
         }
     }
 }

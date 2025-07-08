@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using OrderMedia.Configuration;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
@@ -8,21 +10,28 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveMediaProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
 
     [SetUp]
     public void SetUp()
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+        
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            RenameMediaFiles = true
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
     public void Execute_Runs_Successfully()
     {
         // Arrange
-        var media = new Media()
+        var media = new Media
         {
             NewMediaFolder = "/2014-07-31/",
             MediaPath = "test/photos/IMG_0001.jpg",
@@ -37,14 +46,14 @@ public class MoveMediaProcessorHandlerTests
 
         // Assert
         _ioServiceMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Once);
-        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath), Times.Once);
+        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Once);
     }
 
     [Test]
     public void Execute_Runs_WithNoClassifiableMedia()
     {
         // Arrange
-        var media = new Media()
+        var media = new Media
         {
             NewMediaFolder = "/2014-07-31/",
             MediaPath = "test/photos/IMG_0001.jpg",
@@ -58,6 +67,6 @@ public class MoveMediaProcessorHandlerTests
 
         // Assert
         _ioServiceMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Never);
-        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath), Times.Never);
+        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Never);
     }
 }

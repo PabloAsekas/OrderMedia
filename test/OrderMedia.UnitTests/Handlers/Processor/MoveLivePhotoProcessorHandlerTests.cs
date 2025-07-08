@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using OrderMedia.Configuration;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
@@ -8,21 +10,28 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveLivePhotoProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
 
     [SetUp]
     public void SetUp()
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+        
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            RenameMediaFiles = true
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
     public void Process_Runs_Successfully()
     {
         // Arrange
-        var media = new Media()
+        var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
             MediaFolder = "photos",
@@ -56,6 +65,6 @@ public class MoveLivePhotoProcessorHandlerTests
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(videoLocation, newVideoLocation), Times.Once);
+        _ioServiceMock.Verify(x => x.MoveMedia(videoLocation, newVideoLocation, It.IsAny<bool>()), Times.Once);
     }
 }

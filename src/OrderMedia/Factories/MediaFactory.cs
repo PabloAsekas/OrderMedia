@@ -1,8 +1,10 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using OrderMedia.Enums;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Factories;
 
@@ -11,23 +13,27 @@ namespace OrderMedia.Factories;
 /// </summary>
 public class MediaFactory : IMediaFactory
 {
-    private readonly IConfigurationService _configurationService;
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly IRenameStrategyFactory _renameStrategyFactory;
     private readonly IMediaTypeService _mediaTypeService;
     private readonly ICreatedDateExtractorService _createdDateExtractorService;
+    private readonly ClassificationFoldersOptions _classificationFoldersOptions;
+    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
 
-    public MediaFactory(IConfigurationService configurationService,
-        IIOService ioService,
+    public MediaFactory(
+        IIoWrapper ioWrapper,
         IRenameStrategyFactory renameStrategyFactory,
         IMediaTypeService mediaTypeService,
-        ICreatedDateExtractorService createdDateExtractorService)
+        ICreatedDateExtractorService createdDateExtractorService,
+        IOptions<ClassificationFoldersOptions> classificationFoldersOptions,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _configurationService = configurationService;
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
         _renameStrategyFactory = renameStrategyFactory;
         _mediaTypeService = mediaTypeService;
         _createdDateExtractorService = createdDateExtractorService;
+        _classificationFoldersOptions = classificationFoldersOptions.Value;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
 
     public Media CreateMedia(string path)
@@ -36,23 +42,23 @@ public class MediaFactory : IMediaFactory
 
         var classificationFolderName = GetClassificationFolderName(mediaType);
 
-        var mediaFolder = _ioService.GetDirectoryName(path);
+        var mediaFolder = _ioWrapper.GetDirectoryName(path);
 
-        var fullName = _ioService.GetFileName(path);
+        var fullName = _ioWrapper.GetFileName(path);
 
-        var nameWithoutExtension = _ioService.GetFileNameWithoutExtension(path);
+        var nameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(path);
             
         var createdDateTimeOffset = _createdDateExtractorService.GetCreatedDateTimeOffset(path);
 
         var createdDateTimeOffsetAsString = createdDateTimeOffset.ToString("yyyy-MM-dd");
 
-        var newMediaFolder = _ioService.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeOffsetAsString });
+        var newMediaFolder = _ioWrapper.Combine(new string[] { mediaFolder, classificationFolderName, createdDateTimeOffsetAsString });
 
         var newName = GetNewName(mediaType, fullName, createdDateTimeOffset);
 
-        var newNameWithoutExtension = _ioService.GetFileNameWithoutExtension(newName);
+        var newNameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(newName);
 
-        var newMediaPath = _ioService.Combine(new string[] { newMediaFolder, newName });
+        var newMediaPath = _ioWrapper.Combine(new string[] { newMediaFolder, newName });
 
         return new Media()
         {
@@ -73,19 +79,19 @@ public class MediaFactory : IMediaFactory
     {
         return mediaType switch
         {
-            MediaType.Image => _configurationService.GetImageFolderName(),
-            MediaType.Raw => _configurationService.GetImageFolderName(),
-            MediaType.Video => _configurationService.GetVideoFolderName(),
-            MediaType.WhatsAppImage => _configurationService.GetImageFolderName(),
-            MediaType.WhatsAppVideo => _configurationService.GetVideoFolderName(),
-            MediaType.Insv => _configurationService.GetVideoFolderName(),
+            MediaType.Image => _classificationFoldersOptions.ImageFolderName,
+            MediaType.Raw => _classificationFoldersOptions.ImageFolderName,
+            MediaType.Video => _classificationFoldersOptions.VideoFolderName,
+            MediaType.WhatsAppImage => _classificationFoldersOptions.ImageFolderName,
+            MediaType.WhatsAppVideo => _classificationFoldersOptions.VideoFolderName,
+            MediaType.Insv => _classificationFoldersOptions.VideoFolderName,
             _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
         };
     }
 
     private string GetNewName(MediaType mediaType, string originalName, DateTimeOffset createdDateTimeOffset)
     {
-        if (!_configurationService.GetRenameMediaFiles())
+        if (!_classificationSettingsOptions.RenameMediaFiles)
         {
             return originalName;
         }

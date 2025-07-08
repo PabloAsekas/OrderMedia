@@ -1,7 +1,9 @@
-﻿using OrderMedia.Enums;
+﻿using Microsoft.Extensions.Options;
+using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.UnitTests.Factories;
 
@@ -16,17 +18,18 @@ public class ProcessorHandlerFactoryTests
 	{
 		_autoMocker = new AutoMocker();
 
-		var ioServiceMock = _autoMocker.GetMock<IIOService>();
+		var ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 		var aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
 		var metadataAggregatorServiceMock = _autoMocker.GetMock<IMetadataAggregatorService>();
+		var classificationSettingsOptions = _autoMocker.GetMock<IOptions<ClassificationSettingsOptions>>();
 		
-        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioServiceMock.Object);
+        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
 
-		var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioServiceMock.Object);
+		var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
 
-		var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioServiceMock.Object, aaeHelperServiceMock.Object);
+		var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioServiceMock.Object, aaeHelperServiceMock.Object, classificationSettingsOptions.Object);
 
-        var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioServiceMock.Object);
+        var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioServiceMock.Object, classificationSettingsOptions.Object);
 
         var createdDateAggregatorProcessor = new CreatedDateAggregatorProcessorHandler(metadataAggregatorServiceMock.Object);
 

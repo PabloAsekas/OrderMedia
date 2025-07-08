@@ -6,16 +6,16 @@ namespace OrderMedia.Services;
 
 public class XmpExtractorService : IXmpExtractorService
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
 
-    public XmpExtractorService(IIOService ioService)
+    public XmpExtractorService(IIoWrapper ioWrapper)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
     }
 
     public string GetCreatedDate(string xmpFilePath)
     {
-        if (!_ioService.FileExists(xmpFilePath))
+        if (!_ioWrapper.FileExists(xmpFilePath))
         {
             return null;
         }

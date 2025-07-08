@@ -1,6 +1,8 @@
+using Microsoft.Extensions.Options;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.UnitTests.Handlers.Processor;
 
@@ -8,7 +10,7 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveAaeProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<IAaeHelperService> _aaeHlperServiceMock;
 
     [SetUp]
@@ -16,9 +18,16 @@ public class MoveAaeProcessorHandlerTests
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 
         _aaeHlperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
+        
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            RenameMediaFiles = true
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -27,7 +36,7 @@ public class MoveAaeProcessorHandlerTests
         // Arrange
         const string aaeName = "IMG_O0001.aae";
 
-        var media = new Media()
+        var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
             MediaFolder = "photos",
@@ -59,6 +68,6 @@ public class MoveAaeProcessorHandlerTests
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(aaeLocation, newAaeLocation), Times.Once);
+        _ioServiceMock.Verify(x => x.MoveMedia(aaeLocation, newAaeLocation, It.IsAny<bool>()), Times.Once);
     }
 }

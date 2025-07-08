@@ -9,17 +9,17 @@ namespace OrderMedia.Services;
 /// </summary>
 public class MediaTypeService : IMediaTypeService
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
 
-    public MediaTypeService(IIOService ioService)
+    public MediaTypeService(IIoWrapper ioWrapper)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
     }
 
     public MediaType GetMediaType(string path)
     {
-        var extension = _ioService.GetExtension(path);
-        var name = _ioService.GetFileNameWithoutExtension(path);
+        var extension = _ioWrapper.GetExtension(path);
+        var name = _ioWrapper.GetFileNameWithoutExtension(path);
 
         extension = AnalyzeMediaName(name, "PHOTO", ".WhatsAppImage", extension);
         extension = AnalyzeMediaName(name, "VIDEO", ".WhatsAppVideo", extension);

@@ -7,7 +7,7 @@ namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 public class XmpCreatedDateHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<IXmpExtractorService> _xmpExtractorServiceMock;
 
     [SetUp]
@@ -15,7 +15,7 @@ public class XmpCreatedDateHandlerTests
     {
         _autoMocker = new AutoMocker();
         
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
         
         _xmpExtractorServiceMock = _autoMocker.GetMock<IXmpExtractorService>();
     }

@@ -1,28 +1,40 @@
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveXmpProcessorHandler : BaseProcessorHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
+    private readonly ClassificationSettingsOptions  _classificationSettingsOptions;
 
-    public MoveXmpProcessorHandler(IIOService ioService)
+    public MoveXmpProcessorHandler(
+        IIoWrapper ioWrapper,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
     
     public override void Process(Media media)
     {
         var xmpName = $"{media.NameWithoutExtension}.xmp";
-        var xmpLocation = _ioService.Combine(new string[] { media.MediaFolder, xmpName });
+        var xmpLocation = _ioWrapper.Combine([
+            media.MediaFolder,
+            xmpName
+        ]);
 
-        if (_ioService.FileExists(xmpLocation))
+        if (_ioWrapper.FileExists(xmpLocation))
         {
             var newXmpName = $"{media.NewNameWithoutExtension}.xmp";
-            var newXmpLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newXmpName });
+            var newXmpLocation = _ioWrapper.Combine([
+                media.NewMediaFolder,
+                newXmpName
+            ]);
 
-            _ioService.MoveMedia(xmpLocation, newXmpLocation);
+            _ioWrapper.MoveMedia(xmpLocation, newXmpLocation, _classificationSettingsOptions.OverwriteFiles);
         }
 
         base.Process(media);

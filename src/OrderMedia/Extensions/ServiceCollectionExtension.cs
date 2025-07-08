@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Interfaces.Handlers;
+using OrderMedia.Configuration;
 using OrderMedia.Services;
 using OrderMedia.Strategies.RenameStrategy;
 using OrderMedia.Wrappers;
@@ -17,15 +19,14 @@ public static class ServiceCollectionExtension
     /// </summary>
     /// <param name="services">Service Collection.</param>
     /// <returns><see cref="IServiceCollection"/> with all the services needed by the project.</returns>
-    public static IServiceCollection AddOrderMediaServiceClient(this IServiceCollection services)
+    public static IServiceCollection AddOrderMedia(this IServiceCollection services)
     {
         services
             .AddScoped<IClassificationService, ClassificationService>()
-            .AddScoped<IConfigurationService, ConfigurationService>()
             .AddScoped<ICopyComplementFilesService, CopyComplementFilesService>()
             .AddScoped<ICreatedDateExtractorService, CreatedDateExtractorService>()
             .AddScoped<IImageMetadataReader, ImageMetadataReaderWrapper>()
-            .AddScoped<IIOService, IOService>()
+            .AddScoped<IIoWrapper, IoWrapper>()
             .AddScoped<IMediaFactory, MediaFactory>()
             .AddScoped<IMediaTypeService, MediaTypeService>()
             .AddScoped<IMetadataAggregatorService, MetadataAggregatorService>()
@@ -51,6 +52,20 @@ public static class ServiceCollectionExtension
             .AddScoped<IRenameStrategyFactory, RenameStrategyFactory>()
             .AddScoped<IXmpExtractorService, XmpExtractorService>();
             
+        return services;
+    }
+
+    public static IServiceCollection ConfigureOrderMedia(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<ClassificationFoldersOptions>()
+            .BindConfiguration(ClassificationFoldersOptions.ConfigurationSection);
+        services.AddOptions<ClassificationSettingsOptions>()
+            .BindConfiguration(ClassificationSettingsOptions.ConfigurationSection);
+        services.AddOptions<MediaExtensionsOptions>()
+            .BindConfiguration(MediaExtensionsOptions.ConfigurationSection);
+        services.AddOptions<MediaPathsOptions>()
+            .BindConfiguration(MediaPathsOptions.ConfigurationSection);
+
         return services;
     }
 }

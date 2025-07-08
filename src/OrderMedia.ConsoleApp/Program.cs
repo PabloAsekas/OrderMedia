@@ -32,7 +32,8 @@ public class Program
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Logging.AddConsole();
-        builder.Services.AddOrderMediaServiceClient();
+        builder.Services.ConfigureOrderMedia(builder.Configuration);
+        builder.Services.AddOrderMedia();
         builder.Services.AddHostedService<OrderMediaService>();
         
         return builder;

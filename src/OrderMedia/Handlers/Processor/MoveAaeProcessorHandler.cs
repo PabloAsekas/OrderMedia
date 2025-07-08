@@ -1,18 +1,25 @@
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
+using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveAaeProcessorHandler : BaseProcessorHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly IAaeHelperService _aaeHelperService;
+    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
 
-    public MoveAaeProcessorHandler(IIOService ioService, IAaeHelperService aaeHelperService)
+    public MoveAaeProcessorHandler(
+        IIoWrapper ioWrapper,
+        IAaeHelperService aaeHelperService,
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
         _aaeHelperService = aaeHelperService;
+        _classificationSettingsOptions = classificationSettingsOptions.Value;
     }
     
     public override void Process(Media media)
@@ -38,17 +45,23 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
     
     private bool FindAndMove(string aaeName, Media media)
     {
-        var aaeLocation = _ioService.Combine(new string[] { media.MediaFolder, aaeName });
+        var aaeLocation = _ioWrapper.Combine([
+            media.MediaFolder,
+            aaeName
+        ]);
 
-        if (!_ioService.FileExists(aaeLocation))
+        if (!_ioWrapper.FileExists(aaeLocation))
         {
             return false;
         }
         
         var newAaeName = $"{media.NewNameWithoutExtension}.aae";
-        var newAaeLocation = _ioService.Combine(new string[] { media.NewMediaFolder, newAaeName });
+        var newAaeLocation = _ioWrapper.Combine([
+            media.NewMediaFolder,
+            newAaeName
+        ]);
 
-        _ioService.MoveMedia(aaeLocation, newAaeLocation);
+        _ioWrapper.MoveMedia(aaeLocation, newAaeLocation, _classificationSettingsOptions.OverwriteFiles);
 
         return true;
     }

@@ -7,16 +7,16 @@ namespace OrderMedia.Services;
 
 public class MetadataAggregatorService : IMetadataAggregatorService
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
 
-    public MetadataAggregatorService(IIOService ioService)
+    public MetadataAggregatorService(IIoWrapper ioWrapper)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
     }
 
     public Image GetImage(string imagePath)
     {
-        if (!_ioService.FileExists(imagePath))
+        if (!_ioWrapper.FileExists(imagePath))
         {
             throw new FileNotFoundException();
         }

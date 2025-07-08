@@ -5,12 +5,12 @@ namespace OrderMedia.Handlers.CreatedDate;
 
 public class XmpCreatedDateHandler : BaseCreatedDateHandler
 {
-    private readonly IIOService _ioService;
+    private readonly IIoWrapper _ioWrapper;
     private readonly IXmpExtractorService _xmpExtractorService;
 
-    public XmpCreatedDateHandler(IIOService ioService, IXmpExtractorService xmpExtractorService)
+    public XmpCreatedDateHandler(IIoWrapper ioWrapper, IXmpExtractorService xmpExtractorService)
     {
-        _ioService = ioService;
+        _ioWrapper = ioWrapper;
         _xmpExtractorService = xmpExtractorService;
     }
 
@@ -27,9 +27,9 @@ public class XmpCreatedDateHandler : BaseCreatedDateHandler
     
     private string GetXmpFilePath(string mediaPath)
     {
-        var folder = _ioService.GetDirectoryName(mediaPath);
-        var nameWithoutExtension = _ioService.GetFileNameWithoutExtension(mediaPath);
+        var folder = _ioWrapper.GetDirectoryName(mediaPath);
+        var nameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(mediaPath);
 
-        return _ioService.Combine(new[] { folder, $"{nameWithoutExtension}.xmp" });
+        return _ioWrapper.Combine(new[] { folder, $"{nameWithoutExtension}.xmp" });
     }
 }

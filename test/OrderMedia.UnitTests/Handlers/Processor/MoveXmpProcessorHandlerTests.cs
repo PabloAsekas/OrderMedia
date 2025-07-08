@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Options;
+using OrderMedia.Configuration;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
@@ -8,7 +10,7 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveXmpProcessorHandlerTests
 {
     private AutoMocker _autoMocker;
-    private Mock<IIOService> _ioServiceMock;
+    private Mock<IIoWrapper> _ioServiceMock;
     private Mock<IAaeHelperService> _aaeHelperServiceMock;
 
     [SetUp]
@@ -16,9 +18,16 @@ public class MoveXmpProcessorHandlerTests
     {
         _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIOService>();
+        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 
         _aaeHelperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
+        
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            RenameMediaFiles = true
+        });
+        
+        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -27,7 +36,7 @@ public class MoveXmpProcessorHandlerTests
         // Arrange
         const string xmpName = "IMG_0001.xmp";
 
-        var media = new Media()
+        var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
             MediaFolder = "photos",
@@ -59,6 +68,6 @@ public class MoveXmpProcessorHandlerTests
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(xmpLocation, newXmpLocation), Times.Once);
+        _ioServiceMock.Verify(x => x.MoveMedia(xmpLocation, newXmpLocation, It.IsAny<bool>()), Times.Once);
     }
 }

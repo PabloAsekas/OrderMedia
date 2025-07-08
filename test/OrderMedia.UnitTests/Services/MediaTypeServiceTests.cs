@@ -8,14 +8,14 @@ namespace OrderMedia.UnitTests.Services;
 public class MediaTypeServiceTests
 {
 	private AutoMocker _autoMocker;
-	private Mock<IIOService> _ioServiceMock;
+	private Mock<IIoWrapper> _ioServiceMock;
 
 	[SetUp]
 	public void SetUp()
 	{
 		_autoMocker = new AutoMocker();
 
-		_ioServiceMock = _autoMocker.GetMock<IIOService>();
+		_ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
 	}
 	
 	[TestCase("test", ".gif", MediaType.Image)]

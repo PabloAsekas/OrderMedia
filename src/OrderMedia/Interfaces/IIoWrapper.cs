@@ -4,23 +4,25 @@ using System.IO;
 namespace OrderMedia.Interfaces;
 
 /// <summary>
-/// IIOService interface.
+/// IIoWrapper interface.
 /// </summary>
-public interface IIOService
+public interface IIoWrapper
 {
     /// <summary>
     /// Gets files by the given extensions.
     /// </summary>
+    /// <param name="path">Path to search for extensions.</param>
     /// <param name="extensions">Extensions array.</param>
     /// <returns><see cref="IEnumerable{T}"/> of files that match the given extensions.</returns>
     IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions);
 
     /// <summary>
-    /// Moves media to the desire sub folder.
+    /// Moves media from the old path to the new path.
     /// </summary>
-    /// <param name="file">File to be moved.</param>
-    /// <param name="subFolderName">Name of the sub folder.</param>
-    void MoveMedia(string oldPath, string newPath);
+    /// <param name="oldPath">File to be moved.</param>
+    /// <param name="newPath">New path of the file.</param>
+    /// <param name="overwrite">Overwrites if the file exists in destination.</param>
+    void MoveMedia(string oldPath, string newPath, bool overwrite);
 
     /// <summary>
     /// Creates the passed folder.
