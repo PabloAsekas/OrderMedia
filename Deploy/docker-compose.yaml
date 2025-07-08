@@ -1,28 +1,28 @@
 services:
     OrderMediaConsoleApp:
-        image: ordermedia/consoleapp:dev.1
+        image: ordermedia/consoleapp:dev
         container_name: ordermedia.consoleapp.dev
         volumes:
           - /Users/pablo/Downloads/fotis/:/app/media
         environment:
-          - MediaSourcePath=/app/media
-          - ImageFolderName=img
-          - VideoFolderName=vid
-          - ImageExtensions:0=.heic
-          - ImageExtensions:1=.jpg
-          - ImageExtensions:2=.jpeg
-          - ImageExtensions:3=.gif
-          - ImageExtensions:4=.png
-          - ImageExtensions:5=.arw
-          - ImageExtensions:6=.dng
-          - ImageExtensions:7=.insp
-          - ImageExtensions:8=.cr2
-          - ImageExtensions:9=.cr3
-          - VideoExtensions:0=.mov
-          - VideoExtensions:1=.mp4
-          - VideoExtensions:2=.insv
-          - OverwriteFiles=false
-          - RenameMediaFiles=true
-          - ReplaceLongNames=true
-          - MaxMediaNameLength=8
-          - NewMediaName=pbg
+          - MediaPaths__MediaSourcePath=/app/media
+          - ClassificationFolders__ImageFolderName=img
+          - ClassificationFolders__VideoFolderName=vid
+          - MediaExtensions__ImageExtensions:0=.heic
+          - MediaExtensions__ImageExtensions:1=.jpg
+          - MediaExtensions__ImageExtensions:2=.jpeg
+          - MediaExtensions__ImageExtensions:3=.gif
+          - MediaExtensions__ImageExtensions:4=.png
+          - MediaExtensions__ImageExtensions:5=.arw
+          - MediaExtensions__ImageExtensions:6=.dng
+          - MediaExtensions__ImageExtensions:7=.insp
+          - MediaExtensions__ImageExtensions:8=.cr2
+          - MediaExtensions__ImageExtensions:9=.cr3
+          - MediaExtensions__VideoExtensions:0=.mov
+          - MediaExtensions__VideoExtensions:1=.mp4
+          - MediaExtensions__VideoExtensions:2=.insv
+          - ClassificationSettings__OverwriteFiles=false
+          - ClassificationSettings__RenameMediaFiles=true
+          - ClassificationSettings__ReplaceLongNames=true
+          - ClassificationSettings__MaxMediaNameLength=8
+          - ClassificationSettings__NewMediaName=pbg
