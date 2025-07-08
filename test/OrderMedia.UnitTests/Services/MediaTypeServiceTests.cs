@@ -7,15 +7,12 @@ namespace OrderMedia.UnitTests.Services;
 [TestFixture]
 public class MediaTypeServiceTests
 {
-	private AutoMocker _autoMocker;
-	private Mock<IIoWrapper> _ioServiceMock;
+	private Mock<IIoWrapper> _ioWrapperMock;
 
 	[SetUp]
 	public void SetUp()
 	{
-		_autoMocker = new AutoMocker();
-
-		_ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+		_ioWrapperMock = new Mock<IIoWrapper>();
 	}
 	
 	[TestCase("test", ".gif", MediaType.Image)]
@@ -37,12 +34,12 @@ public class MediaTypeServiceTests
 		// Arrange
 		var path = name + extension;
 
-		_ioServiceMock.Setup(x => x.GetExtension(path))
+		_ioWrapperMock.Setup(x => x.GetExtension(path))
 			.Returns(extension);
-		_ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(path))
+		_ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(path))
 			.Returns(name);
 
-		var sut = _autoMocker.CreateInstance<MediaTypeService>();
+		var sut = new MediaTypeService(_ioWrapperMock.Object);
 
 		// Act
 		var result = sut.GetMediaType(path);
@@ -55,16 +52,16 @@ public class MediaTypeServiceTests
     public void GetMediaType_Throws_Exception()
     {
         // Arrange
-        var name = "test";
-        var extension = ".test";
-        var path = $"{name}{extension}";
+        const string name = "test";
+        const string extension = ".test";
+        const string path = $"{name}{extension}";
 
-        _ioServiceMock.Setup(x => x.GetExtension(path))
+        _ioWrapperMock.Setup(x => x.GetExtension(path))
             .Returns(extension);
-        _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(path))
+        _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(path))
             .Returns(name);
 
-        var sut = _autoMocker.CreateInstance<MediaTypeService>();
+        var sut = new MediaTypeService(_ioWrapperMock.Object);
 
         // Act
         Action act = () => sut.GetMediaType(path);

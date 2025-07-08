@@ -9,25 +9,21 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 [TestFixture]
 public class MoveAaeProcessorHandlerTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
+    private Mock<IIoWrapper> _ioWrapperMock;
     private Mock<IAaeHelperService> _aaeHlperServiceMock;
-
+    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
+    
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
+        _ioWrapperMock = new Mock<IIoWrapper>();
 
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
-
-        _aaeHlperServiceMock = _autoMocker.GetMock<IAaeHelperService>();
+        _aaeHlperServiceMock = new Mock<IAaeHelperService>();
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
             RenameMediaFiles = true
         });
-        
-        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -53,21 +49,25 @@ public class MoveAaeProcessorHandlerTests
         _aaeHlperServiceMock.Setup(x => x.GetAaeName(media.NameWithoutExtension))
             .Returns(aaeName);
 
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.MediaFolder, aaeName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.MediaFolder, aaeName }))
             .Returns(aaeLocation);
 
-        _ioServiceMock.Setup(x => x.FileExists(aaeLocation))
+        _ioWrapperMock.Setup(x => x.FileExists(aaeLocation))
             .Returns(true);
 
-        _ioServiceMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newAaeName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.NewMediaFolder, newAaeName }))
             .Returns(newAaeLocation);
 
-        var sut = _autoMocker.CreateInstance<MoveAaeProcessorHandler>();
+        var sut = new MoveAaeProcessorHandler(
+            _ioWrapperMock.Object,
+            _aaeHlperServiceMock.Object,
+            _classificationSettingsOptions
+            );
 
         // Act
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.MoveMedia(aaeLocation, newAaeLocation, It.IsAny<bool>()), Times.Once);
+        _ioWrapperMock.Verify(x => x.MoveMedia(aaeLocation, newAaeLocation, It.IsAny<bool>()), Times.Once);
     }
 }

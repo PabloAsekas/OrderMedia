@@ -9,22 +9,19 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 [TestFixture]
 public class MoveMediaProcessorHandlerTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
-
+    private Mock<IIoWrapper> _ioWrapperMock;
+    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
+    
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
 
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
+        _ioWrapperMock = new Mock<IIoWrapper>();
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
             RenameMediaFiles = true
         });
-        
-        _autoMocker.Use(classificationSettingsOptions);
     }
 
     [Test]
@@ -39,14 +36,17 @@ public class MoveMediaProcessorHandlerTests
             CreatedDateTimeOffset = new DateTimeOffset(new DateTime(2014, 07, 31, 22, 15, 15)),
         };
 
-        var sut = _autoMocker.CreateInstance<MoveMediaProcessorHandler>();
+        var sut = new MoveMediaProcessorHandler(
+            _ioWrapperMock.Object,
+            _classificationSettingsOptions
+            );
 
         // Act
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Once);
-        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Once);
+        _ioWrapperMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Once);
+        _ioWrapperMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Once);
     }
 
     [Test]
@@ -60,13 +60,16 @@ public class MoveMediaProcessorHandlerTests
             NewMediaPath = "test/photos/img/2014-07-31/2014-07-31_22-15-15_IMG_0001.jpg",
         };
 
-        var sut = _autoMocker.CreateInstance<MoveMediaProcessorHandler>();
+        var sut = new MoveMediaProcessorHandler(
+            _ioWrapperMock.Object,
+            _classificationSettingsOptions
+            );
 
         // Act
         sut.Process(media);
 
         // Assert
-        _ioServiceMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Never);
-        _ioServiceMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Never);
+        _ioWrapperMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Never);
+        _ioWrapperMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Never);
     }
 }

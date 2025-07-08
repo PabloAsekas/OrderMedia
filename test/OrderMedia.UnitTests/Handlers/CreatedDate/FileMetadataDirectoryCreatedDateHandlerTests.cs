@@ -7,15 +7,12 @@ namespace OrderMedia.UnitTests.Handlers.CreatedDate;
 [TestFixture]
 public class FileMetadataDirectoryCreatedDateHandlerTests
 {
-    private AutoMocker _autoMocker;
     private Mock<IImageMetadataReader> _imageMetadataReaderMock;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-        
-        _imageMetadataReaderMock = _autoMocker.GetMock<IImageMetadataReader>();
+        _imageMetadataReaderMock = new Mock<IImageMetadataReader>();
     }
 
     [Test]
@@ -30,7 +27,7 @@ public class FileMetadataDirectoryCreatedDateHandlerTests
                 x.GetMetadataByDirectoryTypeAndTag<FileMetadataDirectory>(mediaPath, FileMetadataDirectory.TagFileModifiedDate))
             .Returns(date);
         
-        var sut = _autoMocker.CreateInstance<FileMetadataDirectoryCreatedDateHandler>();
+        var sut = new FileMetadataDirectoryCreatedDateHandler(_imageMetadataReaderMock.Object);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);
@@ -51,9 +48,9 @@ public class FileMetadataDirectoryCreatedDateHandlerTests
 
         _imageMetadataReaderMock.Setup(x =>
                 x.GetMetadataByDirectoryTypeAndTag<FileMetadataDirectory>(mediaPath, FileMetadataDirectory.TagFileModifiedDate))
-            .Returns((string)null);
+            .Returns((string)null!);
         
-        var sut = _autoMocker.CreateInstance<FileMetadataDirectoryCreatedDateHandler>();
+        var sut = new FileMetadataDirectoryCreatedDateHandler(_imageMetadataReaderMock.Object);
         
         // Act
         var result = sut.GetCreatedDateInfo(mediaPath);

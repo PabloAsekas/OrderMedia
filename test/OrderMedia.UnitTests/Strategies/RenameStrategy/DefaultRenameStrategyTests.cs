@@ -8,19 +8,15 @@ namespace OrderMedia.UnitTests.Strategies.RenameStrategy;
 [TestFixture]
 public class DefaultRenameStrategyTests
 {
-    private AutoMocker _autoMocker;
-    private Mock<IIoWrapper> _ioServiceMock;
+    private Mock<IIoWrapper> _ioWrapperMock;
     private Mock<IRandomizerService> _randomizerService;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
+        _ioWrapperMock = new Mock<IIoWrapper>();
 
-        _ioServiceMock = _autoMocker.GetMock<IIoWrapper>();
-
-        _randomizerService = _autoMocker.GetMock<IRandomizerService>();
-
+        _randomizerService = new Mock<IRandomizerService>();
     }
     
     [Test]
@@ -33,26 +29,27 @@ public class DefaultRenameStrategyTests
         // Arrange
         var createdDateTime = new DateTime(2014, 7, 31, 22, 15, 15);
 
-        _ioServiceMock.Setup(x => x.GetExtension(It.IsAny<string>()))
+        _ioWrapperMock.Setup(x => x.GetExtension(It.IsAny<string>()))
             .Returns(extension);
-        _ioServiceMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
+        _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
             .Returns(name);
 
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        IOptions<ClassificationSettingsOptions> classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
             ReplaceLongNames = replaceLongName,
             MaxMediaNameLength = 8,
             NewMediaName = "pbg"
         });
-        
-        _autoMocker.Use(classificationSettingsOptions);
 
         _randomizerService.Setup(x => x.GetRandomNumberAsD4())
             .Returns("1234");
 
         var fullName = name + extension;
 
-        var sut = _autoMocker.CreateInstance<DefaultRenameStrategy>();
+        var sut = new DefaultRenameStrategy(
+            _ioWrapperMock.Object,
+            _randomizerService.Object,
+            classificationSettingsOptions);
 
         // Act
         var result = sut.Rename(fullName, createdDateTime);

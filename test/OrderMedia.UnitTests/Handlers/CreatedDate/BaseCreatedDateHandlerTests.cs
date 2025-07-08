@@ -15,22 +15,19 @@ public class BaseCreatedDateHandlerConcrete : BaseCreatedDateHandler
 [TestFixture]
 public class BaseCreatedDateHandlerTests
 {
-    private AutoMocker _autoMocker;
     private Mock<ICreatedDateHandler> _nextHandlerMock;
     
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-
-        _nextHandlerMock = _autoMocker.GetMock<ICreatedDateHandler>();
+        _nextHandlerMock = new Mock<ICreatedDateHandler>();
     }
 
     [Test]
     public void SetNext_Runs_Successfully()
     {
         // Arrange
-        var sut = _autoMocker.CreateInstance<BaseCreatedDateHandlerConcrete>();
+        var sut = new BaseCreatedDateHandlerConcrete();
         
         // Act
         var result = sut.SetNext(_nextHandlerMock.Object);
@@ -43,7 +40,7 @@ public class BaseCreatedDateHandlerTests
     public void GetCreatedDateInfo_ExecutesNextHandler_Successfully()
     {
         // Arrange
-        var createdDateInfo = new CreatedDateInfo()
+        var createdDateInfo = new CreatedDateInfo
         {
             CreatedDate = "testDate",
             Format = "testFormat",
@@ -53,7 +50,7 @@ public class BaseCreatedDateHandlerTests
         _nextHandlerMock.Setup(x => x.GetCreatedDateInfo(mediaPath))
             .Returns(createdDateInfo);
         
-        var sut = _autoMocker.CreateInstance<BaseCreatedDateHandlerConcrete>();
+        var sut = new BaseCreatedDateHandlerConcrete();
         sut.SetNext(_nextHandlerMock.Object);
         
         // Act
@@ -71,7 +68,7 @@ public class BaseCreatedDateHandlerTests
         const string createdDate = "testDate";
         const string format = "testFormat";
         
-        var sut = _autoMocker.CreateInstance<BaseCreatedDateHandlerConcrete>();
+        var sut = new BaseCreatedDateHandlerConcrete();
         
         // Act
         var result = sut.CreateDateInfoWrapper(createdDate, format);
@@ -89,7 +86,7 @@ public class BaseCreatedDateHandlerTests
         var createdDate = string.Empty;
         const string format = "testFormat";
         
-        var sut = _autoMocker.CreateInstance<BaseCreatedDateHandlerConcrete>();
+        var sut = new BaseCreatedDateHandlerConcrete();
         
         // Act
         var result = sut.CreateDateInfoWrapper(createdDate, format);

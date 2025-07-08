@@ -7,15 +7,12 @@ namespace OrderMedia.UnitTests.Services;
 [TestFixture]
 public class CreatedDateExtractorServiceTests
 {
-    private AutoMocker _autoMocker;
     private Mock<IMetadataExtractorService> _metadataExtractorServiceMock;
 
     [SetUp]
     public void SetUp()
     {
-        _autoMocker = new AutoMocker();
-
-        _metadataExtractorServiceMock = _autoMocker.GetMock<IMetadataExtractorService>();
+        _metadataExtractorServiceMock = new Mock<IMetadataExtractorService>();
     }
 
     [Test]
@@ -32,7 +29,7 @@ public class CreatedDateExtractorServiceTests
         _metadataExtractorServiceMock.Setup(x => x.GetCreatedDate(mediaPath))
             .Returns(createdDateInfo);
 
-        var sut = _autoMocker.CreateInstance<CreatedDateExtractorService>();
+        var sut = new CreatedDateExtractorService(_metadataExtractorServiceMock.Object);
         
         // Act
         var result = sut.GetCreatedDateTimeOffset(mediaPath);
@@ -50,9 +47,9 @@ public class CreatedDateExtractorServiceTests
         var defaultDate = default(DateTime);
 
         _metadataExtractorServiceMock.Setup(x => x.GetCreatedDate(mediaPath))
-            .Returns((CreatedDateInfo)null);
+            .Returns((CreatedDateInfo)null!);
 
-        var sut = _autoMocker.CreateInstance<CreatedDateExtractorService>();
+        var sut = new CreatedDateExtractorService(_metadataExtractorServiceMock.Object);
         
         // Act
         var result = sut.GetCreatedDateTimeOffset(mediaPath);
