@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
@@ -6,6 +7,7 @@ using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Configuration;
+using OrderMedia.Handlers.CreatedDate;
 using OrderMedia.Services;
 using OrderMedia.Strategies.RenameStrategy;
 using OrderMedia.Wrappers;
@@ -31,18 +33,6 @@ public static class ServiceCollectionExtension
             .AddScoped<IMediaTypeService, MediaTypeService>()
             .AddScoped<IMetadataAggregatorService, MetadataAggregatorService>()
             .AddScoped<IMetadataExtractorService, MetadataExtractorService>()
-            .AddScoped<MoveMediaProcessorHandler>()
-            .AddScoped<IProcessorHandler, MoveMediaProcessorHandler>(s => s.GetRequiredService<MoveMediaProcessorHandler>())
-            .AddScoped<MoveAaeProcessorHandler>()
-            .AddScoped<IProcessorHandler, MoveAaeProcessorHandler>(s => s.GetRequiredService<MoveAaeProcessorHandler>())
-            .AddScoped<MoveLivePhotoProcessorHandler>()
-            .AddScoped<IProcessorHandler, MoveLivePhotoProcessorHandler>(s => s.GetRequiredService<MoveLivePhotoProcessorHandler>())
-            .AddScoped<MoveXmpProcessorHandler>()
-            .AddScoped<IProcessorHandler, MoveXmpProcessorHandler>(s => s.GetRequiredService<MoveXmpProcessorHandler>())
-            .AddScoped<CreatedDateAggregatorProcessorHandler>()
-            .AddScoped<IProcessorHandler, CreatedDateAggregatorProcessorHandler>(s => s.GetRequiredService<CreatedDateAggregatorProcessorHandler>()).AddScoped<MoveM01XmlProcessorHandler>()
-            .AddScoped<IProcessorHandler, MoveM01XmlProcessorHandler>(s => s.GetRequiredService<MoveM01XmlProcessorHandler>())
-            .AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>()
             .AddScoped<IRandomizerService, RandomizerService>()
             .AddScoped<IAaeHelperService, AaeHelperService>()
             .AddScoped<DefaultRenameStrategy>()
@@ -51,6 +41,10 @@ public static class ServiceCollectionExtension
             .AddScoped<IRenameStrategy, Insta360RenameStrategy>()
             .AddScoped<IRenameStrategyFactory, RenameStrategyFactory>()
             .AddScoped<IXmpExtractorService, XmpExtractorService>();
+
+        services.AddCreatedDateHandlers();
+
+        services.AddProcessorHandlers();
             
         return services;
     }
@@ -66,6 +60,50 @@ public static class ServiceCollectionExtension
         services.AddOptions<MediaPathsOptions>()
             .BindConfiguration(MediaPathsOptions.ConfigurationSection);
 
+        return services;
+    }
+
+    private static IServiceCollection AddCreatedDateHandlers(this IServiceCollection services)
+    {
+        services
+            .AddScoped<ExifIfd0DirectoryCreatedDateHandler>()
+            .AddScoped<ExifSubIfdDirectoryCreatedDateHandler>()
+            .AddScoped<FileMetadataDirectoryCreatedDateHandler>()
+            .AddScoped<M01XmlCreatedDateHandler>()
+            .AddScoped<QuickTimeMetadataHeaderDirectoryCreatedDateHandler>()
+            .AddScoped<QuickTimeMovieHeaderDirectoryCreatedDateHandler>()
+            .AddScoped<RegexCreatedDateHandler>()
+            .AddScoped<XmpCreatedDateHandler>();
+
+        services
+            .AddTransient<Func<string, string, RegexCreatedDateHandler>>(
+            sp =>
+                (pattern, format) =>
+                    new RegexCreatedDateHandler(sp.GetRequiredService<IIoWrapper>(), pattern, format));
+        
+        services.AddScoped<ICreatedDateChainFactory, CreatedDateChainFactory>();
+        
+        return services;
+    }
+
+    private static IServiceCollection AddProcessorHandlers(this IServiceCollection services)
+    {
+        services
+            .AddScoped<CreatedDateAggregatorProcessorHandler>()
+            .AddScoped<IProcessorHandler, CreatedDateAggregatorProcessorHandler>(s => s.GetRequiredService<CreatedDateAggregatorProcessorHandler>())
+            .AddScoped<MoveAaeProcessorHandler>()
+            .AddScoped<IProcessorHandler, MoveAaeProcessorHandler>(s => s.GetRequiredService<MoveAaeProcessorHandler>())
+            .AddScoped<MoveLivePhotoProcessorHandler>()
+            .AddScoped<IProcessorHandler, MoveLivePhotoProcessorHandler>(s => s.GetRequiredService<MoveLivePhotoProcessorHandler>())
+            .AddScoped<MoveM01XmlProcessorHandler>()
+            .AddScoped<IProcessorHandler, MoveM01XmlProcessorHandler>(s => s.GetRequiredService<MoveM01XmlProcessorHandler>())
+            .AddScoped<MoveMediaProcessorHandler>()
+            .AddScoped<IProcessorHandler, MoveMediaProcessorHandler>(s => s.GetRequiredService<MoveMediaProcessorHandler>())
+            .AddScoped<MoveXmpProcessorHandler>()
+            .AddScoped<IProcessorHandler, MoveXmpProcessorHandler>(s => s.GetRequiredService<MoveXmpProcessorHandler>());
+
+        services.AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>();
+        
         return services;
     }
 }

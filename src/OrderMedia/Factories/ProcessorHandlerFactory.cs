@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Enums;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces.Factories;
@@ -87,7 +88,7 @@ namespace OrderMedia.Factories
 
         private IProcessorHandler GetProcessorHandler<T>() where T : IProcessorHandler
         {
-            return (IProcessorHandler) _serviceProvider.GetService(typeof(T));
+            return (IProcessorHandler) _serviceProvider.GetRequiredService(typeof(T));
         }
     }
 }

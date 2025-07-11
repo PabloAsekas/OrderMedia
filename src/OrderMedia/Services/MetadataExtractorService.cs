@@ -1,43 +1,20 @@
-﻿using OrderMedia.Handlers.CreatedDate;
-using OrderMedia.Interfaces;
+﻿using OrderMedia.Interfaces;
+using OrderMedia.Interfaces.Factories;
 using OrderMedia.Interfaces.Handlers;
 using OrderMedia.Models;
 
 namespace OrderMedia.Services;
 public class MetadataExtractorService : IMetadataExtractorService
 {
-    private readonly ICreatedDateHandler _createdDateHandler;
+    private readonly ICreatedDateHandler _createdDateHandlerChain;
     
-    public MetadataExtractorService(IImageMetadataReader imageMetadataReader, IIoWrapper ioWrapper, IXmpExtractorService xmpExtractorService)
+    public MetadataExtractorService(ICreatedDateChainFactory createdDateChainFactory)
     {
-        var xmpHandler = new XmpCreatedDateHandler(ioWrapper, xmpExtractorService);
-        var m01XmlHandler = new M01XmlCreatedDateHandler(ioWrapper);
-        var exifSubIfdDirectoryHandler = new ExifSubIfdDirectoryCreatedDateHandler(imageMetadataReader);
-        var exifIfd0DirectoryHandler = new ExifIfd0DirectoryCreatedDateHandler(imageMetadataReader);
-        var quickTimeMetadataHeaderDirectoryHandler = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(imageMetadataReader);
-        var quickTimeMovieHeaderDirectoryHandler = new QuickTimeMovieHeaderDirectoryCreatedDateHandler(imageMetadataReader);
-        var fileMetadataDirectoryCreatedDateHandler = new FileMetadataDirectoryCreatedDateHandler(imageMetadataReader);
-        var whatsAppHandler = new RegexCreatedDateHandler(ioWrapper, "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yyyy-MM-dd-HH-mm-ss"); // Names like PHOTO-2024-04-09-19-45-45.jpg
-        var insta360Handler = new RegexCreatedDateHandler(ioWrapper, "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])_(0[0-9]|[1-2][0-9])([0-5][0-9])([0-5][0-9])", "yyyyMMdd_HHmmss"); // Names like IMG_20240713_164531.jpg
-        var nextCloudHandler = new RegexCreatedDateHandler(ioWrapper, "[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|[1-2][0-9])-([0-5][0-9])-([0-5][0-9])", "yy-MM-dd HH-mm-ss"); // Names like 24-08-03 18-29-44 1005.png
-        
-        xmpHandler
-            .SetNext(m01XmlHandler)
-            .SetNext(insta360Handler)
-            .SetNext(whatsAppHandler)
-            .SetNext(nextCloudHandler)
-            .SetNext(exifSubIfdDirectoryHandler)
-            .SetNext(exifIfd0DirectoryHandler)
-            .SetNext(quickTimeMetadataHeaderDirectoryHandler)
-            .SetNext(quickTimeMovieHeaderDirectoryHandler)
-            // .SetNext(fileMetadataDirectoryCreatedDateHandler)
-            ;
-
-        _createdDateHandler = xmpHandler;
+        _createdDateHandlerChain = createdDateChainFactory.CreateChain();
     }
     
     public CreatedDateInfo? GetCreatedDate(string mediaPath)
     {
-        return _createdDateHandler.GetCreatedDateInfo(mediaPath);
+        return _createdDateHandlerChain.GetCreatedDateInfo(mediaPath);
     }
 }
