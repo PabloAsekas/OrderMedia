@@ -9,17 +9,17 @@ namespace OrderMedia.Services;
 /// </summary>
 public class ClassificationService : IClassificationService
 {
-    private readonly IProcessorHandlerFactory _processorHandlerFactory;
+    private readonly IProcessorChainFactory _processorChainFactory;
 
-    public ClassificationService(IProcessorHandlerFactory processorHandlerFactory)
+    public ClassificationService(IProcessorChainFactory processorChainFactory)
     {
-        _processorHandlerFactory = processorHandlerFactory;
+        _processorChainFactory = processorChainFactory;
     }
 
     public void Process(Media media)
     {
-        var processor = _processorHandlerFactory.CreateProcessorHandler(media.MediaType);
+        var processor = _processorChainFactory.Build(media.MediaType);
 
-        processor.Process(media);
+        processor?.Process(media);
     }
 }

@@ -61,10 +61,20 @@ public class MediaClassificationIntegrationTests
             .WithEnvironment("MediaExtensions__VideoExtensions:1", ".mp4")
             .WithEnvironment("MediaExtensions__VideoExtensions:2", ".insv")
             .WithEnvironment("ClassificationSettings__OverwriteFiles", "false")
-            .WithEnvironment("ClassificationSettings__RenameMediaFiles", "true")
-            .WithEnvironment("ClassificationSettings__ReplaceLongNames", "false")
             .WithEnvironment("ClassificationSettings__MaxMediaNameLength", "8")
             .WithEnvironment("ClassificationSettings__NewMediaName", "pbg")
+            .WithEnvironment("ClassificationSettings__RenameMediaFiles", "true")
+            .WithEnvironment("ClassificationSettings__ReplaceLongNames", "false")
+            .WithEnvironment("ClassificationProcessors__Processors__Image:0", "MoveMediaProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Image:1", "MoveLivePhotoProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Image:2", "MoveAaeProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Raw:0", "MoveMediaProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Raw:1", "MoveXmpProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Video:0", "MoveMediaProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Video:1", "MoveM01XmlProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__WhatsAppImage:0", "MoveMediaProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__WhatsAppVideo:0", "MoveMediaProcessorHandler")
+            .WithEnvironment("ClassificationProcessors__Processors__Insv:0", "MoveMediaProcessorHandler")
             .WithBindMount(_newMediaPath, "/app/media")
             .Build();
         
@@ -99,7 +109,6 @@ public class MediaClassificationIntegrationTests
     [TestCase("vid/1904-01-01/1904-01-01_00-00-00_IMG_7354.mp4")] // Mp4
     [TestCase("vid/2024-08-24/LRV_2024-08-24_09-46-46_11_005.insv")] // Insta 360 video - This example is not a real insv file
     [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_00_005.insv")] // Insta 360 video - This example is not a real insv file
-    [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video - This example is not a real insv file
     [TestCase("vid/2024-08-24/VID_2024-08-24_09-46-46_10_005.insv")] // Insta 360 video - This example is not a real insv file
     // Behaviours
     [TestCase("img/2024-05-17/2024-05-17_10-11-12_DSC01944.ARW")] // RAW with xmp file

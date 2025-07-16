@@ -1,4 +1,4 @@
-﻿using OrderMedia.Enums;
+﻿using System;
 using OrderMedia.Interfaces.Handlers;
 
 namespace OrderMedia.Interfaces.Factories;
@@ -9,9 +9,9 @@ namespace OrderMedia.Interfaces.Factories;
 public interface IProcessorHandlerFactory
 {
 	/// <summary>
-	/// Creates processor handler based on the Media Type.
+	/// Creates an instance of the <see cref="IProcessorHandler"/> with the given <see cref="IServiceProvider"/>.
 	/// </summary>
-	/// <param name="mediaType">Media Type.</param>
-	/// <returns>Processor Handler.</returns>
-	public IProcessorHandler CreateProcessorHandler(MediaType mediaType);
+	/// <param name="serviceProvider">Service Provider.</param>
+	/// <returns>An <see cref="IProcessorHandler"/> instance.</returns>
+	IProcessorHandler CreateInstance(IServiceProvider serviceProvider);
 }

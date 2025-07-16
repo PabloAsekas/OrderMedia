@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using OrderMedia.Enums;
-using OrderMedia.Factories;
-using OrderMedia.Handlers.Processor;
-using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
+﻿using OrderMedia.Factories;
+using OrderMedia.Interfaces.Handlers;
+using OrderMedia.UnitTests.Handlers.Processor;
 
 namespace OrderMedia.UnitTests.Factories;
 
@@ -11,66 +8,29 @@ namespace OrderMedia.UnitTests.Factories;
 public class ProcessorHandlerFactoryTests
 {
 	private Mock<IServiceProvider> _serviceProviderMock;
+	private Mock<Func<IServiceProvider, IProcessorHandler>> _factory;
 
 	[SetUp]
 	public void SetUp()
 	{
-		var ioWrapperMock = new Mock<IIoWrapper>();
-		var aaeHelperServiceMock = new Mock<IAaeHelperService>();
-		var metadataAggregatorServiceMock = new Mock<IMetadataAggregatorService>();
-		var classificationSettingsOptions = new Mock<IOptions<ClassificationSettingsOptions>>();
+		_serviceProviderMock = new Mock<IServiceProvider>();
 		
-        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
-
-		var moveLivePhotoProcessorHandler = new MoveLivePhotoProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
-
-		var moveAaeProcessorHandler = new MoveAaeProcessorHandler(ioWrapperMock.Object, aaeHelperServiceMock.Object, classificationSettingsOptions.Object);
-
-        var moveXmpProcessorHandler = new MoveXmpProcessorHandler(ioWrapperMock.Object, classificationSettingsOptions.Object);
-
-        var createdDateAggregatorProcessor = new CreatedDateAggregatorProcessorHandler(metadataAggregatorServiceMock.Object);
-
-        _serviceProviderMock = new Mock<IServiceProvider>();
-		_serviceProviderMock.Setup(x => x.GetService(typeof(MoveMediaProcessorHandler)))
-			.Returns(moveMediaProcessorHandler);
-        _serviceProviderMock.Setup(x => x.GetService(typeof(MoveLivePhotoProcessorHandler)))
-            .Returns(moveLivePhotoProcessorHandler);
-        _serviceProviderMock.Setup(x => x.GetService(typeof(MoveAaeProcessorHandler)))
-            .Returns(moveAaeProcessorHandler);
-        _serviceProviderMock.Setup(x => x.GetService(typeof(MoveXmpProcessorHandler)))
-            .Returns(moveXmpProcessorHandler);
-        _serviceProviderMock.Setup(x => x.GetService(typeof(CreatedDateAggregatorProcessorHandler)))
-            .Returns(createdDateAggregatorProcessor);
-    }
-	
-	[TestCase(MediaType.Image, typeof(MoveMediaProcessorHandler))]
-    [TestCase(MediaType.Raw, typeof(MoveMediaProcessorHandler))]
-    [TestCase(MediaType.Video, typeof(MoveMediaProcessorHandler))]
-    [TestCase(MediaType.WhatsAppImage, typeof(MoveMediaProcessorHandler))]
-    [TestCase(MediaType.WhatsAppVideo, typeof(MoveMediaProcessorHandler))]
-    [TestCase(MediaType.Insv, typeof(MoveMediaProcessorHandler))]
-    public void CreateProcessor_Returns_Successfully(MediaType mediaType, Type processor)
-	{
-		// Arrange
-		var sut = new ProcessorHandlerFactory(_serviceProviderMock.Object);
-
-		// Act
-		var result = sut.CreateProcessorHandler(mediaType);
-
-		// Assert
-		result.Should().BeOfType(processor);
+		_factory = new Mock<Func<IServiceProvider, IProcessorHandler>>();
+		_factory.Setup(x => x.Invoke(It.IsAny<IServiceProvider>()))
+			.Returns(new BaseProcessorHandlerConcrete());
     }
 
-    [Test]
-	public void CreateProcessor_Throws_Exception()
+	[Test]
+	public void CreateInstance_ExecutesFactory_Successfully()
 	{
 		// Arrange
-		var sut = new ProcessorHandlerFactory(_serviceProviderMock.Object);
-
+		var sut = new ProcessorHandlerFactory(_factory.Object);
+		
 		// Act
-		Action act = () => sut.CreateProcessorHandler(MediaType.None);
-
+		var result = sut.CreateInstance(_serviceProviderMock.Object);
+		
 		// Assert
-		act.Should().Throw<FormatException>();
+		result.Should().BeOfType<BaseProcessorHandlerConcrete>();
+		_factory.Verify(x => x.Invoke(It.IsAny<IServiceProvider>()), Times.Once);
 	}
 }

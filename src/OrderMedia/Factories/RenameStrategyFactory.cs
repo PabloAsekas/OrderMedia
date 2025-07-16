@@ -6,6 +6,9 @@ using OrderMedia.Strategies.RenameStrategy;
 
 namespace OrderMedia.Factories;
 
+/// <summary>
+/// Rename Strategy Factory. To create <<see cref="IRenameStrategy"/> by the <see cref="MediaType"/>.
+/// </summary>
 public class RenameStrategyFactory : IRenameStrategyFactory
 {
     private readonly DefaultRenameStrategy _defaultRenameStrategy;

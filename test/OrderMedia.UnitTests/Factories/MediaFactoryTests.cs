@@ -96,7 +96,11 @@ public class MediaFactoryTests
 
         var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
-            RenameMediaFiles = renamed
+            MaxMediaNameLength = 0,
+            NewMediaName = string.Empty,
+            OverwriteFiles = false,
+            RenameMediaFiles = renamed,
+            ReplaceLongNames = false
         });
         
         var sut = new MediaFactory(
@@ -132,7 +136,14 @@ public class MediaFactoryTests
         _mediaTypeServiceMock.Setup(x => x.GetMediaType(MediaPath))
             .Returns(MediaType.None);
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions());
+        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        {
+            MaxMediaNameLength = 0,
+            NewMediaName = string.Empty,
+            OverwriteFiles = false,
+            RenameMediaFiles = false,
+            ReplaceLongNames = false
+        });
 
         var sut = new MediaFactory(
             _ioWrapperMock.Object,
