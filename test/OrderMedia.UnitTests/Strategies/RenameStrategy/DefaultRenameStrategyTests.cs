@@ -36,9 +36,11 @@ public class DefaultRenameStrategyTests
 
         IOptions<ClassificationSettingsOptions> classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
-            ReplaceLongNames = replaceLongName,
+            OverwriteFiles = false,
             MaxMediaNameLength = 8,
-            NewMediaName = "pbg"
+            NewMediaName = "pbg",
+            RenameMediaFiles = false,
+            ReplaceLongNames = replaceLongName
         });
 
         _randomizerService.Setup(x => x.GetRandomNumberAsD4())

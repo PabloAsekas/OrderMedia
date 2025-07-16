@@ -34,7 +34,9 @@ public class CopyComplementFilesServiceTests
 
         IOptions<MediaPathsOptions> mediaPathsOptions = Options.Create(new MediaPathsOptions
         {
-            MediaPostProcessSource = folderToSearch
+            MediaPostProcessPath = string.Empty,
+            MediaPostProcessSource = folderToSearch,
+            MediaSourcePath = string.Empty
         });
 
         string[] combinedArray = [folderToSearch, "2014"];
@@ -106,6 +108,7 @@ public class CopyComplementFilesServiceTests
         {
             MediaPostProcessPath = folderToApply,
             MediaPostProcessSource = folderToSearch,
+            MediaSourcePath = string.Empty,
         });
 
         var finalFileName = folderToApply + nameWithoutExtension + extensionToSearch;
@@ -142,7 +145,9 @@ public class CopyComplementFilesServiceTests
         
         IOptions<MediaPathsOptions> mediaPaths = Options.Create(new MediaPathsOptions
         {
-            MediaPostProcessSource = folderToSearch
+            MediaPostProcessPath = string.Empty,
+            MediaPostProcessSource = folderToSearch,
+            MediaSourcePath = string.Empty
         });
         
         var combinedArray = new[] { folderToSearch, "2014" };

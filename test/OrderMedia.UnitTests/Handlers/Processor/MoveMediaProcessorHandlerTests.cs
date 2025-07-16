@@ -20,7 +20,11 @@ public class MoveMediaProcessorHandlerTests
         
         _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
-            RenameMediaFiles = true
+            MaxMediaNameLength = 0,
+            NewMediaName = string.Empty,
+            OverwriteFiles = false,
+            RenameMediaFiles = true,
+            ReplaceLongNames = false
         });
     }
 

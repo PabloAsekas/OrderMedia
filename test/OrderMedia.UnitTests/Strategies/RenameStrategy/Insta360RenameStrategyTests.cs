@@ -35,9 +35,11 @@ public class Insta360RenameStrategyTests
 
         IOptions<ClassificationSettingsOptions> classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
         {
-            ReplaceLongNames = replaceLongName,
             MaxMediaNameLength = 3,
-            NewMediaName = "pbg"
+            NewMediaName = "pbg",
+            OverwriteFiles = false,
+            RenameMediaFiles = false,
+            ReplaceLongNames = replaceLongName
         });
         
         _randomizerService.Setup(x => x.GetRandomNumberAsD4())

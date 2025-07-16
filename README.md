@@ -66,6 +66,7 @@ The application can be configured through the `appsettings.json` file, or enviro
 - `ClassificationSettings__NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
 - `MediaPaths__MediaPostProcessPath` *(string)*: The folder where all the exported photos are located.
 - `MediaPaths__MediaPostProcessSource` *(string)*: The folder where the original photos and files are located.
+- `ClassificationProcessors__Processors` *(dictionary string array)*: List of all the processors in order of execution by MediaType. It is configured to work properly. No need to change it.
 
 ## Docker Support
 

@@ -33,9 +33,6 @@
     <None Remove="Services\Processors\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Factories\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\src\OrderMedia\OrderMedia.csproj" />
   </ItemGroup>
 </Project>

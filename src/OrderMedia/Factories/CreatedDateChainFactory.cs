@@ -7,6 +7,9 @@ using OrderMedia.Interfaces.Handlers;
 
 namespace OrderMedia.Factories;
 
+/// <summary>
+/// Created date chain factory. To create CreatedDate chain and execute it in the right order.
+/// </summary>
 public class CreatedDateChainFactory : ICreatedDateChainFactory
 {
     private readonly IServiceProvider _serviceProvider;
