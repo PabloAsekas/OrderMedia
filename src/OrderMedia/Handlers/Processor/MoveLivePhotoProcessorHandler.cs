@@ -9,14 +9,14 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
+    private readonly ClassificationSettings _classificationSettings;
 
     public MoveLivePhotoProcessorHandler(
         IIoWrapper ioWrapper,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
@@ -58,7 +58,7 @@ public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
             newVideoName
         ]);
 
-        _ioWrapper.MoveMedia(videoLocation, newVideoLocation, _classificationSettingsOptions.OverwriteFiles);
+        _ioWrapper.MoveMedia(videoLocation, newVideoLocation, _classificationSettings.OverwriteFiles);
 
         return true;
 

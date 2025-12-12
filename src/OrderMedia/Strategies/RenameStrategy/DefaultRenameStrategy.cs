@@ -10,17 +10,17 @@ public class DefaultRenameStrategy : IRenameStrategy
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IRandomizerService _randomizerService;
-    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
+    private readonly ClassificationSettings _classificationSettings;
 
     public DefaultRenameStrategy(
         IIoWrapper ioWrapper,
         IRandomizerService randomizerService,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions
+        IOptions<ClassificationSettings> classificationSettingsOptions
         )
     {
         _ioWrapper = ioWrapper;
         _randomizerService = randomizerService;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
     public string Rename(string name, DateTimeOffset createdDateTimeOffset)
@@ -34,7 +34,7 @@ public class DefaultRenameStrategy : IRenameStrategy
         if (ReplaceName(cleanedName.Length))
         {
             var randomNumber = _randomizerService.GetRandomNumberAsD4();
-            finalName += $"_{_classificationSettingsOptions.NewMediaName}_{randomNumber}";
+            finalName += $"_{_classificationSettings.NewMediaName}_{randomNumber}";
         }
         else
         {
@@ -59,6 +59,6 @@ public class DefaultRenameStrategy : IRenameStrategy
     }
 
     private bool ReplaceName(int cleanedNameLength) {
-        return cleanedNameLength > _classificationSettingsOptions.MaxMediaNameLength && _classificationSettingsOptions.ReplaceLongNames;
+        return cleanedNameLength > _classificationSettings.MaxMediaNameLength && _classificationSettings.ReplaceLongNames;
     }
 }

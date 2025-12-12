@@ -15,21 +15,21 @@ public class ProcessorChainFactory : IProcessorChainFactory
 {
     private readonly IServiceProvider _sp;
     private readonly IReadOnlyDictionary<string, IProcessorHandlerFactory> _handlers;
-    private readonly ClassificationProcessorsOptions _classificationProcessorsOptions;
+    private readonly ClassificationSettings _classificationSettings;
     
     public ProcessorChainFactory(
         IServiceProvider sp,
         IReadOnlyDictionary<string, IProcessorHandlerFactory> handlers,
-        IOptions<ClassificationProcessorsOptions> options)
+        IOptions<ClassificationSettings> options)
     {
         _sp = sp;
         _handlers = handlers;
-        _classificationProcessorsOptions = options.Value;
+        _classificationSettings = options.Value;
     }
     
     public IProcessorHandler? Build(MediaType key)
     {
-        var processors = _classificationProcessorsOptions.Processors;
+        var processors = _classificationSettings.Processors;
         if (!processors.TryGetValue(key.ToString(), out var names) || names.Count == 0)
             return null;
 

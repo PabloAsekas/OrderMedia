@@ -10,27 +10,27 @@ public class CopyAaeFilesService
     private readonly ILogger<OrderMediaService> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly ICopyComplementFilesService _copyComplementFilesService;
-    private readonly MediaExtensionsOptions _mediaExtensionsOptions;
-    private readonly MediaPathsOptions _mediaPathsOptions;
+    private readonly MediaExtensionsSettings _mediaExtensionsSettings;
+    private readonly MediaPathsSettings _mediaPathsSettings;
 
     public CopyAaeFilesService(
         ILogger<OrderMediaService> logger,
         IIoWrapper ioWrapper,
         ICopyComplementFilesService copyComplementFilesService,
-        IOptions<MediaExtensionsOptions> mediaExtensionsOptions,
-        IOptions<MediaPathsOptions> mediaPathsOptions)
+        IOptions<MediaExtensionsSettings> mediaExtensionsOptions,
+        IOptions<MediaPathsSettings> mediaPathsOptions)
     {
         _logger = logger;
         _ioWrapper = ioWrapper;
         _copyComplementFilesService = copyComplementFilesService;
-        _mediaExtensionsOptions = mediaExtensionsOptions.Value;
-        _mediaPathsOptions = mediaPathsOptions.Value;
+        _mediaExtensionsSettings = mediaExtensionsOptions.Value;
+        _mediaPathsSettings = mediaPathsOptions.Value;
     }
     
     public void Run()
     {
-        var heicExtensions = _mediaExtensionsOptions.ImageExtensions.Where(e => e == ".heic").ToArray<string>();
-        var heicPhotos = _ioWrapper.GetFilesByExtensions(_mediaPathsOptions.MediaPostProcessPath, heicExtensions);
+        var heicExtensions = _mediaExtensionsSettings.ImageExtensions.Where(e => e == ".heic").ToArray<string>();
+        var heicPhotos = _ioWrapper.GetFilesByExtensions(_mediaPathsSettings.MediaPostProcessPath, heicExtensions);
 
         foreach (var photo in heicPhotos)
         {

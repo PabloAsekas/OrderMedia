@@ -12,7 +12,7 @@ public class ProcessorChainFactoryTests
 {
     private Mock<IServiceProvider> _serviceProviderMock;
     private IReadOnlyDictionary<string, IProcessorHandlerFactory> _handlers;
-    private IOptions<ClassificationProcessorsOptions> _options;
+    private IOptions<ClassificationSettings> _options;
 
     [SetUp]
     public void SetUp()
@@ -26,7 +26,7 @@ public class ProcessorChainFactoryTests
     public void Build_ReturnsNull_WhenNoProcessorsConfigured_Successfully()
     {
         // Arrange
-        var options = Options.Create(new ClassificationProcessorsOptions());
+        var options = Options.Create(new ClassificationSettings());
 
         var sut = new ProcessorChainFactory(_serviceProviderMock.Object, _handlers, options);
         
@@ -41,7 +41,7 @@ public class ProcessorChainFactoryTests
     public void Build_ReturnsNull_WhenProcessorsDoesNotExist_Successfully()
     {
         // Arrange
-        var options = Options.Create(new ClassificationProcessorsOptions
+        var options = Options.Create(new ClassificationSettings
         {
             Processors = new Dictionary<string, List<string>>
             {
@@ -63,7 +63,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettingsOptions>>();
+        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
         var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
         var factory = new Mock<IProcessorHandlerFactory>();
         factory.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
@@ -75,7 +75,7 @@ public class ProcessorChainFactoryTests
                 {"MoveMediaProcessorHandler", factory.Object}
             };
         
-        var options = Options.Create(new ClassificationProcessorsOptions
+        var options = Options.Create(new ClassificationSettings
         {
             Processors = new Dictionary<string, List<string>>
             {
@@ -98,7 +98,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettingsOptions>>();
+        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
         var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
         var factory = new Mock<IProcessorHandlerFactory>();
         factory.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
@@ -110,7 +110,7 @@ public class ProcessorChainFactoryTests
                 {"MoveMediaProcessorHandler", factory.Object}
             };
         
-        var options = Options.Create(new ClassificationProcessorsOptions
+        var options = Options.Create(new ClassificationSettings
         {
             Processors = new Dictionary<string, List<string>>
             {
@@ -135,7 +135,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettingsOptions>>();
+        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
         var moveMediaProcessorHandler = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
         var factory1 = new Mock<IProcessorHandlerFactory>();
         factory1.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
@@ -155,7 +155,7 @@ public class ProcessorChainFactoryTests
                 {"CreatedDateAggregatorProcessorHandler", factory2.Object}
             };
         
-        var options = Options.Create(new ClassificationProcessorsOptions
+        var options = Options.Create(new ClassificationSettings
         {
             Processors = new Dictionary<string, List<string>>
             {

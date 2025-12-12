@@ -8,25 +8,25 @@ public class CopyLivePhotoVideoService
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly ICopyComplementFilesService _copyComplementFilesService;
-    private readonly MediaPathsOptions _mediaPathsOptions;
-    private readonly MediaExtensionsOptions _mediaExtensionsOptions;
+    private readonly MediaPathsSettings _mediaPathsSettings;
+    private readonly MediaExtensionsSettings _mediaExtensionsSettings;
     
     public CopyLivePhotoVideoService(
         IIoWrapper ioWrapper,
         ICopyComplementFilesService copyComplementFilesService,
-        IOptions<MediaPathsOptions> mediaPathsOptions,
-        IOptions<MediaExtensionsOptions> mediaExtensionsOptions)
+        IOptions<MediaPathsSettings> mediaPathsOptions,
+        IOptions<MediaExtensionsSettings> mediaExtensionsOptions)
     {
         _ioWrapper = ioWrapper;
         _copyComplementFilesService = copyComplementFilesService;
-        _mediaPathsOptions = mediaPathsOptions.Value;
-        _mediaExtensionsOptions = mediaExtensionsOptions.Value;
+        _mediaPathsSettings = mediaPathsOptions.Value;
+        _mediaExtensionsSettings = mediaExtensionsOptions.Value;
     }
 
     public void Run()
     {
-        var heicExtensions = _mediaExtensionsOptions.ImageExtensions.Where(e => e == ".heic").ToArray<string>();
-        var heicPhotos = _ioWrapper.GetFilesByExtensions(_mediaPathsOptions.MediaPostProcessPath, heicExtensions);
+        var heicExtensions = _mediaExtensionsSettings.ImageExtensions.Where(e => e == ".heic").ToArray<string>();
+        var heicPhotos = _ioWrapper.GetFilesByExtensions(_mediaPathsSettings.MediaPostProcessPath, heicExtensions);
 
         foreach (var photo in heicPhotos)
         {

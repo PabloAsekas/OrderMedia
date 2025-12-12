@@ -34,7 +34,7 @@ public class DefaultRenameStrategyTests
         _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
             .Returns(name);
 
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        IOptions<ClassificationSettings> classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
             OverwriteFiles = false,
             MaxMediaNameLength = 8,

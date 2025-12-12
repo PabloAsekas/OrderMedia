@@ -9,16 +9,16 @@ public class Insta360RenameStrategy : IRenameStrategy
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IRandomizerService _randomizerService;
-    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
+    private readonly ClassificationSettings _classificationSettings;
     
     public Insta360RenameStrategy(
         IIoWrapper ioWrapper,
         IRandomizerService randomizerService,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
         _randomizerService = randomizerService;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
     public string Rename(string name, DateTimeOffset createdDateTimeOffset)
@@ -36,7 +36,7 @@ public class Insta360RenameStrategy : IRenameStrategy
         if (ReplaceName(cleanedName.Length))
         {
             var randomNumber = _randomizerService.GetRandomNumberAsD4();
-            mediaName = $"{_classificationSettingsOptions.NewMediaName}_{randomNumber}";
+            mediaName = $"{_classificationSettings.NewMediaName}_{randomNumber}";
         }
         else
         {
@@ -57,6 +57,6 @@ public class Insta360RenameStrategy : IRenameStrategy
     }
     
     private bool ReplaceName(int cleanedNameLength) {
-        return cleanedNameLength > _classificationSettingsOptions.MaxMediaNameLength && _classificationSettingsOptions.ReplaceLongNames;
+        return cleanedNameLength > _classificationSettings.MaxMediaNameLength && _classificationSettings.ReplaceLongNames;
     }
 }

@@ -10,16 +10,16 @@ public class CopyComplementFilesService : ICopyComplementFilesService
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly ILogger<CopyComplementFilesService> _logger;
-    private readonly MediaPathsOptions _mediaPathsOptions;
+    private readonly MediaPathsSettings _mediaPathsSettings;
 
     public CopyComplementFilesService(
         IIoWrapper ioWrapper,
         ILogger<CopyComplementFilesService> logger,
-        IOptions<MediaPathsOptions> mediaPathsOptions)
+        IOptions<MediaPathsSettings> mediaPathsOptions)
     {
         _ioWrapper = ioWrapper;
         _logger = logger;
-        _mediaPathsOptions = mediaPathsOptions.Value;
+        _mediaPathsSettings = mediaPathsOptions.Value;
     }
 
     public void CopyComplementFiles(string fileToApply, string extensionToSearch)
@@ -31,7 +31,7 @@ public class CopyComplementFilesService : ICopyComplementFilesService
         var year = date[..4];
 
         var yearFolder = _ioWrapper.Combine([
-            _mediaPathsOptions.MediaPostProcessSource,
+            _mediaPathsSettings.MediaPostProcessSource,
             year
         ]);
         
@@ -55,7 +55,7 @@ public class CopyComplementFilesService : ICopyComplementFilesService
                 continue;
             }
             
-            var finalName = _mediaPathsOptions.MediaPostProcessPath + name + extensionToSearch;
+            var finalName = _mediaPathsSettings.MediaPostProcessPath + name + extensionToSearch;
                 
             _ioWrapper.CopyFile(searchFile, finalName);
         }

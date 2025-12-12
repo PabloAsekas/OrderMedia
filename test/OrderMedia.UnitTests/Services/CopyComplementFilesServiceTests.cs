@@ -32,11 +32,9 @@ public class CopyComplementFilesServiceTests
         _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(fileToApply))
             .Returns("2014-07-31_22-22-22_IMG_0001");
 
-        IOptions<MediaPathsOptions> mediaPathsOptions = Options.Create(new MediaPathsOptions
+        IOptions<MediaPathsSettings> mediaPathsOptions = Options.Create(new MediaPathsSettings
         {
-            MediaPostProcessPath = string.Empty,
             MediaPostProcessSource = folderToSearch,
-            MediaSourcePath = string.Empty
         });
 
         string[] combinedArray = [folderToSearch, "2014"];
@@ -104,11 +102,10 @@ public class CopyComplementFilesServiceTests
         _ioWrapperMock.Setup(x => x.FileExists(fileToSearch))
             .Returns(true);
         
-        IOptions<MediaPathsOptions> mediaPaths = Options.Create(new MediaPathsOptions
+        IOptions<MediaPathsSettings> mediaPaths = Options.Create(new MediaPathsSettings
         {
             MediaPostProcessPath = folderToApply,
             MediaPostProcessSource = folderToSearch,
-            MediaSourcePath = string.Empty,
         });
 
         var finalFileName = folderToApply + nameWithoutExtension + extensionToSearch;
@@ -143,11 +140,9 @@ public class CopyComplementFilesServiceTests
         _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(fileToApply))
             .Returns(nameWithoutExtension);
         
-        IOptions<MediaPathsOptions> mediaPaths = Options.Create(new MediaPathsOptions
+        IOptions<MediaPathsSettings> mediaPaths = Options.Create(new MediaPathsSettings
         {
-            MediaPostProcessPath = string.Empty,
             MediaPostProcessSource = folderToSearch,
-            MediaSourcePath = string.Empty
         });
         
         var combinedArray = new[] { folderToSearch, "2014" };
