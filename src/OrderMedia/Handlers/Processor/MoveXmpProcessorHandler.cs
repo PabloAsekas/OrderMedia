@@ -8,14 +8,14 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveXmpProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettingsOptions  _classificationSettingsOptions;
+    private readonly ClassificationSettings  _classificationSettings;
 
     public MoveXmpProcessorHandler(
         IIoWrapper ioWrapper,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
     
     public override void Process(Media media)
@@ -34,7 +34,7 @@ public class MoveXmpProcessorHandler : BaseProcessorHandler
                 newXmpName
             ]);
 
-            _ioWrapper.MoveMedia(xmpLocation, newXmpLocation, _classificationSettingsOptions.OverwriteFiles);
+            _ioWrapper.MoveMedia(xmpLocation, newXmpLocation, _classificationSettings.OverwriteFiles);
         }
 
         base.Process(media);

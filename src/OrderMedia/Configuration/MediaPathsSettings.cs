@@ -3,7 +3,7 @@ namespace OrderMedia.Configuration;
 /// <summary>
 /// Represents the Media Paths configuration.
 /// </summary>
-public class MediaPathsOptions
+public class MediaPathsSettings
 {
     /// <summary>
     /// Gets the configuration section name.
@@ -13,15 +13,10 @@ public class MediaPathsOptions
     /// <summary>
     /// Gets or sets the media post-process path.
     /// </summary>
-    public required string MediaPostProcessPath { get; init; }
+    public string MediaPostProcessPath { get; init; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the media post-process source.
     /// </summary>
-    public required string MediaPostProcessSource { get; init; }
-    
-    /// <summary>
-    /// Gets or sets the media source path.
-    /// </summary>
-    public required string MediaSourcePath { get; init; }
+    public string MediaPostProcessSource { get; init; } = string.Empty;
 }

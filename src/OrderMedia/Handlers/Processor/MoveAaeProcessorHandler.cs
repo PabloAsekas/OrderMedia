@@ -10,16 +10,16 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IAaeHelperService _aaeHelperService;
-    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
+    private readonly ClassificationSettings _classificationSettings;
 
     public MoveAaeProcessorHandler(
         IIoWrapper ioWrapper,
         IAaeHelperService aaeHelperService,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
         _aaeHelperService = aaeHelperService;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
     
     public override void Process(Media media)
@@ -61,7 +61,7 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
             newAaeName
         ]);
 
-        _ioWrapper.MoveMedia(aaeLocation, newAaeLocation, _classificationSettingsOptions.OverwriteFiles);
+        _ioWrapper.MoveMedia(aaeLocation, newAaeLocation, _classificationSettings.OverwriteFiles);
 
         return true;
     }

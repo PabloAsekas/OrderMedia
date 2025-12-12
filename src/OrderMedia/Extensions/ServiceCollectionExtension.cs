@@ -57,16 +57,12 @@ public static class ServiceCollectionExtension
     /// <returns><see cref="IServiceCollection"/> with all the configuration needed by the project.</returns>
     public static IServiceCollection ConfigureOrderMedia(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddOptions<ClassificationFoldersOptions>()
-            .BindConfiguration(ClassificationFoldersOptions.ConfigurationSection);
-        services.AddOptions<ClassificationSettingsOptions>()
-            .BindConfiguration(ClassificationSettingsOptions.ConfigurationSection);
-        services.AddOptions<MediaExtensionsOptions>()
-            .BindConfiguration(MediaExtensionsOptions.ConfigurationSection);
-        services.AddOptions<MediaPathsOptions>()
-            .BindConfiguration(MediaPathsOptions.ConfigurationSection);
-        services.AddOptions<ClassificationProcessorsOptions>()
-            .BindConfiguration(ClassificationProcessorsOptions.ConfigurationSection);
+        services.AddOptions<ClassificationSettings>()
+            .BindConfiguration(ClassificationSettings.ConfigurationSection);
+        services.AddOptions<MediaExtensionsSettings>()
+            .BindConfiguration(MediaExtensionsSettings.ConfigurationSection);
+        services.AddOptions<MediaPathsSettings>()
+            .BindConfiguration(MediaPathsSettings.ConfigurationSection);
 
         return services;
     }

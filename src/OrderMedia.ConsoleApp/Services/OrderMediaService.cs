@@ -9,16 +9,15 @@ namespace OrderMedia.ConsoleApp.Services;
 /// <summary>
 /// Order Media service class.
 /// </summary>
-public class OrderMediaService : IHostedService
+public class OrderMediaService : BackgroundService
 {
     private readonly ILogger<OrderMediaService> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly IMediaFactory _mediaFactory;
     private readonly IClassificationService _classificationService;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly MediaPathsOptions _mediaPathsOptions;
-    private readonly MediaExtensionsOptions _mediaExtensionsOptions;
-    private readonly ClassificationFoldersOptions _classificationFoldersOptions;
+    private readonly MediaExtensionsSettings _mediaExtensionsSettings;
+    private readonly ClassificationSettings _classificationSettings;
 
     public OrderMediaService(
         ILogger<OrderMediaService> logger,
@@ -26,33 +25,19 @@ public class OrderMediaService : IHostedService
         IMediaFactory mediaFactoryService,
         IClassificationService classificationService,
         IHostApplicationLifetime hostApplicationLifetime,
-        IOptions<MediaPathsOptions> mediaPathsOptions,
-        IOptions<MediaExtensionsOptions> mediaExtensionsOptions,
-        IOptions<ClassificationFoldersOptions> classificationFoldersOptions)
+        IOptions<MediaExtensionsSettings> mediaExtensionsOptions,
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _logger = logger;
         _ioWrapper = ioWrapper;
         _mediaFactory = mediaFactoryService;
         _classificationService = classificationService;
         _hostApplicationLifetime = hostApplicationLifetime;
-        _mediaPathsOptions = mediaPathsOptions.Value;
-        _mediaExtensionsOptions = mediaExtensionsOptions.Value;
-        _classificationFoldersOptions = classificationFoldersOptions.Value;
-    }
-    
-    private void CreateMediaFolders()
-    {
-        _ioWrapper.CreateFolder(_ioWrapper.Combine([
-            _mediaPathsOptions.MediaSourcePath,
-            _classificationFoldersOptions.ImageFolderName
-        ]));
-        _ioWrapper.CreateFolder(_ioWrapper.Combine([
-            _mediaPathsOptions.MediaSourcePath,
-            _classificationFoldersOptions.VideoFolderName
-        ]));
+        _mediaExtensionsSettings = mediaExtensionsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.StartClassification();
 
@@ -60,17 +45,31 @@ public class OrderMediaService : IHostedService
 
         Manage();
         
-        _hostApplicationLifetime.StopApplication();
-    }
-
-    public async Task StopAsync(CancellationToken cancellationToken)
-    {
         _logger.EndClassification();
+    }
+    
+    private void CreateMediaFolders()
+    {
+        _ioWrapper.CreateFolder(_ioWrapper.Combine([
+            _classificationSettings.MediaSourcePath,
+            _classificationSettings.Folders.ImageFolderName
+        ]));
+        _ioWrapper.CreateFolder(_ioWrapper.Combine([
+            _classificationSettings.MediaSourcePath,
+            _classificationSettings.Folders.VideoFolderName
+        ]));
+    }
+    
+    private void Manage()
+    {
+        // Images first because of livePhotos classification.
+        ManageMedia(_mediaExtensionsSettings.ImageExtensions);
+        ManageMedia(_mediaExtensionsSettings.VideoExtensions);
     }
     
     private void ManageMedia(params string[] extensions)
     {
-        var allMedia = _ioWrapper.GetFilesByExtensions(_mediaPathsOptions.MediaSourcePath, extensions);
+        var allMedia = _ioWrapper.GetFilesByExtensions(_classificationSettings.MediaSourcePath, extensions);
 
         foreach (var media in allMedia)
         {
@@ -78,13 +77,6 @@ public class OrderMediaService : IHostedService
 
             _classificationService.Process(mediaObject);
         }
-    }
-
-    private void Manage()
-    {
-        // Images first because of livePhotos classification.
-        ManageMedia(_mediaExtensionsOptions.ImageExtensions);
-        ManageMedia(_mediaExtensionsOptions.VideoExtensions);
     }
 }
 

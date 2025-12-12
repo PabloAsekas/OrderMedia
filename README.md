@@ -54,19 +54,19 @@ It also supports:
 
 The application can be configured through the `appsettings.json` file, or environment variables:
 
-- `MediaPaths__MediaSourcePath` *(string)*: The source folder where all the media to be classified is.
-- `ClassificationFolders__ImageFolderName` *(string)*: Name of the folder where all the classified images will be located.
-- `ClassificationFolders__VideoFolderName` *(string)*: Name of the folder where all the classified videos will be located.
-- `MediaExtensions__ImageExtensions` *(string array)*: Image extensions list the application will check for. If a compatible extension is not specified, the application will not read those files.
-- `MediaExtensions__VideoExtensions` *(string)*: Video extensions list the application will check for.  If a compatible extension is not specified, the application will not read those files.
-- `ClassificationSettings__OverwriteFiles` *(boolena)*: Setting to allow overwriting files if the media type is already in the destination.
-- `ClassificationSettings__RenameMediaFiles` *(boolean)*: Setting to allow renaming media files with the created date or not. Ex: From `IMG_0001,heic` to `yyyy-MM-dd_HH-mm:ss_IMG_0001.heic`.
-- `ClassificationSettings__ReplaceLongNames` *(boolean)*: Setting to allow replacing the original long names with another one (composed by the setting `NewMediaName` and a 4-digit random number) when the original name is higher than the `MaxMediaNameLength` setting.
-- `ClassificationSettings__MaxMediaNameLength` *(integer)*: Maximum media name length to replace the name. If a media name length is higher than this setting, the name will be replaced with a concatenation of the setting `NewMediaName` and a 4-digit random number.
+- `ClassificationSettings__Folders__ImageFolderName` *(string)*: Name of the folder where all the classified images will be located.
+- `ClassificationSettings__Folders__VideoFolderName` *(string)*: Name of the folder where all the classified videos will be located.
+- `ClassificationSettings__MaxMediaNameLength` *(integer)*: Maximum media name length to replace the name. If a media name length is higher than this setting, the name will be replaced with a concatenation of the setting `ClassificationSettings__NewMediaName` and a 4-digit random number.
+- `ClassificationSettings__MediaSourcePath` *(string)*: The source folder where is all the media to be classified.
 - `ClassificationSettings__NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
+- `ClassificationSettings__OverwriteFiles` *(boolena)*: Setting to allow overwriting files if the media type is already in the destination.
+- `ClassificationSettings__Processors` *(dictionary string array)*: List of all the processors in order of execution by MediaType. It is configured to work properly. No need to change it.
+- `ClassificationSettings__RenameMediaFiles` *(boolean)*: Setting to allow renaming media files with the created date or not. Ex: From `IMG_0001,heic` to `yyyy-MM-dd_HH-mm-ss_IMG_0001.heic`.
+- `ClassificationSettings__ReplaceLongNames` *(boolean)*: Setting to allow replacing the original long names with another one (composed by the setting `ClassificationSettings__NewMediaName` and a 4-digit random number) when the original name is higher than the `ClassificationSettings__MaxMediaNameLength` setting.
+- `MediaExtensions__ImageExtensions` *(string array)*: Image extensions list the application will check for. If a compatible extension is not specified, the application will not read those files.
+- `MediaExtensions__VideoExtensions` *(string array)*: Video extensions list the application will check for.  If a compatible extension is not specified, the application will not read those files.
 - `MediaPaths__MediaPostProcessPath` *(string)*: The folder where all the exported photos are located.
 - `MediaPaths__MediaPostProcessSource` *(string)*: The folder where the original photos and files are located.
-- `ClassificationProcessors__Processors` *(dictionary string array)*: List of all the processors in order of execution by MediaType. It is configured to work properly. No need to change it.
 
 ## Docker Support
 

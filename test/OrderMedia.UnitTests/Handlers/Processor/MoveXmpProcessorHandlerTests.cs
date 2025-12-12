@@ -10,14 +10,14 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveXmpProcessorHandlerTests
 {
     private Mock<IIoWrapper> _ioWrapperMock;
-    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
+    private IOptions<ClassificationSettings> _classificationSettingsOptions;
 
     [SetUp]
     public void SetUp()
     {
         _ioWrapperMock = new Mock<IIoWrapper>();
         
-        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
             MaxMediaNameLength = 0,
             NewMediaName = string.Empty,

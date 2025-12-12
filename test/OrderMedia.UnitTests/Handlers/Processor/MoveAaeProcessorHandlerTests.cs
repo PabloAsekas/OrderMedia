@@ -11,7 +11,7 @@ public class MoveAaeProcessorHandlerTests
 {
     private Mock<IIoWrapper> _ioWrapperMock;
     private Mock<IAaeHelperService> _aaeHlperServiceMock;
-    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
+    private IOptions<ClassificationSettings> _classificationSettingsOptions;
     
     [SetUp]
     public void SetUp()
@@ -20,7 +20,7 @@ public class MoveAaeProcessorHandlerTests
 
         _aaeHlperServiceMock = new Mock<IAaeHelperService>();
         
-        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
             MaxMediaNameLength = 0,
             NewMediaName = string.Empty,

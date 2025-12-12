@@ -33,7 +33,7 @@ public class Insta360RenameStrategyTests
         _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
             .Returns(name);
 
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        IOptions<ClassificationSettings> classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
             MaxMediaNameLength = 3,
             NewMediaName = "pbg",

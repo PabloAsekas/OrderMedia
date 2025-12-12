@@ -9,14 +9,14 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveMediaProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettingsOptions  _classificationSettingsOptions;
+    private readonly ClassificationSettings  _classificationSettings;
 
     public MoveMediaProcessorHandler(
         IIoWrapper ioWrapper,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
@@ -30,7 +30,7 @@ public class MoveMediaProcessorHandler : BaseProcessorHandler
 
         try
         {
-            _ioWrapper.MoveMedia(media.MediaPath, media.NewMediaPath, _classificationSettingsOptions.OverwriteFiles);
+            _ioWrapper.MoveMedia(media.MediaPath, media.NewMediaPath, _classificationSettings.OverwriteFiles);
             base.Process(media);
         }
         catch (Exception e)

@@ -15,7 +15,6 @@ public class MediaFactoryTests
     private Mock<IRenameStrategyFactory> _renameStrategyFactoryMock;
     private Mock<IMediaTypeService> _mediaTypeServiceMock;
     private Mock<ICreatedDateExtractorService> _createdDateExtractorServiceMock;
-    private IOptions<ClassificationFoldersOptions> _classificationFoldersOptions;
 
     private const string MediaPath = $"{MediaFolder}/{Name}";
     private const string MediaFolder = "test/path";
@@ -58,13 +57,6 @@ public class MediaFactoryTests
         _renameStrategyFactoryMock = new Mock<IRenameStrategyFactory>();
         _renameStrategyFactoryMock.Setup(x => x.GetRenameStrategy(It.IsAny<MediaType>()))
             .Returns(renameServiceMock.Object);
-        
-        _classificationFoldersOptions = Options.Create(
-            new ClassificationFoldersOptions
-            {
-                ImageFolderName = ClassificationFolderName,
-                VideoFolderName = ClassificationFolderName,
-            });
     }
     
     [TestCase(MediaType.Image, true)]
@@ -94,13 +86,14 @@ public class MediaFactoryTests
         _mediaTypeServiceMock.Setup(x => x.GetMediaType(It.IsAny<string>()))
             .Returns(mediaType);
 
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        var classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
-            MaxMediaNameLength = 0,
-            NewMediaName = string.Empty,
-            OverwriteFiles = false,
+            Folders = new ClassificationFolders()
+            {
+                ImageFolderName = ClassificationFolderName,
+                VideoFolderName = ClassificationFolderName,
+            },
             RenameMediaFiles = renamed,
-            ReplaceLongNames = false
         });
         
         var sut = new MediaFactory(
@@ -108,7 +101,6 @@ public class MediaFactoryTests
             _renameStrategyFactoryMock.Object,
             _mediaTypeServiceMock.Object,
             _createdDateExtractorServiceMock.Object,
-            _classificationFoldersOptions,
             classificationSettingsOptions
             );
 
@@ -136,13 +128,13 @@ public class MediaFactoryTests
         _mediaTypeServiceMock.Setup(x => x.GetMediaType(MediaPath))
             .Returns(MediaType.None);
         
-        var classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        var classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
-            MaxMediaNameLength = 0,
-            NewMediaName = string.Empty,
-            OverwriteFiles = false,
-            RenameMediaFiles = false,
-            ReplaceLongNames = false
+            Folders = new ClassificationFolders()
+            {
+                ImageFolderName = ClassificationFolderName,
+                VideoFolderName = ClassificationFolderName,
+            },
         });
 
         var sut = new MediaFactory(
@@ -150,7 +142,6 @@ public class MediaFactoryTests
             _renameStrategyFactoryMock.Object,
             _mediaTypeServiceMock.Object,
             _createdDateExtractorServiceMock.Object,
-            _classificationFoldersOptions,
             classificationSettingsOptions
             );
 

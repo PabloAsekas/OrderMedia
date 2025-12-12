@@ -8,14 +8,14 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveM01XmlProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettingsOptions _classificationSettingsOptions;
+    private readonly ClassificationSettings _classificationSettings;
 
     public MoveM01XmlProcessorHandler(
         IIoWrapper ioWrapper,
-        IOptions<ClassificationSettingsOptions> classificationSettingsOptions)
+        IOptions<ClassificationSettings> classificationSettingsOptions)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettingsOptions = classificationSettingsOptions.Value;
+        _classificationSettings = classificationSettingsOptions.Value;
     }
 
     public override void Process(Media media)
@@ -34,7 +34,7 @@ public class MoveM01XmlProcessorHandler : BaseProcessorHandler
                 newM01XmlName
             ]);
 
-            _ioWrapper.MoveMedia(m01XmlLocation, newM01XmlLocation, _classificationSettingsOptions.OverwriteFiles);
+            _ioWrapper.MoveMedia(m01XmlLocation, newM01XmlLocation, _classificationSettings.OverwriteFiles);
         }
 
         base.Process(media);

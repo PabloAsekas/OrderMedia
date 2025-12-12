@@ -1,38 +1,4 @@
-﻿#FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-#ARG RESOURCE_REAPER_SESSION_ID="00000000-0000-0000-0000-000000000000"
-#LABEL "org.testcontainers.resource-reaper-session"=$RESOURCE_REAPER_SESSION_ID
-#WORKDIR /app
-#RUN chown app:app .
-#USER app
-#
-#FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-#ARG RESOURCE_REAPER_SESSION_ID="00000000-0000-0000-0000-000000000000"
-#LABEL "org.testcontainers.resource-reaper-session"=$RESOURCE_REAPER_SESSION_ID
-#ARG BUILD_CONFIGURATION=Release
-#WORKDIR /src
-#COPY ["src/OrderMedia.ConsoleApp/OrderMedia.ConsoleApp.csproj", "src/OrderMedia.ConsoleApp/"]
-#COPY ["src/OrderMedia/OrderMedia.csproj", "src/OrderMedia/"]
-#RUN dotnet restore "src/OrderMedia.ConsoleApp/OrderMedia.ConsoleApp.csproj"
-#COPY . .
-#WORKDIR "/src/src/OrderMedia.ConsoleApp"
-#RUN dotnet build "OrderMedia.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
-#
-#FROM build AS publish
-#ARG RESOURCE_REAPER_SESSION_ID="00000000-0000-0000-0000-000000000000"
-#LABEL "org.testcontainers.resource-reaper-session"=$RESOURCE_REAPER_SESSION_ID
-#ARG BUILD_CONFIGURATION=Release
-#RUN dotnet publish "OrderMedia.ConsoleApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-#
-#FROM base AS final
-#ARG RESOURCE_REAPER_SESSION_ID="00000000-0000-0000-0000-000000000000"
-#LABEL "org.testcontainers.resource-reaper-session"=$RESOURCE_REAPER_SESSION_ID
-#WORKDIR /app
-#COPY --from=publish /app/publish .
-#USER root
-#RUN chmod 744 appsettings.json
-#ENTRYPOINT ["dotnet", "OrderMedia.ConsoleApp.dll"]
-
-FROM mcr.microsoft.com/dotnet/sdk:10.0
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 ARG RESOURCE_REAPER_SESSION_ID="00000000-0000-0000-0000-000000000000"
 LABEL "org.testcontainers.resource-reaper-session"=$RESOURCE_REAPER_SESSION_ID

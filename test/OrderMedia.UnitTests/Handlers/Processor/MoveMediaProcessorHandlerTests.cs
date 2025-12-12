@@ -10,7 +10,7 @@ namespace OrderMedia.UnitTests.Handlers.Processor;
 public class MoveMediaProcessorHandlerTests
 {
     private Mock<IIoWrapper> _ioWrapperMock;
-    private IOptions<ClassificationSettingsOptions> _classificationSettingsOptions;
+    private IOptions<ClassificationSettings> _classificationSettingsOptions;
     
     [SetUp]
     public void SetUp()
@@ -18,7 +18,7 @@ public class MoveMediaProcessorHandlerTests
 
         _ioWrapperMock = new Mock<IIoWrapper>();
         
-        _classificationSettingsOptions = Options.Create(new ClassificationSettingsOptions
+        _classificationSettingsOptions = Options.Create(new ClassificationSettings
         {
             MaxMediaNameLength = 0,
             NewMediaName = string.Empty,
