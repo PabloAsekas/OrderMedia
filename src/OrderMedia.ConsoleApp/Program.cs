@@ -34,7 +34,7 @@ public class Program
         builder.Logging.AddConsole();
         builder.Services.ConfigureOrderMedia(builder.Configuration);
         builder.Services.AddOrderMedia();
-        builder.Services.AddHostedService<OrderMediaService>();
+        builder.Services.AddHostedService<ClassificationService>();
         
         return builder;
     }

@@ -1,8 +1,6 @@
-using System;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
+using OrderMedia.Models;
 
 namespace OrderMedia.Strategies.RenameStrategy;
 
@@ -10,31 +8,27 @@ public class DefaultRenameStrategy : IRenameStrategy
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IRandomizerService _randomizerService;
-    private readonly ClassificationSettings _classificationSettings;
 
     public DefaultRenameStrategy(
         IIoWrapper ioWrapper,
-        IRandomizerService randomizerService,
-        IOptions<ClassificationSettings> classificationSettingsOptions
-        )
+        IRandomizerService randomizerService)
     {
         _ioWrapper = ioWrapper;
         _randomizerService = randomizerService;
-        _classificationSettings = classificationSettingsOptions.Value;
     }
 
-    public string Rename(string name, DateTimeOffset createdDateTimeOffset)
+    public string Rename(RenameMediaRequest request)
     {
-        var finalName = createdDateTimeOffset.ToString("yyyy-MM-dd_HH-mm-ss");
+        var finalName = request.CreatedDate.ToString("yyyy-MM-dd_HH-mm-ss");
 
-        var extension = _ioWrapper.GetExtension(name);
+        var extension = _ioWrapper.GetExtension(request.Name);
 
-        var cleanedName = GetCleanedName(name);
+        var cleanedName = GetCleanedName(request.Name);
 
-        if (ReplaceName(cleanedName.Length))
+        if (ReplaceName(request.ReplaceName, request.MaximumNameLength, cleanedName.Length))
         {
             var randomNumber = _randomizerService.GetRandomNumberAsD4();
-            finalName += $"_{_classificationSettings.NewMediaName}_{randomNumber}";
+            finalName += $"_{request.NewName}_{randomNumber}";
         }
         else
         {
@@ -57,8 +51,8 @@ public class DefaultRenameStrategy : IRenameStrategy
 
         return cleanedName;
     }
-
-    private bool ReplaceName(int cleanedNameLength) {
-        return cleanedNameLength > _classificationSettings.MaxMediaNameLength && _classificationSettings.ReplaceLongNames;
+    
+    private bool ReplaceName(bool replaceName, int maximumNameLength, int nameLength) {
+        return replaceName && nameLength > maximumNameLength;
     }
 }

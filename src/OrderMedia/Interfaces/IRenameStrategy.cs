@@ -1,4 +1,4 @@
-using System;
+using OrderMedia.Models;
 
 namespace OrderMedia.Interfaces;
 
@@ -10,5 +10,6 @@ public interface IRenameStrategy
     /// <param name="name">Current name.</param>
     /// <param name="createdDateTimeOffset">Created DateTimeOffset.</param>
     /// <returns>New name.</returns>
-    public string Rename(string name, DateTimeOffset createdDateTimeOffset);
+    // public string Rename(string name, DateTimeOffset createdDateTimeOffset);
+    public string Rename(RenameMediaRequest request);
 }

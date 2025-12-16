@@ -14,8 +14,8 @@ public abstract class BaseProcessorHandler : IProcessorHandler
         return handler;
     }
 
-    public virtual void Process(Media media)
+    public virtual void Process(ProcessMediaRequest request)
     {
-        _nextHandler?.Process(media);
+        _nextHandler?.Process(request);
     }
 }

@@ -109,12 +109,12 @@ public class MediaFactoryTests
 
         // Assert
         result.Should().BeOfType<Media>();
-        result.MediaType.Should().Be(mediaType);
-        result.MediaPath.Should().Be(MediaPath);
-        result.MediaFolder.Should().Be(MediaFolder);
+        result.Type.Should().Be(mediaType);
+        result.Path.Should().Be(MediaPath);
+        result.DirectoryPath.Should().Be(MediaFolder);
         result.Name.Should().Be(Name);
         result.NameWithoutExtension.Should().Be(NameWithoutExtension);
-        result.CreatedDateTimeOffset.Should().Be(CreatedDateTimeOffset);
+        result.CreatedDateTime.Should().Be(CreatedDateTimeOffset);
         result.NewMediaPath.Should().Be(finalMediaPath);
         result.NewMediaFolder.Should().Be(NewMediaFolder);
         result.NewName.Should().Be(finalNewName);

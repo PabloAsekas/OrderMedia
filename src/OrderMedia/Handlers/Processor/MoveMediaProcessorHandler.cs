@@ -9,29 +9,26 @@ namespace OrderMedia.Handlers.Processor;
 public class MoveMediaProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettings  _classificationSettings;
 
-    public MoveMediaProcessorHandler(
-        IIoWrapper ioWrapper,
-        IOptions<ClassificationSettings> classificationSettingsOptions)
+    public MoveMediaProcessorHandler(IIoWrapper ioWrapper)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettings = classificationSettingsOptions.Value;
     }
 
-    public override void Process(Media media)
+    public override void Process(ProcessMediaRequest request)
     {
-        if (media.CreatedDateTimeOffset == default(DateTimeOffset))
+        if (request.Original.CreatedDateTime == default(DateTimeOffset))
         {
             return;
         }
 
-        _ioWrapper.CreateFolder(media.NewMediaFolder);
+        _ioWrapper.CreateFolder(request.Target.DirectoryPath);
 
         try
         {
-            _ioWrapper.MoveMedia(media.MediaPath, media.NewMediaPath, _classificationSettings.OverwriteFiles);
-            base.Process(media);
+            _ioWrapper.MoveMedia(request.Original.Path, request.Target.Path, request.OverwriteFiles);
+            
+            base.Process(request);
         }
         catch (Exception e)
         {

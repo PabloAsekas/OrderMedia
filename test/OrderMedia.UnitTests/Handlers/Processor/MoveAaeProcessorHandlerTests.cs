@@ -39,12 +39,12 @@ public class MoveAaeProcessorHandlerTests
         var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
-            MediaFolder = "photos",
+            DirectoryPath = "photos",
             NewMediaFolder = "2014-07-31",
             NewNameWithoutExtension = "2014-07-31_22-15-15_IMG_0001"
         };
 
-        var aaeLocation = $"{media.MediaFolder}/{aaeName}";
+        var aaeLocation = $"{media.DirectoryPath}/{aaeName}";
 
         var newAaeName = $"{media.NewNameWithoutExtension}.aae";
 
@@ -53,7 +53,7 @@ public class MoveAaeProcessorHandlerTests
         _aaeHlperServiceMock.Setup(x => x.GetAaeName(media.NameWithoutExtension))
             .Returns(aaeName);
 
-        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.MediaFolder, aaeName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.DirectoryPath, aaeName }))
             .Returns(aaeLocation);
 
         _ioWrapperMock.Setup(x => x.FileExists(aaeLocation))

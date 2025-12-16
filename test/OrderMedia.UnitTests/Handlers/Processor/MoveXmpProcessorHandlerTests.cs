@@ -36,18 +36,18 @@ public class MoveXmpProcessorHandlerTests
         var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
-            MediaFolder = "photos",
+            DirectoryPath = "photos",
             NewMediaFolder = "2014-07-31",
             NewNameWithoutExtension = "2014-07-31_22-15-15_IMG_0001"
         };
 
-        var xmpLocation = $"{media.MediaFolder}/{xmpName}";
+        var xmpLocation = $"{media.DirectoryPath}/{xmpName}";
 
         var newXmpName = $"{media.NewNameWithoutExtension}.xmp";
 
         var newXmpLocation = $"{media.NewMediaFolder}/{newXmpName}";
         
-        _ioWrapperMock.Setup(x => x.Combine(new[] { media.MediaFolder, xmpName }))
+        _ioWrapperMock.Setup(x => x.Combine(new[] { media.DirectoryPath, xmpName }))
             .Returns(xmpLocation);
 
         _ioWrapperMock.Setup(x => x.FileExists(xmpLocation))

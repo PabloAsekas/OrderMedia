@@ -24,7 +24,6 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddOrderMedia(this IServiceCollection services)
     {
         services
-            .AddScoped<IClassificationService, ClassificationService>()
             .AddScoped<ICopyComplementFilesService, CopyComplementFilesService>()
             .AddScoped<ICreatedDateExtractorService, CreatedDateExtractorService>()
             .AddScoped<IImageMetadataReader, ImageMetadataReaderWrapper>()
@@ -110,6 +109,16 @@ public static class ServiceCollectionExtension
             ["MoveXmpProcessorHandler"] = new ProcessorHandlerFactory(sp => sp.GetRequiredService<MoveXmpProcessorHandler>())
         });
 
+        services.AddSingleton<IReadOnlyDictionary<string, List<string>>>(_ => new Dictionary<string, List<string>>
+        {
+            ["Image"] = ["MoveMediaProcessorHandler", "MoveLivePhotoProcessorHandler", "MoveAaeProcessorHandler"],
+            ["Raw"] = ["MoveMediaProcessorHandler", "MoveXmpProcessorHandler"],
+            ["Video"] = ["MoveMediaProcessorHandler", "MoveM01XmlProcessorHandler"],
+            ["WhatsAppImage"] = ["MoveMediaProcessorHandler"],
+            ["WhatsAppVideo"] = ["MoveMediaProcessorHandler"],
+            ["Insv"] = ["MoveMediaProcessorHandler"]
+        });
+        
         services.AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>();
         services.AddScoped<IProcessorChainFactory, ProcessorChainFactory>();
         

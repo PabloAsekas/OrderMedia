@@ -24,7 +24,7 @@ public class CreatedDateAggregatorProcessorHandlerTests
         // Arrange
         var media = new Media()
         {
-            CreatedDateTimeOffset = new DateTime(2014, 07, 31, 22, 15, 15),
+            CreatedDateTime = new DateTime(2014, 07, 31, 22, 15, 15),
             NewMediaPath = "/photos/2014-07-31/2014-07-31_22-15-15_IMG_0001",
         };
 
@@ -39,7 +39,7 @@ public class CreatedDateAggregatorProcessorHandlerTests
         sut.Process(media);
         
         // Assert
-        var mediaDateTime = media.CreatedDateTimeOffset.ToString("yyyy:MM:dd HH:mm:ss");
+        var mediaDateTime = media.CreatedDateTime.ToString("yyyy:MM:dd HH:mm:ss");
         var offset = "+01:00";
         
         _metadataAggregatorServiceMock.Verify(x => x.GetImage(media.NewMediaPath), Times.Once);

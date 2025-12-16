@@ -7,14 +7,14 @@ namespace OrderMedia.ConsoleApp.Services;
 
 public class CopyAaeFilesService
 {
-    private readonly ILogger<OrderMediaService> _logger;
+    private readonly ILogger<ClassificationService> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly ICopyComplementFilesService _copyComplementFilesService;
     private readonly MediaExtensionsSettings _mediaExtensionsSettings;
     private readonly MediaPathsSettings _mediaPathsSettings;
 
     public CopyAaeFilesService(
-        ILogger<OrderMediaService> logger,
+        ILogger<ClassificationService> logger,
         IIoWrapper ioWrapper,
         ICopyComplementFilesService copyComplementFilesService,
         IOptions<MediaExtensionsSettings> mediaExtensionsOptions,

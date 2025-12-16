@@ -35,9 +35,9 @@ public class MoveMediaProcessorHandlerTests
         var media = new Media
         {
             NewMediaFolder = "/2014-07-31/",
-            MediaPath = "test/photos/IMG_0001.jpg",
+            Path = "test/photos/IMG_0001.jpg",
             NewMediaPath = "test/photos/img/2014-07-31/2014-07-31_22-15-15_IMG_0001.jpg",
-            CreatedDateTimeOffset = new DateTimeOffset(new DateTime(2014, 07, 31, 22, 15, 15)),
+            CreatedDateTime = new DateTimeOffset(new DateTime(2014, 07, 31, 22, 15, 15)),
         };
 
         var sut = new MoveMediaProcessorHandler(
@@ -50,7 +50,7 @@ public class MoveMediaProcessorHandlerTests
 
         // Assert
         _ioWrapperMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Once);
-        _ioWrapperMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Once);
+        _ioWrapperMock.Verify(x => x.MoveMedia(media.Path, media.NewMediaPath, It.IsAny<bool>()), Times.Once);
     }
 
     [Test]
@@ -60,7 +60,7 @@ public class MoveMediaProcessorHandlerTests
         var media = new Media
         {
             NewMediaFolder = "/2014-07-31/",
-            MediaPath = "test/photos/IMG_0001.jpg",
+            Path = "test/photos/IMG_0001.jpg",
             NewMediaPath = "test/photos/img/2014-07-31/2014-07-31_22-15-15_IMG_0001.jpg",
         };
 
@@ -74,6 +74,6 @@ public class MoveMediaProcessorHandlerTests
 
         // Assert
         _ioWrapperMock.Verify(x => x.CreateFolder(media.NewMediaFolder), Times.Never);
-        _ioWrapperMock.Verify(x => x.MoveMedia(media.MediaPath, media.NewMediaPath, It.IsAny<bool>()), Times.Never);
+        _ioWrapperMock.Verify(x => x.MoveMedia(media.Path, media.NewMediaPath, It.IsAny<bool>()), Times.Never);
     }
 }

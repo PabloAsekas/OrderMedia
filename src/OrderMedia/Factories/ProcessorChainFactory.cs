@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using OrderMedia.Configuration;
 using OrderMedia.Enums;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Interfaces.Handlers;
@@ -15,21 +13,21 @@ public class ProcessorChainFactory : IProcessorChainFactory
 {
     private readonly IServiceProvider _sp;
     private readonly IReadOnlyDictionary<string, IProcessorHandlerFactory> _handlers;
-    private readonly ClassificationSettings _classificationSettings;
+    private readonly IReadOnlyDictionary<string, List<string>> _processors;
     
     public ProcessorChainFactory(
         IServiceProvider sp,
         IReadOnlyDictionary<string, IProcessorHandlerFactory> handlers,
-        IOptions<ClassificationSettings> options)
+        IReadOnlyDictionary<string, List<string>> processors)
     {
         _sp = sp;
         _handlers = handlers;
-        _classificationSettings = options.Value;
+        _processors = processors;
     }
     
     public IProcessorHandler? Build(MediaType key)
     {
-        var processors = _classificationSettings.Processors;
+        var processors = _processors;
         if (!processors.TryGetValue(key.ToString(), out var names) || names.Count == 0)
             return null;
 

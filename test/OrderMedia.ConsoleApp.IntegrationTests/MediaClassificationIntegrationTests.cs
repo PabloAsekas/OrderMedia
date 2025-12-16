@@ -63,16 +63,6 @@ public class MediaClassificationIntegrationTests
             .WithEnvironment("ClassificationSettings__MediaSourcePath", "/app/media")
             .WithEnvironment("ClassificationSettings__NewMediaName", "pbg")
             .WithEnvironment("ClassificationSettings__OverwriteFiles", "false")
-            .WithEnvironment("ClassificationSettings__Processors__Image:0", "MoveMediaProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Image:1", "MoveLivePhotoProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Image:2", "MoveAaeProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Raw:0", "MoveMediaProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Raw:1", "MoveXmpProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Video:0", "MoveMediaProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Video:1", "MoveM01XmlProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__WhatsAppImage:0", "MoveMediaProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__WhatsAppVideo:0", "MoveMediaProcessorHandler")
-            .WithEnvironment("ClassificationSettings__Processors__Insv:0", "MoveMediaProcessorHandler")
             .WithEnvironment("ClassificationSettings__RenameMediaFiles", "true")
             .WithEnvironment("ClassificationSettings__ReplaceLongNames", "false")
             .WithBindMount(_newMediaPath, "/app/media")
@@ -88,7 +78,7 @@ public class MediaClassificationIntegrationTests
     {
         await _container.StopAsync();
         await _dockerImage.DeleteAsync();
-        Directory.Delete(_newMediaPath, true);
+        // Directory.Delete(_newMediaPath, true);
         await _container.DisposeAsync();
         await _dockerImage.DisposeAsync();
     }

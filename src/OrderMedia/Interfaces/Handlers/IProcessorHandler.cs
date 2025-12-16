@@ -15,8 +15,8 @@ public interface IProcessorHandler
     IProcessorHandler SetNext(IProcessorHandler handler);
     
     /// <summary>
-    /// Process the media.
+    /// Process the request from the old media to get the new media.
     /// </summary>
-    /// <param name="media">Media to be processed.</param>
-    void Process(Media media);
+    /// <param name="request">Requests to be processed.</param>
+    void Process(ProcessMediaRequest request);
 }

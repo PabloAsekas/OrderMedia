@@ -34,20 +34,20 @@ public class MoveLivePhotoProcessorHandlerTests
         var media = new Media
         {
             NameWithoutExtension = "IMG_0001",
-            MediaFolder = "photos",
+            DirectoryPath = "photos",
             NewMediaFolder = "2014-07-31",
             NewNameWithoutExtension = "2014-07-31_22-15-15_IMG_0001"
         };
 
         string videoName = $"{media.NameWithoutExtension}.mov";
 
-        var videoLocation = $"{media.MediaFolder}/{videoName}";
+        var videoLocation = $"{media.DirectoryPath}/{videoName}";
 
         var newVideoName = $"{media.NewNameWithoutExtension}.mov";
 
         var newVideoLocation = $"{media.NewMediaFolder}/{newVideoName}";
 
-        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.MediaFolder, videoName }))
+        _ioWrapperMock.Setup(x => x.Combine(new string[] { media.DirectoryPath, videoName }))
             .Returns(videoLocation);
 
         _ioWrapperMock.Setup(x => x.GetExtension(It.IsAny<string>()))

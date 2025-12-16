@@ -3,12 +3,12 @@ namespace OrderMedia.Models;
 public class CreatedDateInfo
 {
     /// <summary>
-    /// Gets or sets CreatedDate.
+    /// Medias Created Date.
     /// </summary>
-    public string CreatedDate { get; set; }
+    public string CreatedDate { get; init; }
     
     /// <summary>
-    /// Gets or sets Format.
+    /// Format of the Created Date.
     /// </summary>
-    public string Format { get; set; }
+    public string Format { get; init; }
 }
