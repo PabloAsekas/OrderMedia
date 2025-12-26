@@ -1,4 +1,4 @@
-namespace OrderMedia.Configuration;
+namespace OrderMedia.ConsoleApp.Configuration;
 
 /// <summary>
 /// Represents the Media Extensions configuration.

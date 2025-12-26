@@ -78,7 +78,7 @@ public class MediaClassificationIntegrationTests
     {
         await _container.StopAsync();
         await _dockerImage.DeleteAsync();
-        // Directory.Delete(_newMediaPath, true);
+        Directory.Delete(_newMediaPath, true);
         await _container.DisposeAsync();
         await _dockerImage.DisposeAsync();
     }

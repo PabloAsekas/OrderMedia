@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
@@ -19,7 +17,7 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
     
     public override void Process(ProcessMediaRequest request)
     {
-        var possibleNames = new List<string>()
+        var possibleNames = new List<string>
         {
             $"{request.Original.NameWithoutExtension}.aae",
             _aaeHelperService.GetAaeName(request.Original.NameWithoutExtension),

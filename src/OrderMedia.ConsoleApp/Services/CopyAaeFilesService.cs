@@ -1,20 +1,20 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
+using OrderMedia.ConsoleApp.Configuration;
 
 namespace OrderMedia.ConsoleApp.Services;
 
 public class CopyAaeFilesService
 {
-    private readonly ILogger<ClassificationService> _logger;
+    private readonly ILogger<CopyAaeFilesService> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly ICopyComplementFilesService _copyComplementFilesService;
     private readonly MediaExtensionsSettings _mediaExtensionsSettings;
     private readonly MediaPathsSettings _mediaPathsSettings;
 
     public CopyAaeFilesService(
-        ILogger<ClassificationService> logger,
+        ILogger<CopyAaeFilesService> logger,
         IIoWrapper ioWrapper,
         ICopyComplementFilesService copyComplementFilesService,
         IOptions<MediaExtensionsSettings> mediaExtensionsOptions,

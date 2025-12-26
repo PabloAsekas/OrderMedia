@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
-using OrderMedia.Configuration;
 using OrderMedia.Handlers.CreatedDate;
 using OrderMedia.Services;
 using OrderMedia.Strategies.RenameStrategy;
@@ -45,24 +43,6 @@ public static class ServiceCollectionExtension
 
         services.AddProcessorHandlers();
             
-        return services;
-    }
-
-    /// <summary>
-    /// Configures OrderMedia.
-    /// </summary>
-    /// <param name="services">Service Collection.</param>
-    /// <param name="configuration">Configuration.</param>
-    /// <returns><see cref="IServiceCollection"/> with all the configuration needed by the project.</returns>
-    public static IServiceCollection ConfigureOrderMedia(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddOptions<ClassificationSettings>()
-            .BindConfiguration(ClassificationSettings.ConfigurationSection);
-        services.AddOptions<MediaExtensionsSettings>()
-            .BindConfiguration(MediaExtensionsSettings.ConfigurationSection);
-        services.AddOptions<MediaPathsSettings>()
-            .BindConfiguration(MediaPathsSettings.ConfigurationSection);
-
         return services;
     }
 

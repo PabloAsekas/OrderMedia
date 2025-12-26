@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Configuration;
-
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveM01XmlProcessorHandler : BaseProcessorHandler

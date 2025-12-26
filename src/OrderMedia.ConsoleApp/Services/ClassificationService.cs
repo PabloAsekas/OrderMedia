@@ -1,165 +1,90 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
-using OrderMedia.Configuration;
-using OrderMedia.Enums;
+using OrderMedia.ConsoleApp.Configuration;
+using OrderMedia.ConsoleApp.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.ConsoleApp.Services;
-/// <summary>
-/// Order Media service class.
-/// </summary>
-public class ClassificationService : BackgroundService
+
+public class ClassificationService : IClassificationService
 {
-    private readonly ILogger<ClassificationService> _logger;
     private readonly IIoWrapper _ioWrapper;
-    private readonly IMediaFactory _mediaFactory;
-    private readonly IProcessorChainFactory _processorChainFactory;
-    private readonly MediaExtensionsSettings _mediaExtensionsSettings;
     private readonly ClassificationSettings _classificationSettings;
     private readonly IRenameStrategyFactory _renameStrategyFactory;
+    private readonly IClassificationMediaFolderStrategyResolver _mediaFolderStrategyResolver;
 
     public ClassificationService(
-        ILogger<ClassificationService> logger,
         IIoWrapper ioWrapper,
-        IMediaFactory mediaFactoryService,
-        IProcessorChainFactory processorChainFactory,
-        IOptions<MediaExtensionsSettings> mediaExtensionsOptions,
         IOptions<ClassificationSettings> classificationSettingsOptions,
-        IRenameStrategyFactory renameStrategyFactory)
+        IRenameStrategyFactory renameStrategyFactory,
+        IClassificationMediaFolderStrategyResolver mediaFolderStrategyResolver)
     {
-        _logger = logger;
         _ioWrapper = ioWrapper;
-        _mediaFactory = mediaFactoryService;
-        _processorChainFactory = processorChainFactory;
         _renameStrategyFactory = renameStrategyFactory;
-        _mediaExtensionsSettings = mediaExtensionsOptions.Value;
         _classificationSettings = classificationSettingsOptions.Value;
+        _mediaFolderStrategyResolver = mediaFolderStrategyResolver;
     }
 
-    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+    public Media Classify(Media original)
     {
-        _logger.StartClassification();
+        var targetFolder = ResolveTargetFolder(original);
 
-        CreateMediaFolders();
+        var targetDirectory = BuildTargetDirectory(original, targetFolder);
 
-        Manage();
+        var targetName = ResolveTargetName(original);
+
+        return CreateTargetMedia(original, targetDirectory, targetName);
+    }
+
+    private string ResolveTargetFolder(Media original)
+    {
+        var strategy = _mediaFolderStrategyResolver.Resolve(original.Type);
+
+        return strategy.GetTargetFolder();
+    }
+
+    private string BuildTargetDirectory(Media original, string targetFolder)
+    {
+        var folderName = original.CreatedDateTime.ToString("yyyy-MM-dd");
         
-        _logger.EndClassification();
-    }
-    
-    private void CreateMediaFolders()
-    {
-        _ioWrapper.CreateFolder(_ioWrapper.Combine([
-            _classificationSettings.MediaSourcePath,
-            _classificationSettings.Folders.ImageFolderName
-        ]));
-        _ioWrapper.CreateFolder(_ioWrapper.Combine([
-            _classificationSettings.MediaSourcePath,
-            _classificationSettings.Folders.VideoFolderName
-        ]));
-    }
-    
-    private void Manage()
-    {
-        // Images first because of livePhotos classification.
-        ManageMedia(_mediaExtensionsSettings.ImageExtensions);
-        ManageMedia(_mediaExtensionsSettings.VideoExtensions);
-    }
-    
-    private void ManageMedia(params string[] extensions)
-    {
-        var allMediaFileInfo = _ioWrapper.GetFilesByExtensions(_classificationSettings.MediaSourcePath, extensions);
-
-        foreach (var mediaFileInfo in allMediaFileInfo)
-        {
-            var fromMedia = _mediaFactory.CreateMedia(mediaFileInfo.FullName);
-            
-            var toMedia = CreateClassificationMedia(fromMedia);
-
-            var request = new ProcessMediaRequest()
-            {
-                Original = fromMedia,
-                Target = toMedia,
-                OverwriteFiles = _classificationSettings.OverwriteFiles
-            };
-            
-            var processor = _processorChainFactory.Build(fromMedia.Type);
-            
-            processor!.Process(request);
-        }
+        return _ioWrapper.Combine([original.DirectoryPath, targetFolder, folderName]);
     }
 
-    private Media CreateClassificationMedia(Media fromMedia)
-    { 
-        var classificationFolderName = GetClassificationFolderName(fromMedia.Type);
-        
-        var createdDateTimeOffsetAsString = fromMedia.CreatedDateTime.ToString("yyyy-MM-dd");
-
-        var newMediaFolder = _ioWrapper.Combine(new[] { fromMedia.DirectoryPath, classificationFolderName, createdDateTimeOffsetAsString });
-
-        var newName = GetNewName(fromMedia.Type, fromMedia.Name, fromMedia.CreatedDateTime);
-
-        var newNameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(newName);
-
-        var newMediaPath = _ioWrapper.Combine(new[] { newMediaFolder, newName });
-
-        var classificationMedia = new Media
-        {
-            Type = fromMedia.Type,
-            Path = newMediaPath,
-            DirectoryPath = newMediaFolder,
-            Name = newName,
-            NameWithoutExtension = newNameWithoutExtension,
-            CreatedDateTime = fromMedia.CreatedDateTime,
-        };
-        
-        return classificationMedia;
-    }
-    
-    private string GetClassificationFolderName(MediaType mediaType)
-    {
-        return mediaType switch
-        {
-            MediaType.Image => _classificationSettings.Folders.ImageFolderName,
-            MediaType.Raw => _classificationSettings.Folders.ImageFolderName,
-            MediaType.Video => _classificationSettings.Folders.VideoFolderName,
-            MediaType.WhatsAppImage => _classificationSettings.Folders.ImageFolderName,
-            MediaType.WhatsAppVideo => _classificationSettings.Folders.VideoFolderName,
-            MediaType.Insv => _classificationSettings.Folders.VideoFolderName,
-            _ => throw new FormatException($"The provided media type '{mediaType}' is not supported."),
-        };
-    }
-
-    private string GetNewName(MediaType mediaType, string originalName, DateTimeOffset createdDateTimeOffset)
+    private string ResolveTargetName(Media original)
     {
         if (!_classificationSettings.RenameMediaFiles)
         {
-            return originalName;
+            return original.Name;
         }
-
-        var renameStrategy = _renameStrategyFactory.GetRenameStrategy(mediaType);
+        
+        var strategy = _renameStrategyFactory.GetRenameStrategy(original.Type);
 
         var request = new RenameMediaRequest
         {
-            Name = originalName,
-            CreatedDate = createdDateTimeOffset,
+            Name = original.Name,
+            CreatedDate =  original.CreatedDateTime,
             ReplaceName = _classificationSettings.ReplaceLongNames,
             MaximumNameLength = _classificationSettings.MaxMediaNameLength,
             NewName = _classificationSettings.NewMediaName
         };
         
-        return renameStrategy.Rename(request);
+        return strategy.Rename(request);
     }
-}
 
-internal static partial class Log
-{
-    [LoggerMessage(Level = LogLevel.Information, Message = "Classification started")]
-    public static partial void StartClassification(this ILogger<ClassificationService> logger);
-    
-    [LoggerMessage(Level = LogLevel.Information, Message = "Classification ended")]
-    public static partial void EndClassification(this ILogger<ClassificationService> logger);
+    private Media CreateTargetMedia(Media original, string targetDirectory, string targetName)
+    {
+        var path = _ioWrapper.Combine([targetDirectory, targetName]);
+        var nameWithoutExtension = _ioWrapper.GetFileNameWithoutExtension(targetName);
+        
+        return new Media
+        {
+            Type = original.Type,
+            Path = path,
+            DirectoryPath = targetDirectory,
+            Name = targetName,
+            NameWithoutExtension = nameWithoutExtension,
+            CreatedDateTime = original.CreatedDateTime,
+        };
+    }
 }

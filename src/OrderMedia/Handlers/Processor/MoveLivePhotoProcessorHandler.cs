@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 

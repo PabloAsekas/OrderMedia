@@ -1,6 +1,5 @@
-using Microsoft.Extensions.Options;
-using OrderMedia.Configuration;
 using OrderMedia.Interfaces;
+using OrderMedia.Models;
 using OrderMedia.Strategies.RenameStrategy;
 
 namespace OrderMedia.UnitTests.Strategies.RenameStrategy;
@@ -28,32 +27,30 @@ public class Insta360RenameStrategyTests
         // Arrange
         var createdDateTime = new DateTime(2014, 7, 31, 22, 15, 15);
 
+        var fullName = name + extension;
+
+        var request = new RenameMediaRequest
+        {
+            Name = fullName,
+            CreatedDate = createdDateTime,
+            ReplaceName = replaceLongName,
+            MaximumNameLength = 3,
+            NewName = "pbg"
+        };
+        
         _ioWrapperMock.Setup(x => x.GetExtension(It.IsAny<string>()))
             .Returns(extension);
         _ioWrapperMock.Setup(x => x.GetFileNameWithoutExtension(It.IsAny<string>()))
             .Returns(name);
-
-        IOptions<ClassificationSettings> classificationSettingsOptions = Options.Create(new ClassificationSettings
-        {
-            MaxMediaNameLength = 3,
-            NewMediaName = "pbg",
-            OverwriteFiles = false,
-            RenameMediaFiles = false,
-            ReplaceLongNames = replaceLongName
-        });
         
         _randomizerService.Setup(x => x.GetRandomNumberAsD4())
             .Returns("1234");
 
-        var fullName = name + extension;
 
-        var sut = new Insta360RenameStrategy(
-            _ioWrapperMock.Object,
-            _randomizerService.Object,
-            classificationSettingsOptions);
+        var sut = new Insta360RenameStrategy(_ioWrapperMock.Object, _randomizerService.Object);
 
         // Act
-        var result = sut.Rename(fullName, createdDateTime);
+        var result = sut.Rename(request);
 
         // Assert
         result.Should().Be(renamed);

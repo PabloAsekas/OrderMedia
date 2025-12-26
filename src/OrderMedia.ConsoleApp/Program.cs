@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OrderMedia.ConsoleApp.Extensions;
 using OrderMedia.ConsoleApp.Services;
 using OrderMedia.Extensions;
 
@@ -32,9 +33,9 @@ public class Program
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Logging.AddConsole();
-        builder.Services.ConfigureOrderMedia(builder.Configuration);
+        builder.Services.ConfigureApplication();
+        builder.Services.AddConsoleAppServices();
         builder.Services.AddOrderMedia();
-        builder.Services.AddHostedService<ClassificationService>();
         
         return builder;
     }
