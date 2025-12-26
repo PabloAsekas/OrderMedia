@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
-using OrderMedia.Configuration;
 using OrderMedia.Handlers.CreatedDate;
 using OrderMedia.Services;
 using OrderMedia.Strategies.RenameStrategy;
@@ -24,7 +22,6 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddOrderMedia(this IServiceCollection services)
     {
         services
-            .AddScoped<IClassificationService, ClassificationService>()
             .AddScoped<ICopyComplementFilesService, CopyComplementFilesService>()
             .AddScoped<ICreatedDateExtractorService, CreatedDateExtractorService>()
             .AddScoped<IImageMetadataReader, ImageMetadataReaderWrapper>()
@@ -46,24 +43,6 @@ public static class ServiceCollectionExtension
 
         services.AddProcessorHandlers();
             
-        return services;
-    }
-
-    /// <summary>
-    /// Configures OrderMedia.
-    /// </summary>
-    /// <param name="services">Service Collection.</param>
-    /// <param name="configuration">Configuration.</param>
-    /// <returns><see cref="IServiceCollection"/> with all the configuration needed by the project.</returns>
-    public static IServiceCollection ConfigureOrderMedia(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddOptions<ClassificationSettings>()
-            .BindConfiguration(ClassificationSettings.ConfigurationSection);
-        services.AddOptions<MediaExtensionsSettings>()
-            .BindConfiguration(MediaExtensionsSettings.ConfigurationSection);
-        services.AddOptions<MediaPathsSettings>()
-            .BindConfiguration(MediaPathsSettings.ConfigurationSection);
-
         return services;
     }
 
@@ -110,6 +89,16 @@ public static class ServiceCollectionExtension
             ["MoveXmpProcessorHandler"] = new ProcessorHandlerFactory(sp => sp.GetRequiredService<MoveXmpProcessorHandler>())
         });
 
+        services.AddSingleton<IReadOnlyDictionary<string, List<string>>>(_ => new Dictionary<string, List<string>>
+        {
+            ["Image"] = ["MoveMediaProcessorHandler", "MoveLivePhotoProcessorHandler", "MoveAaeProcessorHandler"],
+            ["Raw"] = ["MoveMediaProcessorHandler", "MoveXmpProcessorHandler"],
+            ["Video"] = ["MoveMediaProcessorHandler", "MoveM01XmlProcessorHandler"],
+            ["WhatsAppImage"] = ["MoveMediaProcessorHandler"],
+            ["WhatsAppVideo"] = ["MoveMediaProcessorHandler"],
+            ["Insv"] = ["MoveMediaProcessorHandler"]
+        });
+        
         services.AddScoped<IProcessorHandlerFactory, ProcessorHandlerFactory>();
         services.AddScoped<IProcessorChainFactory, ProcessorChainFactory>();
         

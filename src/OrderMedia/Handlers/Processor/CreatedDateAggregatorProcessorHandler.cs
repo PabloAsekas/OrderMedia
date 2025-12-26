@@ -13,13 +13,13 @@ public class CreatedDateAggregatorProcessorHandler : BaseProcessorHandler
         _metadataAggregatorService = metadataAggregatorService;
     }
 
-    public override void Process(Media media)
+    public override void Process(ProcessMediaRequest request)
     {
-        using var image = _metadataAggregatorService.GetImage(media.NewMediaPath);
+        using var image = _metadataAggregatorService.GetImage(request.Target.Path);
         
         var exifProfile = image.Metadata.ExifProfile ?? new ExifProfile();
 
-        var mediaDateTime = media.CreatedDateTimeOffset.ToString("yyyy:MM:dd HH:mm:ss");
+        var mediaDateTime = request.Target.CreatedDateTime.ToString("yyyy:MM:dd HH:mm:ss");
         
         exifProfile.SetValue(ExifTag.DateTimeOriginal, mediaDateTime);
         exifProfile.SetValue(ExifTag.DateTime, mediaDateTime);
@@ -30,8 +30,8 @@ public class CreatedDateAggregatorProcessorHandler : BaseProcessorHandler
         
         image.Metadata.ExifProfile = exifProfile;
         
-        _metadataAggregatorService.SaveImage(image, media.NewMediaPath);
+        _metadataAggregatorService.SaveImage(image, request.Target.Path);
         
-        base.Process(media);
+        base.Process(request);
     }
 }

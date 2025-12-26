@@ -60,7 +60,6 @@ The application can be configured through the `appsettings.json` file, or enviro
 - `ClassificationSettings__MediaSourcePath` *(string)*: The source folder where is all the media to be classified.
 - `ClassificationSettings__NewMediaName` *(string)*: New media name to replace original names when the conditions are met. This name will be concatenated to a 4-digit random number. Ex: From `IMG_0001.heic` to `pbg_3107.heic`.
 - `ClassificationSettings__OverwriteFiles` *(boolena)*: Setting to allow overwriting files if the media type is already in the destination.
-- `ClassificationSettings__Processors` *(dictionary string array)*: List of all the processors in order of execution by MediaType. It is configured to work properly. No need to change it.
 - `ClassificationSettings__RenameMediaFiles` *(boolean)*: Setting to allow renaming media files with the created date or not. Ex: From `IMG_0001,heic` to `yyyy-MM-dd_HH-mm-ss_IMG_0001.heic`.
 - `ClassificationSettings__ReplaceLongNames` *(boolean)*: Setting to allow replacing the original long names with another one (composed by the setting `ClassificationSettings__NewMediaName` and a 4-digit random number) when the original name is higher than the `ClassificationSettings__MaxMediaNameLength` setting.
 - `MediaExtensions__ImageExtensions` *(string array)*: Image extensions list the application will check for. If a compatible extension is not specified, the application will not read those files.

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
+using OrderMedia.ConsoleApp.Configuration;
 
 namespace OrderMedia.ConsoleApp.Services;
 

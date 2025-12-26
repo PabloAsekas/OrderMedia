@@ -36,15 +36,15 @@ public class BaseProcessorHandlerTests
     public void Process_ExecutesNextHandler_Successfully()
     {
         // Arrange
-        var media = new Media();
+        var request = new ProcessMediaRequest();
         
         var sut = new BaseProcessorHandlerConcrete();
         sut.SetNext(_nextHandlerMock.Object);
         
         // Act
-        sut.Process(media);
+        sut.Process(request);
 
         // Assert
-        _nextHandlerMock.Verify(x => x.Process(media), Times.Once);
+        _nextHandlerMock.Verify(x => x.Process(request), Times.Once);
     }
 }

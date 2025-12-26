@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace OrderMedia.Configuration;
+namespace OrderMedia.ConsoleApp.Configuration;
 
 /// <summary>
 /// Represents the Classification settings.
@@ -31,11 +29,6 @@ public class ClassificationSettings
     /// Gets or sets the new media name.
     /// </summary>
     public string NewMediaName { get; init; } = string.Empty;
-    
-    /// <summary>
-    /// Gets or sets the processor dictionary.
-    /// </summary>
-    public Dictionary<string, List<string>> Processors { get; init; } = new();
     
     /// <summary>
     /// Gets or sets overwrite files configuration.

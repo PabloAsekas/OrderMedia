@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Options;
-using OrderMedia.Configuration;
 using OrderMedia.Enums;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
@@ -12,7 +10,6 @@ public class ProcessorChainFactoryTests
 {
     private Mock<IServiceProvider> _serviceProviderMock;
     private IReadOnlyDictionary<string, IProcessorHandlerFactory> _handlers;
-    private IOptions<ClassificationSettings> _options;
 
     [SetUp]
     public void SetUp()
@@ -26,9 +23,9 @@ public class ProcessorChainFactoryTests
     public void Build_ReturnsNull_WhenNoProcessorsConfigured_Successfully()
     {
         // Arrange
-        var options = Options.Create(new ClassificationSettings());
+        IReadOnlyDictionary<string, List<string>> processors = new Dictionary<string, List<string>>();
 
-        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, _handlers, options);
+        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, _handlers, processors);
         
         // Act
         var result = sut.Build(MediaType.None);
@@ -41,15 +38,12 @@ public class ProcessorChainFactoryTests
     public void Build_ReturnsNull_WhenProcessorsDoesNotExist_Successfully()
     {
         // Arrange
-        var options = Options.Create(new ClassificationSettings
+        IReadOnlyDictionary<string, List<string>> processors = new Dictionary<string, List<string>>
         {
-            Processors = new Dictionary<string, List<string>>
-            {
-                {"Test", [] }
-            }
-        });
+            {"Test", [] }
+        };
 
-        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, _handlers, options);
+        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, _handlers, processors);
         
         // Act
         var result = sut.Build(MediaType.None);
@@ -63,8 +57,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
-        var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
+        var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object);
         var factory = new Mock<IProcessorHandlerFactory>();
         factory.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
             .Returns(moveMediaProcessorHandlerMock);
@@ -75,15 +68,12 @@ public class ProcessorChainFactoryTests
                 {"MoveMediaProcessorHandler", factory.Object}
             };
         
-        var options = Options.Create(new ClassificationSettings
+        IReadOnlyDictionary<string, List<string>> processors = new Dictionary<string, List<string>>
         {
-            Processors = new Dictionary<string, List<string>>
-            {
-                {"Image", ["MoveMediaProcessorHandler"] }
-            }
-        });
+            {"Image", ["MoveMediaProcessorHandler"] }
+        };
         
-        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, options);
+        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, processors);
         
         // Act
         var result = sut.Build(MediaType.Image);
@@ -98,8 +88,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
-        var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
+        var moveMediaProcessorHandlerMock = new MoveMediaProcessorHandler(iIoWrapperMock.Object);
         var factory = new Mock<IProcessorHandlerFactory>();
         factory.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
             .Returns(moveMediaProcessorHandlerMock);
@@ -109,18 +98,15 @@ public class ProcessorChainFactoryTests
             {
                 {"MoveMediaProcessorHandler", factory.Object}
             };
-        
-        var options = Options.Create(new ClassificationSettings
+
+        IReadOnlyDictionary<string, List<string>> processors = new Dictionary<string, List<string>>
         {
-            Processors = new Dictionary<string, List<string>>
-            {
-                {"Raw", ["MoveAaeProcessorHandler"] },
-                {"Video", ["MoveMediaProcessorHandler"] },
-                {"Image", ["MoveMediaProcessorHandler"] },
-            }
-        });
+            { "Raw", ["MoveAaeProcessorHandler"] },
+            { "Video", ["MoveMediaProcessorHandler"] },
+            { "Image", ["MoveMediaProcessorHandler"] },
+        };
         
-        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, options);
+        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, processors);
         
         // Act
         var result = sut.Build(MediaType.Image);
@@ -135,8 +121,7 @@ public class ProcessorChainFactoryTests
     {
         // Arrange
         var iIoWrapperMock = new Mock<IIoWrapper>();
-        var classificationSettingsOptionsMock = new Mock<IOptions<ClassificationSettings>>();
-        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(iIoWrapperMock.Object, classificationSettingsOptionsMock.Object);
+        var moveMediaProcessorHandler = new MoveMediaProcessorHandler(iIoWrapperMock.Object);
         var factory1 = new Mock<IProcessorHandlerFactory>();
         factory1.Setup(x => x.CreateInstance(It.IsAny<IServiceProvider>()))
             .Returns(moveMediaProcessorHandler); 
@@ -154,17 +139,14 @@ public class ProcessorChainFactoryTests
                 {"MoveMediaProcessorHandler", factory1.Object},
                 {"CreatedDateAggregatorProcessorHandler", factory2.Object}
             };
-        
-        var options = Options.Create(new ClassificationSettings
+
+        IReadOnlyDictionary<string, List<string>> processors = new Dictionary<string, List<string>>
         {
-            Processors = new Dictionary<string, List<string>>
-            {
-                {"Raw", ["MoveAaeProcessorHandler"] },
-                {"Image", ["CreatedDateAggregatorProcessorHandler", "MoveMediaProcessorHandler"] },
-            }
-        });
+            { "Raw", ["MoveAaeProcessorHandler"] },
+            { "Image", ["CreatedDateAggregatorProcessorHandler", "MoveMediaProcessorHandler"] },
+        };
         
-        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, options);
+        var sut = new ProcessorChainFactory(_serviceProviderMock.Object, handlers, processors);
         
         // Act
         var result = sut.Build(MediaType.Image);

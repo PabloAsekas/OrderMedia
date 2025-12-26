@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
@@ -10,29 +8,24 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IAaeHelperService _aaeHelperService;
-    private readonly ClassificationSettings _classificationSettings;
 
-    public MoveAaeProcessorHandler(
-        IIoWrapper ioWrapper,
-        IAaeHelperService aaeHelperService,
-        IOptions<ClassificationSettings> classificationSettingsOptions)
+    public MoveAaeProcessorHandler(IIoWrapper ioWrapper, IAaeHelperService aaeHelperService)
     {
         _ioWrapper = ioWrapper;
         _aaeHelperService = aaeHelperService;
-        _classificationSettings = classificationSettingsOptions.Value;
     }
     
-    public override void Process(Media media)
+    public override void Process(ProcessMediaRequest request)
     {
-        var possibleNames = new List<string>()
+        var possibleNames = new List<string>
         {
-            $"{media.NameWithoutExtension}.aae",
-            _aaeHelperService.GetAaeName(media.NameWithoutExtension),
+            $"{request.Original.NameWithoutExtension}.aae",
+            _aaeHelperService.GetAaeName(request.Original.NameWithoutExtension),
         };
 
         foreach (var aaeName in possibleNames)
         {
-            var result = FindAndMove(aaeName, media);
+            var result = FindAndMove(aaeName, request);
             
             if (result)
             {
@@ -40,13 +33,13 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
             }
         }
         
-        base.Process(media);
+        base.Process(request);
     }
     
-    private bool FindAndMove(string aaeName, Media media)
+    private bool FindAndMove(string aaeName, ProcessMediaRequest request)
     {
         var aaeLocation = _ioWrapper.Combine([
-            media.MediaFolder,
+            request.Original.DirectoryPath,
             aaeName
         ]);
 
@@ -55,13 +48,13 @@ public class MoveAaeProcessorHandler : BaseProcessorHandler
             return false;
         }
         
-        var newAaeName = $"{media.NewNameWithoutExtension}.aae";
+        var newAaeName = $"{request.Target.NameWithoutExtension}.aae";
         var newAaeLocation = _ioWrapper.Combine([
-            media.NewMediaFolder,
+            request.Target.DirectoryPath,
             newAaeName
         ]);
 
-        _ioWrapper.MoveMedia(aaeLocation, newAaeLocation, _classificationSettings.OverwriteFiles);
+        _ioWrapper.MoveMedia(aaeLocation, newAaeLocation, request.OverwriteFiles);
 
         return true;
     }

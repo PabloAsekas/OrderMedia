@@ -22,10 +22,13 @@ public class CreatedDateAggregatorProcessorHandlerTests
     public void Process_Runs_Successfully()
     {
         // Arrange
-        var media = new Media()
+        var request = new ProcessMediaRequest
         {
-            CreatedDateTimeOffset = new DateTime(2014, 07, 31, 22, 15, 15),
-            NewMediaPath = "/photos/2014-07-31/2014-07-31_22-15-15_IMG_0001",
+            Target = new Media()
+            {
+                CreatedDateTime = new DateTime(2014, 07, 31, 22, 15, 15),
+                Path = "/photos/2014-07-31/2014-07-31_22-15-15_IMG_0001",
+            }
         };
 
         var image = new Image<Rgba32>(100, 100);
@@ -36,13 +39,13 @@ public class CreatedDateAggregatorProcessorHandlerTests
         var sut = new CreatedDateAggregatorProcessorHandler(_metadataAggregatorServiceMock.Object);
 
         // Act
-        sut.Process(media);
+        sut.Process(request);
         
         // Assert
-        var mediaDateTime = media.CreatedDateTimeOffset.ToString("yyyy:MM:dd HH:mm:ss");
+        var mediaDateTime = request.Target.CreatedDateTime.ToString("yyyy:MM:dd HH:mm:ss");
         var offset = "+01:00";
         
-        _metadataAggregatorServiceMock.Verify(x => x.GetImage(media.NewMediaPath), Times.Once);
+        _metadataAggregatorServiceMock.Verify(x => x.GetImage(request.Target.Path), Times.Once);
         image.Metadata.ExifProfile.Should().NotBeNull();
         TryGetValue(image, ExifTag.DateTimeOriginal).Should().Be(mediaDateTime);
         TryGetValue(image, ExifTag.DateTime).Should().Be(mediaDateTime);

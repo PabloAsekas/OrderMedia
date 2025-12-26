@@ -27,17 +27,19 @@ public class M01XmlCreatedDateHandler: BaseCreatedDateHandler
     private string GetDate(string xmlFilePath)
     {
         var result = string.Empty;
-        
-        if (_ioWrapper.FileExists(xmlFilePath))
-        {
-            var doc = XDocument.Load(xmlFilePath);
 
-            XNamespace ns = "urn:schemas-professionalDisc:nonRealTimeMeta:ver.2.00";
-            result = doc.Root?
-                .Element(ns + "CreationDate")?
-                .Attribute("value")?
-                .Value;
+        if (!_ioWrapper.FileExists(xmlFilePath))
+        {
+            return result;
         }
+        
+        var doc = XDocument.Load(xmlFilePath);
+
+        XNamespace ns = "urn:schemas-professionalDisc:nonRealTimeMeta:ver.2.00";
+        result = doc.Root?
+            .Element(ns + "CreationDate")?
+            .Attribute("value")?
+            .Value;
 
         return result;
     }

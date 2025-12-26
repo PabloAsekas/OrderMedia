@@ -1,7 +1,5 @@
-using System;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
+using OrderMedia.Models;
 
 namespace OrderMedia.Strategies.RenameStrategy;
 
@@ -9,34 +7,31 @@ public class Insta360RenameStrategy : IRenameStrategy
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly IRandomizerService _randomizerService;
-    private readonly ClassificationSettings _classificationSettings;
     
     public Insta360RenameStrategy(
         IIoWrapper ioWrapper,
-        IRandomizerService randomizerService,
-        IOptions<ClassificationSettings> classificationSettingsOptions)
+        IRandomizerService randomizerService)
     {
         _ioWrapper = ioWrapper;
         _randomizerService = randomizerService;
-        _classificationSettings = classificationSettingsOptions.Value;
     }
 
-    public string Rename(string name, DateTimeOffset createdDateTimeOffset)
+    public string Rename(RenameMediaRequest request)
     {
-        var extension = _ioWrapper.GetExtension(name);
+        var extension = _ioWrapper.GetExtension(request.Name);
         
-        var cleanedName = GetCleanedName(name);
+        var cleanedName = GetCleanedName(request.Name);
         
-        var nameSplit = name.Split("_");
+        var nameSplit = request.Name.Split("_");
 
-        var date = createdDateTimeOffset.ToString("yyyy-MM-dd_HH-mm-ss");
+        var date = request.CreatedDate.ToString("yyyy-MM-dd_HH-mm-ss");
 
         var mediaName = string.Empty;
         
-        if (ReplaceName(cleanedName.Length))
+        if (ReplaceName(request.ReplaceName, request.MaximumNameLength, cleanedName.Length))
         {
             var randomNumber = _randomizerService.GetRandomNumberAsD4();
-            mediaName = $"{_classificationSettings.NewMediaName}_{randomNumber}";
+            mediaName = $"{request.NewName}_{randomNumber}";
         }
         else
         {
@@ -56,7 +51,7 @@ public class Insta360RenameStrategy : IRenameStrategy
         return cleanedNameSplit[4];
     }
     
-    private bool ReplaceName(int cleanedNameLength) {
-        return cleanedNameLength > _classificationSettings.MaxMediaNameLength && _classificationSettings.ReplaceLongNames;
+    private bool ReplaceName(bool replaceName, int maximumNameLength, int nameLength) {
+        return replaceName && nameLength > maximumNameLength;
     }
 }

@@ -1,8 +1,5 @@
-using System.Linq;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
-using OrderMedia.Configuration;
 
 namespace OrderMedia.Services;
 
@@ -10,16 +7,13 @@ public class CopyComplementFilesService : ICopyComplementFilesService
 {
     private readonly IIoWrapper _ioWrapper;
     private readonly ILogger<CopyComplementFilesService> _logger;
-    private readonly MediaPathsSettings _mediaPathsSettings;
-
+    
     public CopyComplementFilesService(
         IIoWrapper ioWrapper,
-        ILogger<CopyComplementFilesService> logger,
-        IOptions<MediaPathsSettings> mediaPathsOptions)
+        ILogger<CopyComplementFilesService> logger)
     {
         _ioWrapper = ioWrapper;
         _logger = logger;
-        _mediaPathsSettings = mediaPathsOptions.Value;
     }
 
     public void CopyComplementFiles(string fileToApply, string extensionToSearch)
@@ -30,7 +24,7 @@ public class CopyComplementFilesService : ICopyComplementFilesService
 
         var year = date[..4];
 
-        var yearFolder = _ioWrapper.Combine([
+        /*var yearFolder = _ioWrapper.Combine([
             _mediaPathsSettings.MediaPostProcessSource,
             year
         ]);
@@ -58,6 +52,6 @@ public class CopyComplementFilesService : ICopyComplementFilesService
             var finalName = _mediaPathsSettings.MediaPostProcessPath + name + extensionToSearch;
                 
             _ioWrapper.CopyFile(searchFile, finalName);
-        }
+        }*/
     }
 }

@@ -1,47 +1,41 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using OrderMedia.Interfaces;
 using OrderMedia.Models;
-using OrderMedia.Configuration;
 
 namespace OrderMedia.Handlers.Processor;
 
 public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
 {
     private readonly IIoWrapper _ioWrapper;
-    private readonly ClassificationSettings _classificationSettings;
 
-    public MoveLivePhotoProcessorHandler(
-        IIoWrapper ioWrapper,
-        IOptions<ClassificationSettings> classificationSettingsOptions)
+    public MoveLivePhotoProcessorHandler(IIoWrapper ioWrapper)
     {
         _ioWrapper = ioWrapper;
-        _classificationSettings = classificationSettingsOptions.Value;
     }
 
-    public override void Process(Media media)
+    public override void Process(ProcessMediaRequest request)
     {
         var possibleNames = new List<string>()
         {
-            $"{media.NameWithoutExtension}.mov",
-            $"{media.NameWithoutExtension}.mp4"
+            $"{request.Original.NameWithoutExtension}.mov",
+            $"{request.Original.NameWithoutExtension}.mp4"
         };
 
         foreach (var videoName in possibleNames)
         {
-            var result = FindAndMove(videoName, media);
+            var result = FindAndMove(videoName, request);
 
             if (result)
                 break;
         }
 
-        base.Process(media);
+        base.Process(request);
     }
     
-    private bool FindAndMove(string videoName, Media media)
+    private bool FindAndMove(string videoName, ProcessMediaRequest request)
     {
         var videoLocation = _ioWrapper.Combine([
-            media.MediaFolder,
+            request.Original.DirectoryPath,
             videoName
         ]);
 
@@ -52,13 +46,13 @@ public class MoveLivePhotoProcessorHandler : BaseProcessorHandler
             return false;
         }
         
-        var newVideoName = $"{media.NewNameWithoutExtension}{extension}";
+        var newVideoName = $"{request.Target.NameWithoutExtension}{extension}";
         var newVideoLocation = _ioWrapper.Combine([
-            media.NewMediaFolder,
+            request.Target.DirectoryPath,
             newVideoName
         ]);
 
-        _ioWrapper.MoveMedia(videoLocation, newVideoLocation, _classificationSettings.OverwriteFiles);
+        _ioWrapper.MoveMedia(videoLocation, newVideoLocation, request.OverwriteFiles);
 
         return true;
 
