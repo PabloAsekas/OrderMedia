@@ -10,7 +10,6 @@ public class ProcessorChainFactoryTests
 {
     private Mock<IServiceProvider> _serviceProviderMock;
     private IReadOnlyDictionary<string, IProcessorHandlerFactory> _handlers;
-    // private IReadOnlyDictionary<string, List<string>> _processors;
 
     [SetUp]
     public void SetUp()

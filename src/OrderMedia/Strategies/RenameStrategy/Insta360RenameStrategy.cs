@@ -16,7 +16,6 @@ public class Insta360RenameStrategy : IRenameStrategy
         _randomizerService = randomizerService;
     }
 
-    // public string Rename(string name, DateTimeOffset createdDateTimeOffset)
     public string Rename(RenameMediaRequest request)
     {
         var extension = _ioWrapper.GetExtension(request.Name);
