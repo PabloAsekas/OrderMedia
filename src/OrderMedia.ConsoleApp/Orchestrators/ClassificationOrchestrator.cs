@@ -20,7 +20,6 @@ public class ClassificationOrchestrator : BackgroundService
     private readonly IClassificationService _classificationService;
     private readonly IProcessorChainFactory _processorChainFactory;
     private readonly IClassificationFolderPreparer _classificationFolderPreparer;
-    
 
     public ClassificationOrchestrator(
         ILogger<ClassificationOrchestrator> logger,
@@ -64,6 +63,11 @@ public class ClassificationOrchestrator : BackgroundService
         foreach (var fileInfo in allMediaFileInfo)
         {
             var originalMedia = _mediaFactory.CreateMedia(fileInfo.FullName);
+            
+            if (originalMedia.CreatedDateTime == default)
+            {
+                continue;
+            }
             
             var targetMedia = _classificationService.Classify(originalMedia);
             

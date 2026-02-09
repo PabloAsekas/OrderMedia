@@ -40,8 +40,8 @@ public class MediaTypeService : IMediaTypeService
             ".dng" => MediaType.Raw,
             ".insp" => MediaType.Image,
             ".insv" => MediaType.Insv,
-            ".cr2" => MediaType.Image,
-            ".cr3" => MediaType.Image,
+            ".cr2" => MediaType.Raw,
+            ".cr3" => MediaType.Raw,
             ".m4v" => MediaType.Video,
             _ => throw new FormatException($"The provided extension '{extension.ToLower()}' is not supported."),
         };

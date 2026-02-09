@@ -15,6 +15,8 @@ public static class ServiceCollectionExtensions
         {
             services.AddOptions<ClassificationSettings>()
                 .BindConfiguration(ClassificationSettings.ConfigurationSection);
+            services.AddOptions<RenamingSettings>()
+                .BindConfiguration(RenamingSettings.ConfigurationSection);
             services.AddOptions<MediaExtensionsSettings>()
                 .BindConfiguration(MediaExtensionsSettings.ConfigurationSection);
             services.AddOptions<MediaPathsSettings>()
@@ -31,7 +33,11 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IClassificationService, ClassificationService>();
             services.AddScoped<IClassificationFolderPreparer, ClassificationFolderPreparerService>();
             
+            services.AddScoped<IRenamingService, RenamingService>();
+            services.AddScoped<IRenamingValidatorService, RenamingValidatorService>();
+            
             services.AddHostedService<ClassificationOrchestrator>();
+            // services.AddHostedService<RenamingOrchestrator>();
 
             return services;
         }

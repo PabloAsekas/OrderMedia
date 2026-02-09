@@ -26,4 +26,15 @@ public static class DirectoryInfoExtensionsMethods
         IEnumerable<FileInfo> files = dir.EnumerateFiles();
         return files.Where(f => extensions.Contains(f.Extension, StringComparer.OrdinalIgnoreCase));
     }
+
+    public static IEnumerable<FileInfo> GetAllFilesByExtensions(this DirectoryInfo dir, params string[] extensions)
+    {
+        if (extensions == null)
+        {
+            throw new ArgumentNullException("Extensions are needed");
+        }
+
+        IEnumerable<FileInfo> files = dir.EnumerateFiles("*", SearchOption.AllDirectories);
+        return files.Where(f => extensions.Contains(f.Extension, StringComparer.OrdinalIgnoreCase));
+    }
 }

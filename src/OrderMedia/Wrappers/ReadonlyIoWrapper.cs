@@ -1,15 +1,20 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using OrderMedia.Extensions;
 using OrderMedia.Interfaces;
 
 namespace OrderMedia.Wrappers;
 
-/// <summary>
-/// IO service class.
-/// </summary>
-public class IoWrapper : IIoWrapper
+public class ReadonlyIoWrapper : IIoWrapper, IDisposable
 {
+    private readonly StreamWriter _file;
+
+    public ReadonlyIoWrapper()
+    {
+        _file = new StreamWriter("/Users/pablo/Downloads/file.txt", true);
+    }
+    
     public IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
     {
         var directory = new DirectoryInfo(path);
@@ -24,12 +29,16 @@ public class IoWrapper : IIoWrapper
 
     public void MoveMedia(string oldPath, string newPath, bool overwrite)
     {
-        File.Move(oldPath, newPath, overwrite);
+        // Console.WriteLine($"Moving '{oldPath}' to '{newPath}'");
+        _file.WriteLine($"Moving '{oldPath}' to '{newPath}'");
+        // File.Move(oldPath, newPath, overwrite);
     }
 
     public void CreateFolder(string path)
     {
-        Directory.CreateDirectory(path);
+        // Console.WriteLine($"Creating folder '{path}'");
+        // _file.WriteLine($"Creating folder '{path}'");
+        // Directory.CreateDirectory(path);
     }
 
     public string Combine(string[] paths)
@@ -74,10 +83,18 @@ public class IoWrapper : IIoWrapper
 
     public void CopyFile(string sourceFileName, string destFileName)
     {
-        File.Copy(sourceFileName, destFileName);
+        //Console.WriteLine($"Copying '{sourceFileName}' to '{destFileName}'");
+        _file.WriteLine($"Copying '{sourceFileName}' to '{destFileName}'");
+        // File.Copy(sourceFileName, destFileName);
     }
 
     public void RejectMedia(string path)
     {
+        // _file.WriteLine($"Rejecting '{path}'");
+    }
+
+    public void Dispose()
+    {
+        _file.Dispose();
     }
 }
