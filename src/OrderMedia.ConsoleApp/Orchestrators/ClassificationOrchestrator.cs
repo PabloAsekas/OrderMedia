@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OrderMedia.ConsoleApp.Configuration;
@@ -10,8 +9,10 @@ using OrderMedia.Models;
 
 namespace OrderMedia.ConsoleApp.Orchestrators;
 
-public class ClassificationOrchestrator : BackgroundService
+public class ClassificationOrchestrator : IOrchestrator
 {
+    public const string ServiceName = "ClassificationOrchestrator";
+    
     private readonly ILogger<ClassificationOrchestrator> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly MediaExtensionsSettings _mediaExtensionsSettings;
@@ -41,7 +42,7 @@ public class ClassificationOrchestrator : BackgroundService
         _classificationFolderPreparer = classificationFolderPreparer;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    public Task RunAsync(CancellationToken stoppingToken)
     {
         _logger.StartClassification();
 

@@ -29,16 +29,12 @@ public class ReadonlyIoWrapper : IIoWrapper, IDisposable
 
     public void MoveMedia(string oldPath, string newPath, bool overwrite)
     {
-        // Console.WriteLine($"Moving '{oldPath}' to '{newPath}'");
         _file.WriteLine($"Moving '{oldPath}' to '{newPath}'");
-        // File.Move(oldPath, newPath, overwrite);
     }
 
     public void CreateFolder(string path)
     {
-        // Console.WriteLine($"Creating folder '{path}'");
-        // _file.WriteLine($"Creating folder '{path}'");
-        // Directory.CreateDirectory(path);
+        _file.WriteLine($"Creating folder '{path}'");
     }
 
     public string Combine(string[] paths)
@@ -83,14 +79,12 @@ public class ReadonlyIoWrapper : IIoWrapper, IDisposable
 
     public void CopyFile(string sourceFileName, string destFileName)
     {
-        //Console.WriteLine($"Copying '{sourceFileName}' to '{destFileName}'");
         _file.WriteLine($"Copying '{sourceFileName}' to '{destFileName}'");
-        // File.Copy(sourceFileName, destFileName);
     }
 
     public void RejectMedia(string path)
     {
-        // _file.WriteLine($"Rejecting '{path}'");
+        _file.WriteLine($"Rejecting '{path}'");
     }
 
     public void Dispose()

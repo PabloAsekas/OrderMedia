@@ -20,25 +20,25 @@ public class RenamingValidatorService : IRenamingValidatorService
             return false;
         }
 
-        // if (media.NameWithoutExtension.EndsWith("-HDR"))
-        // {
-        //     return false;
-        // }
+        if (media.NameWithoutExtension.EndsWith("-HDR"))
+        {
+            return false;
+        }
         
         if (media.NameWithoutExtension.Contains("-HDR-"))
         {
             return false;
         }
         
-        // if (media.NameWithoutExtension.EndsWith("-Pano"))
-        // {
-        //     return false;
-        // }
+        if (media.NameWithoutExtension.EndsWith("-Pano"))
+        {
+            return false;
+        }
         
-        // if (media.NameWithoutExtension.Contains("-Pano-"))
-        // {
-        //     return false;
-        // }
+        if (media.NameWithoutExtension.Contains("-Pano-"))
+        {
+            return false;
+        }
         
         return true;
     }

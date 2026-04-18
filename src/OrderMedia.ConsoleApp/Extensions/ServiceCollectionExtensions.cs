@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using OrderMedia.ConsoleApp.BackgroundServices;
 using OrderMedia.ConsoleApp.Configuration;
 using OrderMedia.ConsoleApp.Interfaces;
 using OrderMedia.ConsoleApp.Orchestrators;
@@ -32,12 +33,14 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IClassificationMediaFolderStrategyResolver, ClassificationMediaFolderStrategyResolver>();
             services.AddScoped<IClassificationService, ClassificationService>();
             services.AddScoped<IClassificationFolderPreparer, ClassificationFolderPreparerService>();
+            services.AddKeyedScoped<IOrchestrator, ClassificationOrchestrator>(ClassificationOrchestrator.ServiceName);
             
             services.AddScoped<IRenamingService, RenamingService>();
             services.AddScoped<IRenamingValidatorService, RenamingValidatorService>();
+            services.AddKeyedScoped<IOrchestrator, RenamingOrchestrator>(RenamingOrchestrator.ServiceName);
             
-            services.AddHostedService<ClassificationOrchestrator>();
-            // services.AddHostedService<RenamingOrchestrator>();
+            services.AddHostedService<ClassificationBackgroundService>();
+            // services.AddHostedService<RenamingBackgroundService>();
 
             return services;
         }

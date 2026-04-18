@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OrderMedia.ConsoleApp.Configuration;
@@ -10,8 +9,10 @@ using OrderMedia.Models;
 
 namespace OrderMedia.ConsoleApp.Orchestrators;
 
-public class RenamingOrchestrator : BackgroundService
+public class RenamingOrchestrator : IOrchestrator
 {
+    public const string ServiceName = "RenamingOrchestrator";
+    
     private readonly ILogger<RenamingOrchestrator> _logger;
     private readonly MediaExtensionsSettings _mediaExtensionsSettings;
     private readonly RenamingSettings _renamingSettings;
@@ -41,12 +42,13 @@ public class RenamingOrchestrator : BackgroundService
         _renamingSettings = renamingSettings.Value;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    public Task RunAsync(CancellationToken stoppingToken)
     {
         _logger.StartRenaming();
 
+        // Images first so it process live photos videos.
         ProcessMedia(_mediaExtensionsSettings.ImageExtensions);
-        // ProcessMedia(_mediaExtensionsSettings.VideoExtensions);
+        ProcessMedia(_mediaExtensionsSettings.VideoExtensions);
         
         _logger.EndRenaming();
         
