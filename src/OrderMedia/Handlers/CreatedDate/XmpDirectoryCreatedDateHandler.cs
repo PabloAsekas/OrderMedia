@@ -1,31 +1,32 @@
-using System.Linq;
-using MetadataExtractor;
-using MetadataExtractor.Formats.Xmp;
+using OrderMedia.Interfaces;
 using OrderMedia.Models;
 
 namespace OrderMedia.Handlers.CreatedDate;
 
 public class XmpDirectoryCreatedDateHandler : BaseCreatedDateHandler
 {
+    private readonly IImageMetadataReader _imageMetadataReader;
+
+    public XmpDirectoryCreatedDateHandler(IImageMetadataReader imageMetadataReader)
+    {
+        _imageMetadataReader = imageMetadataReader;
+    }
+
     public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
         if (!mediaPath.EndsWith(".dng"))
         {
             return base.GetCreatedDateInfo(mediaPath);
         }
-        
-        var directories = ImageMetadataReader.ReadMetadata(mediaPath);
-            
-        var xmpDirectory = directories.OfType<XmpDirectory>().FirstOrDefault();
-        
-        if (xmpDirectory == null)
+
+        var createdDate = _imageMetadataReader.GetMetadataFromXmpDirectory(mediaPath, "xmp:CreateDate");
+
+        if (createdDate == null)
+        {
             return base.GetCreatedDateInfo(mediaPath);
+        }
         
-        var properties = xmpDirectory.GetXmpProperties();
-
-        properties.TryGetValue("xmp:CreateDate", out var createdDate);
-
-        createdDate = createdDate?.Substring(0, 19);
+        createdDate = createdDate.Substring(0, 19);
 
         var createdDateInfo = CreateCreatedDateInfo(createdDate, "yyyy-MM-ddTHH:mm:ss");
         

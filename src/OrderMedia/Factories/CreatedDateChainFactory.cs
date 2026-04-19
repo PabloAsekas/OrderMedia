@@ -32,7 +32,7 @@ public class CreatedDateChainFactory : ICreatedDateChainFactory
         
         var xmpHandler = new XmpCreatedDateHandler(ioWrapper, xmpExtractorService);
         var m01XmlHandler = new M01XmlCreatedDateHandler(ioWrapper);
-        var xmpDirectoryHandler = new XmpDirectoryCreatedDateHandler();
+        var xmpDirectoryHandler = new XmpDirectoryCreatedDateHandler(imageMetadataReader);
         var exifSubIfdDirectoryHandler = new ExifSubIfdDirectoryCreatedDateHandler(imageMetadataReader);
         var exifIfd0DirectoryHandler = new ExifIfd0DirectoryCreatedDateHandler(imageMetadataReader);
         var quickTimeMetadataHeaderDirectoryHandler = new QuickTimeMetadataHeaderDirectoryCreatedDateHandler(imageMetadataReader);

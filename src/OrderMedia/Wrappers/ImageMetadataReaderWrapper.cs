@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Xmp;
@@ -21,7 +22,7 @@ public class ImageMetadataReaderWrapper : IImageMetadataReader
     {
         try
         {
-            var directories = ImageMetadataReader.ReadMetadata(mediaPath);
+            var directories = ReadMetadata(mediaPath);
             var dateDirectory = directories.OfType<T>().FirstOrDefault() as Directory;
             
             return dateDirectory?.GetDescription(tagType);
@@ -33,5 +34,36 @@ public class ImageMetadataReaderWrapper : IImageMetadataReader
         }
 
         return null;
+    }
+
+    public string GetMetadataFromXmpDirectory(string mediaPath, string propertyName)
+    {
+        try
+        {
+            var directories = ReadMetadata(mediaPath);
+            var xmpDirectory = directories.OfType<XmpDirectory>().FirstOrDefault();
+
+            if (xmpDirectory == null)
+            {
+                return null;
+            }
+
+            var properties = xmpDirectory.GetXmpProperties();
+
+            properties.TryGetValue(propertyName, out var propertyValue);
+
+            return propertyValue;
+        }
+        catch (Exception e)
+        {
+            _logger.ErrorReadingMetadata(mediaPath);
+        }
+
+        return null;
+    }
+    
+    private static IReadOnlyList<Directory> ReadMetadata(string mediaPath)
+    {
+        return ImageMetadataReader.ReadMetadata(mediaPath);
     }
 }
