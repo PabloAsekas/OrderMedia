@@ -15,11 +15,6 @@ public class MoveMediaProcessorHandler : BaseProcessorHandler
 
     public override void Process(ProcessMediaRequest request)
     {
-        if (request.Original.CreatedDateTime == default(DateTimeOffset))
-        {
-            return;
-        }
-
         _ioWrapper.CreateFolder(request.Target.DirectoryPath);
 
         try

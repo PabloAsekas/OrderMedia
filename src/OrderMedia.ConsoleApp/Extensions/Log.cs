@@ -9,4 +9,10 @@ public static partial class Log
     
     [LoggerMessage(Level = LogLevel.Information, Message = "Classification ended")]
     public static partial void EndClassification(this ILogger logger);
+    
+    [LoggerMessage(Level = LogLevel.Information, Message = "Renaming started")]
+    public static partial void StartRenaming(this ILogger logger);
+    
+    [LoggerMessage(Level = LogLevel.Information, Message = "Renaming ended")]
+    public static partial void EndRenaming(this ILogger logger);
 }

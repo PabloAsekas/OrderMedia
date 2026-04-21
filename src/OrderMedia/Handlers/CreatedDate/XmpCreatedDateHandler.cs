@@ -16,11 +16,18 @@ public class XmpCreatedDateHandler : BaseCreatedDateHandler
 
     public override CreatedDateInfo? GetCreatedDateInfo(string mediaPath)
     {
+        const string format = "yyyy-MM-ddTHH:mm:ss";
+        
         var xmpFilePath = GetXmpFilePath(mediaPath);
 
         var createdDate = _xmpExtractorService.GetCreatedDate(xmpFilePath);
 
-        var createdDateInfo = CreateCreatedDateInfo(createdDate, "yyyy-MM-ddTHH:mm:ss");
+        if (createdDate is not null && createdDate.Length > format.Length)
+        {
+            createdDate = createdDate.Substring(0, format.Length);
+        }
+        
+        var createdDateInfo = CreateCreatedDateInfo(createdDate, format);
         
         return createdDateInfo ?? base.GetCreatedDateInfo(mediaPath);
     }

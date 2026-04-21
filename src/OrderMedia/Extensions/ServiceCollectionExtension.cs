@@ -26,6 +26,7 @@ public static class ServiceCollectionExtension
             .AddScoped<ICreatedDateExtractorService, CreatedDateExtractorService>()
             .AddScoped<IImageMetadataReader, ImageMetadataReaderWrapper>()
             .AddScoped<IIoWrapper, IoWrapper>()
+            // .AddScoped<IIoWrapper, ReadonlyIoWrapper>()
             .AddScoped<IMediaFactory, MediaFactory>()
             .AddScoped<IMediaTypeService, MediaTypeService>()
             .AddScoped<IMetadataAggregatorService, MetadataAggregatorService>()

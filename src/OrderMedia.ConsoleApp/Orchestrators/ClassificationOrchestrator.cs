@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OrderMedia.ConsoleApp.Configuration;
@@ -10,8 +9,10 @@ using OrderMedia.Models;
 
 namespace OrderMedia.ConsoleApp.Orchestrators;
 
-public class ClassificationOrchestrator : BackgroundService
+public class ClassificationOrchestrator : IOrchestrator
 {
+    public const string ServiceName = "ClassificationOrchestrator";
+    
     private readonly ILogger<ClassificationOrchestrator> _logger;
     private readonly IIoWrapper _ioWrapper;
     private readonly MediaExtensionsSettings _mediaExtensionsSettings;
@@ -20,7 +21,6 @@ public class ClassificationOrchestrator : BackgroundService
     private readonly IClassificationService _classificationService;
     private readonly IProcessorChainFactory _processorChainFactory;
     private readonly IClassificationFolderPreparer _classificationFolderPreparer;
-    
 
     public ClassificationOrchestrator(
         ILogger<ClassificationOrchestrator> logger,
@@ -42,7 +42,7 @@ public class ClassificationOrchestrator : BackgroundService
         _classificationFolderPreparer = classificationFolderPreparer;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    public Task RunAsync(CancellationToken stoppingToken)
     {
         _logger.StartClassification();
 
@@ -64,6 +64,11 @@ public class ClassificationOrchestrator : BackgroundService
         foreach (var fileInfo in allMediaFileInfo)
         {
             var originalMedia = _mediaFactory.CreateMedia(fileInfo.FullName);
+            
+            if (originalMedia.CreatedDateTime == default)
+            {
+                continue;
+            }
             
             var targetMedia = _classificationService.Classify(originalMedia);
             

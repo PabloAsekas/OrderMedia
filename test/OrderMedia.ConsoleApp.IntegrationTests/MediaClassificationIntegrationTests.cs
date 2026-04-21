@@ -86,6 +86,7 @@ public class MediaClassificationIntegrationTests
     // Raw
     [TestCase("img/2024-03-09/2024-03-09_19-11-36_DSC01943.ARW")] // Arw
     [TestCase("img/2024-05-26/2024-05-26_16-50-17_IMG_3739.DNG")] // Dng
+    [TestCase("img/2025-10-13/2025-10-13_17-08-01_DSC03832.dng")] // Dng with XmpDirectory
     [TestCase("img/2016-10-06/2016-10-06_18-13-33_IMG_1234.cr2")] // Cr2
     [TestCase("img/2024-07-04/2024-07-04_20-03-26_IMG_0006.cr3")] // Cr3
     // Common photo types
@@ -111,8 +112,8 @@ public class MediaClassificationIntegrationTests
     [TestCase("img/2024-08-03/2024-08-03_18-29-44_24-08-03 18-29-44 1005.png")] // NextCloud photo
     [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.HEIC")] // Photo with aae file
     [TestCase("img/2024-12-27/2024-12-27_14-06-29_IMG_6253.aae")] // Photo with aae file
-    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001.mp4")] //Mp4 with xml file
-    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001M01.XML")] //Mp4 with xml file
+    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001.mp4")] // Mp4 with xml file
+    [TestCase("vid/2025-02-22/2025-02-22_11-35-21_C0001M01.XML")] // Mp4 with xml file
     // No classify
     [TestCase("no-classify.jpg")] // No classification
     public void GivenMediaFile_WhenExecuted_ClassificationIsPerformedSuccessfully(string mediaPath)

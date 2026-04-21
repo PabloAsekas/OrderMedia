@@ -10,10 +10,16 @@ namespace OrderMedia.Wrappers;
 /// </summary>
 public class IoWrapper : IIoWrapper
 {
-    public IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
+    public IReadOnlyList<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
     {
         var directory = new DirectoryInfo(path);
         return directory.GetFilesByExtensions(extensions);
+    }
+    
+    public IReadOnlyList<FileInfo> GetAllFilesByExtensions(string path, params string[] extensions)
+    {
+        var directory = new DirectoryInfo(path);
+        return directory.GetAllFilesByExtensions(extensions);
     }
 
     public void MoveMedia(string oldPath, string newPath, bool overwrite)
@@ -69,5 +75,9 @@ public class IoWrapper : IIoWrapper
     public void CopyFile(string sourceFileName, string destFileName)
     {
         File.Copy(sourceFileName, destFileName);
+    }
+
+    public void RejectMedia(string path)
+    {
     }
 }
