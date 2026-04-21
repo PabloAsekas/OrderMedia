@@ -15,13 +15,13 @@ public class ReadonlyIoWrapper : IIoWrapper, IDisposable
         _file = new StreamWriter("/Users/pablo/Downloads/file.txt", true);
     }
     
-    public IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
+    public IReadOnlyList<FileInfo> GetFilesByExtensions(string path, params string[] extensions)
     {
         var directory = new DirectoryInfo(path);
         return directory.GetFilesByExtensions(extensions);
     }
     
-    public IEnumerable<FileInfo> GetAllFilesByExtensions(string path, params string[] extensions)
+    public IReadOnlyList<FileInfo> GetAllFilesByExtensions(string path, params string[] extensions)
     {
         var directory = new DirectoryInfo(path);
         return directory.GetAllFilesByExtensions(extensions);

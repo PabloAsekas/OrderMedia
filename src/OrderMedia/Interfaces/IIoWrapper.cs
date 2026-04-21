@@ -14,7 +14,7 @@ public interface IIoWrapper
     /// <param name="path">Path to search for extensions.</param>
     /// <param name="extensions">Extensions array.</param>
     /// <returns><see cref="IEnumerable{T}"/> of files that match the given extensions.</returns>
-    IEnumerable<FileInfo> GetFilesByExtensions(string path, params string[] extensions);
+    IReadOnlyList<FileInfo> GetFilesByExtensions(string path, params string[] extensions);
     
     /// <summary>
     /// Gets files in folder and subfolders by the given extensions.
@@ -22,7 +22,7 @@ public interface IIoWrapper
     /// <param name="path">Path to search for extensions (including subfolders).</param>
     /// <param name="extensions">Extensions array</param>
     /// <returns><see cref="IEnumerable{T}"/> of files that match the given extensions.</returns>
-    IEnumerable<FileInfo> GetAllFilesByExtensions(string path, params string[] extensions);
+    IReadOnlyList<FileInfo> GetAllFilesByExtensions(string path, params string[] extensions);
 
     /// <summary>
     /// Moves media from the old path to the new path.
