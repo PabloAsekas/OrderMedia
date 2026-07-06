@@ -42,7 +42,7 @@ public class ClassificationOrchestrator : IOrchestrator
         _classificationFolderPreparer = classificationFolderPreparer;
     }
 
-    public Task RunAsync(CancellationToken stoppingToken)
+    public Task RunAsync(CancellationToken cancellationToken)
     {
         _logger.StartClassification();
 

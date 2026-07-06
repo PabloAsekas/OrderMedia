@@ -15,4 +15,10 @@ public static partial class Log
     
     [LoggerMessage(Level = LogLevel.Information, Message = "Renaming ended")]
     public static partial void EndRenaming(this ILogger logger);
+    
+    [LoggerMessage(Level = LogLevel.Information, Message = "Synchronization started")]
+    public static partial void StartSynchronization(this ILogger logger);
+    
+    [LoggerMessage(Level = LogLevel.Information, Message = "Synchronization ended")]
+    public static partial void EndSyncrhonization(this ILogger logger);
 }

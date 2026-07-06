@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OrderMedia.ConsoleApp.Configuration;
 using OrderMedia.ConsoleApp.Extensions;
-using OrderMedia.ConsoleApp.Services;
+using OrderMedia.DigiKam.Extensions;
 using OrderMedia.Extensions;
+using OrderMedia.Immich.Extensions;
 
 namespace OrderMedia.ConsoleApp;
 
@@ -31,11 +33,26 @@ public class Program
 
     internal static HostApplicationBuilder CreateAppBuilder(string[] args)
     {
-        HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Logging.AddConsole();
         builder.Services.ConfigureApplication();
         builder.Services.AddConsoleAppServices();
         builder.Services.AddOrderMedia();
+        builder.Services.AddDigiKam(options =>
+        {
+            var syncOptions = new SynchronizationSettings();
+            builder.Configuration.GetSection(SynchronizationSettings.ConfigurationSection).Bind(syncOptions);
+            
+            options.ConnectionString = syncOptions.DigiKam.ConnectionString;
+        });
+        builder.Services.AddImmich(options =>
+        {
+            var syncOptions = new SynchronizationSettings();
+            builder.Configuration.GetSection(SynchronizationSettings.ConfigurationSection).Bind(syncOptions);
+            
+            options.Url = syncOptions.Immich.Url;
+            options.ApiKey = syncOptions.Immich.ApiKey;
+        });
         
         return builder;
     }

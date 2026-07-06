@@ -22,6 +22,8 @@ public static class ServiceCollectionExtensions
                 .BindConfiguration(MediaExtensionsSettings.ConfigurationSection);
             services.AddOptions<MediaPathsSettings>()
                 .BindConfiguration(MediaPathsSettings.ConfigurationSection);
+            services.AddOptions<SynchronizationSettings>()
+                .BindConfiguration(SynchronizationSettings.ConfigurationSection);
             
             return services;
         }
@@ -39,8 +41,12 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IRenamingValidatorService, RenamingValidatorService>();
             services.AddKeyedScoped<IOrchestrator, RenamingOrchestrator>(RenamingOrchestrator.ServiceName);
             
-            services.AddHostedService<ClassificationBackgroundService>();
+            services.AddKeyedScoped<IOrchestrator, SynchronizationOrchestrator>(SynchronizationOrchestrator.ServiceName);
+            services.AddScoped<ISyncExclusionService, SyncExclusionService>();
+            
+            // services.AddHostedService<ClassificationBackgroundService>();
             // services.AddHostedService<RenamingBackgroundService>();
+            services.AddHostedService<SynchronizationBackgroundService>();
 
             return services;
         }

@@ -87,6 +87,21 @@ public class ReadonlyIoWrapper : IIoWrapper, IDisposable
         _file.WriteLine($"Rejecting '{path}'");
     }
 
+    public void DeleteFile(string path)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteDirectory(string path)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsDirectoryEmpty(string path)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Dispose()
     {
         _file.Dispose();

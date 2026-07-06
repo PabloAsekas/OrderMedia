@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.ConsoleApp.Integ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.ConsoleApp.UnitTests", "test\OrderMedia.ConsoleApp.UnitTests\OrderMedia.ConsoleApp.UnitTests.csproj", "{73DDF72D-D1E1-495E-A6FB-F395F9EED4D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.DigiKam", "src\OrderMedia.DigiKam\OrderMedia.DigiKam.csproj", "{80E89C98-A5E5-4636-AFEA-A0BBC5A8691D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderMedia.Immich", "src\OrderMedia.Immich\OrderMedia.Immich.csproj", "{67AA1DDF-5E78-47AB-BA1B-3546D4FEE2D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{73DDF72D-D1E1-495E-A6FB-F395F9EED4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73DDF72D-D1E1-495E-A6FB-F395F9EED4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73DDF72D-D1E1-495E-A6FB-F395F9EED4D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E89C98-A5E5-4636-AFEA-A0BBC5A8691D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E89C98-A5E5-4636-AFEA-A0BBC5A8691D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E89C98-A5E5-4636-AFEA-A0BBC5A8691D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E89C98-A5E5-4636-AFEA-A0BBC5A8691D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67AA1DDF-5E78-47AB-BA1B-3546D4FEE2D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67AA1DDF-5E78-47AB-BA1B-3546D4FEE2D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67AA1DDF-5E78-47AB-BA1B-3546D4FEE2D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67AA1DDF-5E78-47AB-BA1B-3546D4FEE2D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

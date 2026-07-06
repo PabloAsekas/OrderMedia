@@ -74,10 +74,34 @@ public class IoWrapper : IIoWrapper
 
     public void CopyFile(string sourceFileName, string destFileName)
     {
-        File.Copy(sourceFileName, destFileName);
+        if (!FileExists(destFileName))
+        {
+            File.Copy(sourceFileName, destFileName);
+        }
     }
 
     public void RejectMedia(string path)
     {
+    }
+
+    public void DeleteFile(string path)
+    {
+        if (FileExists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
+    public void DeleteDirectory(string path)
+    {
+        if (DirectoryExists(path))
+        {
+            Directory.Delete(path, true);
+        }
+    }
+
+    public bool IsDirectoryEmpty(string path)
+    {
+        return Directory.GetFiles(path).Length == 0;
     }
 }

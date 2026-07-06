@@ -42,7 +42,7 @@ public class RenamingOrchestrator : IOrchestrator
         _renamingSettings = renamingSettings.Value;
     }
 
-    public Task RunAsync(CancellationToken stoppingToken)
+    public Task RunAsync(CancellationToken cancellationToken)
     {
         _logger.StartRenaming();
 

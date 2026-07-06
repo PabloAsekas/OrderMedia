@@ -102,4 +102,8 @@ public interface IIoWrapper
     void CopyFile(string sourceFileName, string destFileName);
 
     void RejectMedia(string path);
+    
+    void DeleteFile(string path);
+    void DeleteDirectory(string path);
+    bool IsDirectoryEmpty(string path);
 }

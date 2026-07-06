@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using OrderMedia.Dispatchers;
 using OrderMedia.Factories;
 using OrderMedia.Handlers.Processor;
 using OrderMedia.Interfaces;
 using OrderMedia.Interfaces.Factories;
 using OrderMedia.Handlers.CreatedDate;
+using OrderMedia.Handlers.Sync;
+using OrderMedia.Interfaces.Dispatchers;
+using OrderMedia.Interfaces.Handlers;
+using OrderMedia.Models;
 using OrderMedia.Services;
 using OrderMedia.Strategies.RenameStrategy;
 using OrderMedia.Wrappers;
@@ -38,7 +43,10 @@ public static class ServiceCollectionExtension
             .AddScoped<Insta360RenameStrategy>()
             .AddScoped<IRenameStrategy, Insta360RenameStrategy>()
             .AddScoped<IRenameStrategyFactory, RenameStrategyFactory>()
-            .AddScoped<IXmpExtractorService, XmpExtractorService>();
+            .AddScoped<IXmpExtractorService, XmpExtractorService>()
+            .AddScoped<ISyncDispatcher, SyncDispatcher>()
+            .AddScoped<ISyncHandler<AddSyncRequest>, AddSyncHandler>()
+            .AddScoped<ISyncHandler<RemoveSyncRequest>, RemoveSyncHandler>();
 
         services.AddCreatedDateHandlers();
 
